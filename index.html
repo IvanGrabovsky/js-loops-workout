@@ -1411,10 +1411,10 @@ do {
         massRunnerPercentText.textContent = percent + '%';
         massRunnerStatusText.textContent = `Тестування завдання ${task.id} (${task.name})...`;
 
-        // Code to test: user code if available and completed, otherwise reference solution
+        // Code to test: student code if saved, otherwise initial starter stub
         const codeToTest = userCodes[task.id] 
           ? userCodes[task.id] 
-          : `function ${task.name}(${task.starterParams}) { ${task.solutionBody} }`;
+          : `function ${task.name}(${task.starterParams}) {\n  ${task.starterBody}\n}`;
 
         let taskPassed = true;
         try {
