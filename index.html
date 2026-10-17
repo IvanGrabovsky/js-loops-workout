@@ -711,6 +711,112 @@
       transform: translateY(0);
       opacity: 1;
     }
+
+    /* Teacher Modal & Auth styling */
+    .teacher-active {
+      background: rgba(16, 185, 129, 0.12) !important;
+      color: #047857 !important;
+      border-color: rgba(16, 185, 129, 0.4) !important;
+      font-weight: 600 !important;
+    }
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      animation: fadeIn 0.15s ease-out;
+    }
+    .modal-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-card);
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      color: var(--smoke);
+      padding: 4px;
+      border-radius: 4px;
+    }
+    .modal-close:hover {
+      color: var(--ink);
+    }
+    .modal-body {
+      padding: 20px;
+    }
+
+    /* Teacher Modal & Auth styling */
+    .teacher-active {
+      background: rgba(16, 185, 129, 0.12) !important;
+      color: #047857 !important;
+      border-color: rgba(16, 185, 129, 0.4) !important;
+      font-weight: 600 !important;
+    }
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      animation: fadeIn 0.15s ease-out;
+    }
+    .modal-card {
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-card);
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      color: var(--smoke);
+      padding: 4px;
+      border-radius: 4px;
+    }
+    .modal-close:hover {
+      color: var(--ink);
+    }
+    .modal-body {
+      padding: 20px;
+    }
   </style>
 </head>
 <body>
@@ -732,6 +838,16 @@
         <div class="pill-badge" id="progressPill">
           🏆 <span id="progressCount">0</span> / 165 виконано
         </div>
+
+        
+        <button class="btn-pill btn-pill-outline" id="teacherAuthBtn" title="Вхід викладача (Ctrl+Shift+A)">
+          🔐 Ментор
+        </button>
+
+        
+        <button class="btn-pill btn-pill-outline" id="teacherAuthBtn" title="Вхід викладача (Ctrl+Shift+A)">
+          🔐 Ментор
+        </button>
 
         <button class="btn-pill btn-pill-outline" id="resetAllBtn" title="Скинути весь збережений код до початкового стану">
           ↺ Скинути
@@ -838,7 +954,7 @@
               </div>
 
               <div style="display:flex; gap:8px;">
-                <button class="btn-pill btn-pill-outline" id="revealSolutionBtn">💡 Рішення</button>
+                <button class="btn-pill btn-pill-outline" id="revealSolutionBtn" style="display:none;">💡 Рішення</button>
                 <button class="btn-pill btn-pill-primary" id="runTestBtn">▶ Запустити тест</button>
               </div>
             </div>
@@ -1064,6 +1180,60 @@ do {
     </div>
   </div>
 
+  
+  <!-- Teacher Auth Modal -->
+  <div id="teacherAuthModal" class="modal-overlay" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:18px;">🔐</span>
+          <h3 style="margin:0; font-size:16px; font-weight:600;">Вхід для викладача</h3>
+        </div>
+        <button class="modal-close" id="closeTeacherModalBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="color:var(--smoke); font-size:13px; line-height:1.5; margin:0 0 16px 0;">
+          Еталонні рішення надійно зашифровані AES-256-GCM. Введіть пароль викладача для розблокування режиму ментора:
+        </p>
+        <div style="margin-bottom:12px;">
+          <input type="password" id="teacherPasswordInput" placeholder="Пароль викладача..." autocomplete="off" style="width:100%; box-sizing:border-box; padding:10px 14px; border-radius:var(--radius-pill); border:1px solid var(--border-color); background:#ffffff; color:var(--ink); font-size:14px; outline:none; font-family:inherit;" />
+        </div>
+        <div id="teacherAuthStatus" style="font-size:12px; margin-bottom:14px; min-height:16px; font-weight:500;"></div>
+        <div style="display:flex; justify-content:flex-end; gap:8px;">
+          <button class="btn-pill btn-pill-outline" id="cancelTeacherAuthBtn">Скасувати</button>
+          <button class="btn-pill btn-pill-primary" id="submitTeacherAuthBtn">Розблокувати</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <!-- Teacher Auth Modal -->
+  <div id="teacherAuthModal" class="modal-overlay" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:18px;">🔐</span>
+          <h3 style="margin:0; font-size:16px; font-weight:600;">Вхід для викладача</h3>
+        </div>
+        <button class="modal-close" id="closeTeacherModalBtn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="color:var(--smoke); font-size:13px; line-height:1.5; margin:0 0 16px 0;">
+          Еталонні рішення надійно зашифровані AES-256-GCM. Введіть пароль викладача для розблокування режиму ментора:
+        </p>
+        <div style="margin-bottom:12px;">
+          <input type="password" id="teacherPasswordInput" placeholder="Пароль викладача..." autocomplete="off" style="width:100%; box-sizing:border-box; padding:10px 14px; border-radius:var(--radius-pill); border:1px solid var(--border-color); background:#ffffff; color:var(--ink); font-size:14px; outline:none; font-family:inherit;" />
+        </div>
+        <div id="teacherAuthStatus" style="font-size:12px; margin-bottom:14px; min-height:16px; font-weight:500;"></div>
+        <div style="display:flex; justify-content:flex-end; gap:8px;">
+          <button class="btn-pill btn-pill-outline" id="cancelTeacherAuthBtn">Скасувати</button>
+          <button class="btn-pill btn-pill-primary" id="submitTeacherAuthBtn">Розблокувати</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Notification -->
   <div class="toast-box" id="toastBox">
     <span class="audio-sphere" style="width:16px; height:16px;"></span>
@@ -1071,7 +1241,7 @@ do {
   </div>
 
   <script type="module">
-    import { MODULES, ALL_TASKS } from './catalog.js';
+    import { MODULES, ALL_TASKS, ENCRYPTED_SOLUTIONS } from './catalog.js';
 
     // Application State
     let currentModuleIdx = 1;
@@ -1338,14 +1508,199 @@ do {
 
     document.getElementById('runTestBtn').addEventListener('click', runSingleTaskTest);
 
-    // Reveal Solution
-    document.getElementById('revealSolutionBtn').addEventListener('click', () => {
-      if (confirm('Підставити еталонне рішення? Це замінить ваш поточний код.')) {
-        codeEditor.value = `export function ${currentTask.name}(${currentTask.starterParams}) {\n  ${currentTask.solutionBody}\n}`;
-        saveCurrentCode();
-        showToast('Еталонне рішення вставлено.');
+    // --- Teacher Authentication & WebCrypto AES-GCM Decryption ---
+    const TEACHER_SALT = "camp_salt_2026_secure";
+    let decryptedSolutionsCache = null;
+
+    async function getTeacherCryptoKey(password) {
+      const enc = new TextEncoder();
+      const salt = enc.encode(TEACHER_SALT);
+      const keyMaterial = await window.crypto.subtle.importKey(
+        "raw",
+        enc.encode(password),
+        { name: "PBKDF2" },
+        false,
+        ["deriveKey"]
+      );
+      return await window.crypto.subtle.deriveKey(
+        {
+          name: "PBKDF2",
+          salt: salt,
+          iterations: 100000,
+          hash: "SHA-256"
+        },
+        keyMaterial,
+        { name: "AES-GCM", length: 256 },
+        false,
+        ["decrypt"]
+      );
+    }
+
+    async function decryptPayloadWithKey(payload, key) {
+      const [ivHex, tagHex, dataHex] = payload.split(":");
+      const iv = new Uint8Array(ivHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+      const tag = new Uint8Array(tagHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+      const data = new Uint8Array(dataHex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+
+      const combined = new Uint8Array(data.length + tag.length);
+      combined.set(data, 0);
+      combined.set(tag, data.length);
+
+      const decryptedBuf = await window.crypto.subtle.decrypt(
+        { name: "AES-GCM", iv: iv },
+        key,
+        combined
+      );
+      return new TextDecoder().decode(decryptedBuf);
+    }
+
+    async function verifyAndUnlockTeacher(password) {
+      if (!password || !ENCRYPTED_SOLUTIONS) return false;
+      const firstId = Object.keys(ENCRYPTED_SOLUTIONS)[0];
+      const firstPayload = ENCRYPTED_SOLUTIONS[firstId];
+      if (!firstPayload) return false;
+
+      try {
+        const key = await getTeacherCryptoKey(password);
+        await decryptPayloadWithKey(firstPayload, key);
+
+        const cache = {};
+        for (const [id, payload] of Object.entries(ENCRYPTED_SOLUTIONS)) {
+          cache[id] = await decryptPayloadWithKey(payload, key);
+        }
+        decryptedSolutionsCache = cache;
+        sessionStorage.setItem('camp_teacher_pwd', password);
+        applyTeacherUI(true);
+        return true;
+      } catch (err) {
+        console.warn("Teacher unlock failed:", err);
+        return false;
+      }
+    }
+
+    function lockTeacherMode() {
+      decryptedSolutionsCache = null;
+      sessionStorage.removeItem('camp_teacher_pwd');
+      applyTeacherUI(false);
+    }
+
+    function applyTeacherUI(isUnlocked) {
+      const teacherBtn = document.getElementById('teacherAuthBtn');
+      const revealBtn = document.getElementById('revealSolutionBtn');
+      if (isUnlocked) {
+        if (teacherBtn) {
+          teacherBtn.innerHTML = '🎓 Ментор (Активно)';
+          teacherBtn.classList.add('teacher-active');
+          teacherBtn.title = 'Режим викладача активний. Натисніть, щоб вийти.';
+        }
+        if (revealBtn) {
+          revealBtn.style.display = 'inline-flex';
+        }
+      } else {
+        if (teacherBtn) {
+          teacherBtn.innerHTML = '🔐 Ментор';
+          teacherBtn.classList.remove('teacher-active');
+          teacherBtn.title = 'Вхід викладача (Ctrl+Shift+A)';
+        }
+        if (revealBtn) {
+          revealBtn.style.display = 'none';
+        }
+      }
+    }
+
+    const teacherAuthModal = document.getElementById('teacherAuthModal');
+    const teacherPasswordInput = document.getElementById('teacherPasswordInput');
+    const teacherAuthStatus = document.getElementById('teacherAuthStatus');
+    const submitTeacherAuthBtn = document.getElementById('submitTeacherAuthBtn');
+    const cancelTeacherAuthBtn = document.getElementById('cancelTeacherAuthBtn');
+    const closeTeacherModalBtn = document.getElementById('closeTeacherModalBtn');
+
+    function openTeacherModal() {
+      teacherPasswordInput.value = '';
+      teacherAuthStatus.textContent = '';
+      teacherAuthStatus.style.color = 'inherit';
+      teacherAuthModal.style.display = 'flex';
+      setTimeout(() => teacherPasswordInput.focus(), 50);
+    }
+
+    function closeTeacherModal() {
+      teacherAuthModal.style.display = 'none';
+      teacherPasswordInput.value = '';
+      teacherAuthStatus.textContent = '';
+    }
+
+    async function handleTeacherAuthSubmit() {
+      const pwd = teacherPasswordInput.value.trim();
+      if (!pwd) {
+        teacherAuthStatus.textContent = 'Введіть пароль викладача';
+        teacherAuthStatus.style.color = '#ef4444';
+        return;
+      }
+      teacherAuthStatus.textContent = 'Перевірка криптографічного ключа...';
+      teacherAuthStatus.style.color = '#2563eb';
+      submitTeacherAuthBtn.disabled = true;
+
+      const ok = await verifyAndUnlockTeacher(pwd);
+      submitTeacherAuthBtn.disabled = false;
+
+      if (ok) {
+        closeTeacherModal();
+        showToast('🎓 Режим викладача активовано! Еталонні рішення розблоковано.');
+      } else {
+        teacherAuthStatus.textContent = '❌ Невірний пароль викладача';
+        teacherAuthStatus.style.color = '#ef4444';
+      }
+    }
+
+    document.getElementById('teacherAuthBtn')?.addEventListener('click', () => {
+      if (decryptedSolutionsCache) {
+        if (confirm('Вийти з режиму викладача та сховати еталонні рішення?')) {
+          lockTeacherMode();
+          showToast('Режим викладача деактивовано.');
+        }
+      } else {
+        openTeacherModal();
       }
     });
+
+    closeTeacherModalBtn?.addEventListener('click', closeTeacherModal);
+    cancelTeacherAuthBtn?.addEventListener('click', closeTeacherModal);
+    submitTeacherAuthBtn?.addEventListener('click', handleTeacherAuthSubmit);
+    teacherPasswordInput?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') handleTeacherAuthSubmit();
+      if (e.key === 'Escape') closeTeacherModal();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        e.preventDefault();
+        if (decryptedSolutionsCache) {
+          if (confirm('Вийти з режиму викладача?')) lockTeacherMode();
+        } else {
+          openTeacherModal();
+        }
+      }
+    });
+
+    // Reveal Solution
+    document.getElementById('revealSolutionBtn').addEventListener('click', () => {
+      if (!decryptedSolutionsCache || !decryptedSolutionsCache[currentTask.id]) {
+        showToast('Потрібна авторизація викладача');
+        openTeacherModal();
+        return;
+      }
+      codeEditor.value = `export function ${currentTask.name}(${currentTask.starterParams}) {\n  ${decryptedSolutionsCache[currentTask.id]}\n}`;
+      saveCurrentCode();
+      showToast('💡 Еталонне рішення вставлено (Режим ментора).');
+    });
+
+    // Check saved session
+    const savedTeacherPwd = sessionStorage.getItem('camp_teacher_pwd');
+    if (savedTeacherPwd) {
+      verifyAndUnlockTeacher(savedTeacherPwd);
+    } else {
+      applyTeacherUI(false);
+    }
 
     // Reset current task
     document.getElementById('resetCurrentTaskBtn').addEventListener('click', () => {
