@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JS Loops & Debugger Workout | 165 завдань, блок-схеми та відлагоджувач</title>
+  <meta name="description" content="Інтенсивний практичний тренажер з циклів (while, do...while, for, break, continue, вкладені цикли), алгоритмічних блок-схем та роботи з відлагоджувачем (Debugger, DevTools, breakpoints). 165 завдань.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Prettier Standalone for Code Formatting -->
+  <script src="https://cdn.jsdelivr.net/npm/prettier@3.3.3/standalone.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prettier@3.3.3/plugins/babel.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prettier@3.3.3/plugins/estree.js"></script>
+
+  <style>
+    :root {
+      /* ElevenLabs Design System Tokens (https://styles.refero.design/style/031056ff-7af1-46db-8daa-115f731c5d26) */
+      --canvas: #fdfcfc;
+      --surface-taupe: #f5f3f1;
+      --surface-stone: #ebe8e4;
+      --border-stone: #ebe8e4;
+      --border-subtle: rgba(0, 0, 0, 0.08);
+      --ink: #000000;
+      --smoke: #777169;
+      --smoke-light: #a8a29a;
+      --accent-violet: #0447ff;
+      --accent-orange: #ff4704;
+      --accent-pink: #e040fb;
+      --mint-success: #10b981;
+      --crimson-alert: #ef4444;
+      --editor-bg: #14171f;
+      --terminal-bg: #191c24;
+      --terminal-text: #f4efea;
+      
+      --radius-pill: 9999px;
+      --radius-card: 20px;
+      --radius-subcard: 14px;
+      
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, Menlo, Monaco, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      background-color: var(--canvas);
+      color: var(--ink);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+      padding: 24px 20px 80px 20px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+
+    /* Sphere Accent Orb */
+    .audio-sphere {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #ff4704 0%, #0447ff 65%, #e040fb 100%);
+      box-shadow: 0 0 16px rgba(4, 71, 255, 0.45);
+      animation: spherePulse 4s ease-in-out infinite alternate;
+      display: inline-block;
+      vertical-align: middle;
+      flex-shrink: 0;
+    }
+
+    @keyframes spherePulse {
+      0% { transform: scale(0.95); filter: hue-rotate(0deg); }
+      100% { transform: scale(1.1); filter: hue-rotate(25deg); }
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-stone);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-title {
+      font-size: 19px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+
+    .brand-tag {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: var(--surface-taupe);
+      border: 1px solid var(--border-stone);
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      color: var(--smoke);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Pill Badges and Buttons */
+    .pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--surface-taupe);
+      border: 1px solid var(--border-stone);
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-decoration: none;
+      font-family: inherit;
+    }
+
+    .btn-pill-primary {
+      background: var(--ink);
+      color: #ffffff;
+      border: 1px solid var(--ink);
+    }
+
+    .btn-pill-primary:hover {
+      background: #222222;
+      transform: translateY(-1px);
+    }
+
+    .btn-pill-outline {
+      background: #ffffff;
+      color: var(--ink);
+      border: 1px solid var(--border-stone);
+    }
+
+    .btn-pill-outline:hover {
+      background: var(--surface-taupe);
+      border-color: #d8d4ce;
+    }
+
+    /* Tabs Bar */
+    .tabs-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      background: var(--surface-taupe);
+      padding: 6px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-stone);
+      width: fit-content;
+    }
+
+    .tab-btn {
+      padding: 8px 20px;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 500;
+      border: none;
+      background: transparent;
+      color: var(--smoke);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: inherit;
+    }
+
+    .tab-btn.active {
+      background: #ffffff;
+      color: var(--ink);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+      font-weight: 600;
+    }
+
+    /* Custom ElevenLabs Dropdown for Modules */
+    .module-selector-wrap {
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .dropdown-trigger {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding: 14px 20px;
+      background: var(--surface-taupe);
+      border: 1px solid var(--border-stone);
+      border-radius: var(--radius-card);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ink);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .dropdown-trigger:hover {
+      border-color: #cfcac3;
+      background: #f1eeea;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border: 1px solid var(--border-stone);
+      border-radius: var(--radius-card);
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+      padding: 8px;
+      z-index: 100;
+      display: none;
+      max-height: 480px;
+      overflow-y: auto;
+    }
+
+    .dropdown-menu.open {
+      display: block;
+    }
+
+    .dropdown-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      border-radius: var(--radius-subcard);
+      cursor: pointer;
+      transition: background 0.1s ease;
+      gap: 12px;
+    }
+
+    .dropdown-item:hover {
+      background: var(--surface-taupe);
+    }
+
+    .dropdown-item.active {
+      background: #f1ede8;
+      font-weight: 600;
+    }
+
+    .dropdown-item-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Trainer Grid Layout */
+    .trainer-grid {
+      display: grid;
+      grid-template-columns: 460px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    @media (max-width: 1024px) {
+      .trainer-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left Card: Task Details */
+    .task-card {
+      background: var(--surface-taupe);
+      border: 1px solid var(--border-stone);
+      border-radius: var(--radius-card);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .task-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .task-number {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-violet);
+      background: #ffffff;
+      border: 1px solid var(--border-stone);
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+    }
+
+    .task-title {
+      font-size: 20px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.3;
+      color: var(--ink);
+    }
+
+    .task-badge-level {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      background: #ffffff;
+      border: 1px solid var(--border-stone);
+      color: var(--smoke);
+      white-space: nowrap;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--smoke);
+      margin-bottom: 6px;
+    }
+
+    .task-goal {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #333333;
+    }
+
+    .req-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .req-list li {
+      position: relative;
+      padding-left: 20px;
+      font-size: 13.5px;
+      color: #444444;
+      line-height: 1.5;
+    }
+
+    .req-list li::before {
+      content: "•";
+      position: absolute;
+      left: 6px;
+      color: var(--accent-orange);
+      font-weight: bold;
+    }
+
+    .theory-hint-box {
+      background: #ffffff;
+      border: 1px solid var(--border-stone);
+      border-radius: var(--radius-subcard);
+      padding: 14px;
+      font-size: 13px;
+      line-height: 1.55;
+      color: #444444;
+    }
+
+    .theory-hint-box code {
+      font-family: var(--font-mono);
+      background: var(--surface-taupe);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: var(--accent-violet);
+    }
+
+    .task-navigation {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-stone);
+    }
+
+    /* Right Card: Code Editor */
+    .editor-card {
+      background: #ffffff;
+      border: 1px solid var(--border-stone);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .editor-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 18px;
+      background: var(--surface-taupe);
+      border-bottom: 1px solid var(--border-stone);
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .editor-filename {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .editor-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .format-btn {
+      background: #ffffff;
+      border: 1px solid var(--border-stone);
+      border-radius: var(--radius-pill);
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .format-btn:hover {
+      background: var(--surface-stone);
+      border-color: #d1ccc5;
+    }
+
+    .save-notice {
+      font-size: 12px;
+      color: var(--mint-success);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .save-notice.visible {
+      opacity: 1;
+    }
+
+    .editor-textarea {
+      width: 100%;
+      min-height: 280px;
+      background: var(--editor-bg);
+      color: #e6edf3;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      line-height: 1.6;
+      padding: 18px;
+      border: none;
+      resize: vertical;
+      outline: none;
+      tab-size: 2;
+    }
+
+    .editor-bottombar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 18px;
+      background: #ffffff;
+      border-top: 1px solid var(--border-stone);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .shortcut-hints {
+      font-size: 12px;
+      color: var(--smoke);
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .shortcut-hints kbd {
+      background: var(--surface-taupe);
+      border: 1px solid var(--border-stone);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--ink);
+    }
+
+    /* Test Results Console */
+    .console-card {
+      margin-top: 18px;
+      background: var(--terminal-bg);
+      color: var(--terminal-text);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      border: 1px solid #2a2e3a;
+    }
+
+    .console-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 18px;
+      background: #12141a;
+      border-bottom: 1px solid #2a2e3a;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #9ba1b0;
+    }
+
+    .console-body {
+      padding: 16px 18px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.6;
+      min-height: 90px;
+      max-height: 280px;
+      overflow-y: auto;
+    }
+
+    .test-result-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .test-status-pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      text-transform: uppercase;
+    }
+
+    .status-pass {
+      background: rgba(16, 185, 129, 0.2);
+      color: #34d399;
+      border: 1px solid #059669;
+    }
+
+    .status-fail {
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      border: 1px solid #dc2626;
+    }
+
+    /* Theory Tab Layout */
+    .theory-section {
+      background: #ffffff;
+      border: 1px solid var(--border-stone);
+      border-radius: var(--radius-card);
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+
+    .theory-title {
+      font-size: 26px;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      color: var(--ink);
+    }
+
+    .theory-subtitle {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 24px 0 12px 0;
+      color: var(--ink);
+    }
+
+    .theory-p {
+      font-size: 15px;
+      line-height: 1.7;
+      color: #374151;
+      margin-bottom: 16px;
+    }
+
+    .flowchart-svg-container {
+      background: var(--surface-taupe);
+      border: 1px solid var(--border-stone);
+      border-radius: var(--radius-card);
+      padding: 20px;
+      margin: 20px 0;
+      text-align: center;
+      overflow-x: auto;
+    }
+
+    .flowchart-svg-container svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .theory-grid-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .theory-card {
+      background: var(--surface-taupe);
+      border: 1px solid var(--border-stone);
+      border-radius: var(--radius-subcard);
+      padding: 18px;
+    }
+
+    .theory-card-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Mass Runner Tab */
+    .mass-runner-box {
+      background: #ffffff;
+      border: 1px solid var(--border-stone);
+      border-radius: var(--radius-card);
+      padding: 32px;
+    }
+
+    .progress-bar-wrap {
+      width: 100%;
+      height: 12px;
+      background: var(--surface-stone);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+      margin: 20px 0;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-violet) 0%, var(--accent-orange) 100%);
+      width: 0%;
+      transition: width 0.2s ease;
+    }
+
+    /* Mass Console */
+    #massConsoleLog {
+      background: #191c24;
+      color: #f4efea;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.6;
+      padding: 20px;
+      border-radius: var(--radius-card);
+      max-height: 480px;
+      overflow-y: auto;
+      border: 1px solid #2a2e3a;
+    }
+
+    /* Modal / Success celebration */
+    .toast-box {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #ffffff;
+      border: 1px solid var(--border-stone);
+      border-radius: var(--radius-card);
+      padding: 16px 20px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 1000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .toast-box.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="brand">
+        <span class="audio-sphere"></span>
+        <h1 class="brand-title">JS Loops &amp; Debugger Workout</h1>
+        <span class="brand-tag">ElevenLabs Style</span>
+      </div>
+
+      <div class="header-actions">
+        <div class="pill-badge" id="onlineBadge">
+          <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981;"></span>
+          <span id="onlineCountText">1 онлайн</span>
+        </div>
+
+        <div class="pill-badge" id="progressPill">
+          🏆 <span id="progressCount">0</span> / 165 виконано
+        </div>
+
+        <button class="btn-pill btn-pill-outline" id="resetAllBtn" title="Скинути весь збережений код до початкового стану">
+          ↺ Скинути
+        </button>
+
+        <a class="btn-pill btn-pill-primary" href="https://github.com/IvanGrabovsky/js-loops-workout" target="_blank" rel="noopener">
+          GitHub Repo ↗
+        </a>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="tabs-bar">
+      <button class="tab-btn active" data-tab="trainer">⚡ Тренажер (165 завдань)</button>
+      <button class="tab-btn" data-tab="theory">📖 Повна теорія (Цикли, Блок-схеми, Debugger)</button>
+      <button class="tab-btn" data-tab="mass-runner">🧪 Масовий запуск (Mass Runner)</button>
+      <button class="tab-btn" data-tab="final-cert">🚀 Підсумковий тест</button>
+    </div>
+
+    <!-- TAB 1: TRAINER -->
+    <div id="tab-trainer" class="tab-content">
+      <!-- Custom ElevenLabs Dropdown for Module Selection -->
+      <div class="module-selector-wrap">
+        <div class="dropdown-trigger" id="moduleDropdownTrigger">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span class="audio-sphere" style="width:14px; height:14px;"></span>
+            <span id="activeModuleTitle">Модуль 1: Цикл while та поняття ітерації</span>
+          </div>
+          <span style="font-size:12px; color:var(--smoke);">▼</span>
+        </div>
+
+        <div class="dropdown-menu" id="moduleDropdownMenu">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Quick Task Pills Bar -->
+      <div id="quickTaskPills" style="display:flex; gap:6px; overflow-x:auto; padding-bottom:14px; margin-bottom:18px;">
+        <!-- Populated by JavaScript -->
+      </div>
+
+      <!-- Split Grid -->
+      <div class="trainer-grid">
+        <!-- Left: Task Description -->
+        <div class="task-card">
+          <div class="task-header">
+            <div>
+              <span class="task-number" id="taskIdBadge">1.1</span>
+              <h2 class="task-title" id="taskTitle" style="margin-top:8px;">countUp</h2>
+            </div>
+            <span class="task-badge-level" id="taskLevelBadge">Початковий рівень</span>
+          </div>
+
+          <div>
+            <div class="section-title">Мета завдання</div>
+            <p class="task-goal" id="taskGoal">Згенерувати масив послідовних цілих чисел...</p>
+          </div>
+
+          <div>
+            <div class="section-title">Вимоги</div>
+            <ul class="req-list" id="taskReqs">
+              <!-- Populated by JS -->
+            </ul>
+          </div>
+
+          <div class="theory-hint-box" id="taskHintBox">
+            <div class="section-title" style="color:var(--accent-violet);">Підказка</div>
+            <div id="taskHintContent">Використайте цикл while...</div>
+          </div>
+
+          <div class="task-navigation">
+            <button class="btn-pill btn-pill-outline" id="prevTaskBtn">← Попереднє</button>
+            <button class="btn-pill btn-pill-primary" id="nextTaskBtn">Наступне →</button>
+          </div>
+        </div>
+
+        <!-- Right: Code Editor & Runner -->
+        <div>
+          <div class="editor-card">
+            <div class="editor-topbar">
+              <div class="editor-filename">
+                <span>📄</span>
+                <span id="editorFilename">src/01-while-basics.js</span>
+              </div>
+
+              <div class="editor-actions">
+                <span class="save-notice" id="saveNotice">✓ Збережено</span>
+                <button class="format-btn" id="formatCodeBtn" title="Форматувати код (Shift + Alt + F)">
+                  ✨ Форматувати <span style="font-size:11px; color:var(--smoke);">(Shift+Alt+F)</span>
+                </button>
+                <button class="btn-pill btn-pill-outline" id="resetCurrentTaskBtn" style="padding:4px 12px; font-size:12px;">
+                  Скинути код
+                </button>
+              </div>
+            </div>
+
+            <textarea class="editor-textarea" id="codeEditor" spellcheck="false"></textarea>
+
+            <div class="editor-bottombar">
+              <div class="shortcut-hints">
+                <span><kbd>Ctrl</kbd> + <kbd>Enter</kbd> Запустити тест</span>
+                <span><kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>F</kbd> Форматувати</span>
+                <span><kbd>Tab</kbd> Відступ 2 пробіли</span>
+              </div>
+
+              <div style="display:flex; gap:8px;">
+                <button class="btn-pill btn-pill-outline" id="revealSolutionBtn">💡 Рішення</button>
+                <button class="btn-pill btn-pill-primary" id="runTestBtn">▶ Запустити тест</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Test Results Console -->
+          <div class="console-card">
+            <div class="console-header">
+              <span>Результати тестів</span>
+              <span id="testSummaryStatus" style="color:#9ba1b0;">Очікує запуску...</span>
+            </div>
+            <div class="console-body" id="consoleBody">
+              <div style="color:#6e7687;">Натисніть "Запустити тест" або комбінацію Ctrl + Enter для перевірки коду.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: FULL THEORY -->
+    <div id="tab-theory" class="tab-content" style="display:none;">
+      <div class="theory-section">
+        <h2 class="theory-title">Модуль 1–4: Цикли в JavaScript (while, do...while, for, break, continue)</h2>
+        <p class="theory-p">
+          <b>Цикл (Loop)</b> — це керуюча конструкція мови програмування, яка дозволяє багаторазово виконувати певну послідовність дій (тіло циклу) доти, доки виконується задана логічна умова.
+        </p>
+
+        <div class="theory-grid-cards">
+          <div class="theory-card">
+            <h3 class="theory-card-title">🔄 Цикл while (з передумовою)</h3>
+            <p style="font-size:13.5px; line-height:1.6; color:#444;">
+              Умова перевіряється <b>перед</b> кожною ітерацією. Якщо умова хибна з самого початку (<code>false</code>), тіло циклу не виконається <b>жодного разу</b>.
+            </p>
+            <pre style="background:#fff; border:1px solid var(--border-stone); padding:8px; border-radius:6px; margin-top:8px; font-family:var(--font-mono); font-size:12px;">let i = 0;
+while (i &lt; 5) {
+  console.log(i);
+  i++;
+}</pre>
+          </div>
+
+          <div class="theory-card">
+            <h3 class="theory-card-title">⚡ Цикл do...while (з післяумовою)</h3>
+            <p style="font-size:13.5px; line-height:1.6; color:#444;">
+              Тіло циклу виконується <b>гарантовано щонайменше 1 раз</b>, а умова перевіряється вже після виконання. Ідеально для повторних запитів, паролів та ігрових циклів.
+            </p>
+            <pre style="background:#fff; border:1px solid var(--border-stone); padding:8px; border-radius:6px; margin-top:8px; font-family:var(--font-mono); font-size:12px;">let input;
+do {
+  input = askUser();
+} while (!isValid(input));</pre>
+          </div>
+
+          <div class="theory-card">
+            <h3 class="theory-card-title">🎯 Цикл for (параметричний)</h3>
+            <p style="font-size:13.5px; line-height:1.6; color:#444;">
+              Обʼєднує 3 секції в одному заголовку: ініціалізацію, умову продовження та крок зміни лічильника: <code>for (init; condition; step)</code>.
+            </p>
+            <pre style="background:#fff; border:1px solid var(--border-stone); padding:8px; border-radius:6px; margin-top:8px; font-family:var(--font-mono); font-size:12px;">for (let i = 0; i &lt; arr.length; i++) {
+  console.log(arr[i]);
+}</pre>
+          </div>
+
+          <div class="theory-card">
+            <h3 class="theory-card-title">🛑 break та continue</h3>
+            <p style="font-size:13.5px; line-height:1.6; color:#444;">
+              <b>break</b> негайно зупиняє весь цикл і передає керування за його межі.<br>
+              <b>continue</b> завершує поточну ітерацію і одразу переходить до перевірки наступної.
+            </p>
+          </div>
+        </div>
+
+        <h3 class="theory-subtitle">⚠️ Вічний цикл (Infinite Loop) та запобіжники</h3>
+        <p class="theory-p">
+          Вічний цикл виникає тоді, коли умова циклу ніколи не стає <code>false</code> (наприклад, забули написати <code>i++</code> всередині <code>while</code>). У браузері це призводить до зависання вкладки та 100% навантаження CPU. Для захисту в критичних системах застосовують лічильник-сторож (<b>Watchdog Counter</b>): якщо кількість ітерацій перевищує безпечний ліміт (наприклад, 10 000), спрацьовує аварійний <code>break</code>.
+        </p>
+      </div>
+
+      <!-- Module 5: Flowcharts SVG -->
+      <div class="theory-section">
+        <h2 class="theory-title">Модуль 5: Позначення циклів у блок-схемах</h2>
+        <p class="theory-p">
+          У класичних графічних блок-схемах алгоритмів використовують стандартизовані геометричні блоки:
+        </p>
+
+        <div class="theory-grid-cards">
+          <div class="theory-card">
+            <h4 style="font-size:14px; font-weight:600; margin-bottom:6px;">🔷 Ромб умови</h4>
+            <p style="font-size:13px; color:#555;">Містить умову циклу. Має два виходи: гілка «ТАК» (до тіла циклу) та гілка «НІ» (вихід із циклу).</p>
+          </div>
+          <div class="theory-card">
+            <h4 style="font-size:14px; font-weight:600; margin-bottom:6px;">🛑 Шестикутник підготовки</h4>
+            <p style="font-size:13px; color:#555;">Позначає параметричний цикл for: вказуються змінна, початкове значення, кінцеве значення та крок: <code>i = 1, 10, 1</code>.</p>
+          </div>
+          <div class="theory-card">
+            <h4 style="font-size:14px; font-weight:600; margin-bottom:6px;">↩️ Стрілка зворотного звʼязку (Loopback)</h4>
+            <p style="font-size:13px; color:#555;">Повертає потік керування від кінця тіла циклу назад до ромба перевірки умови або кроку інкременту.</p>
+          </div>
+        </div>
+
+        <div class="flowchart-svg-container">
+          <h4 style="font-size:14px; font-weight:600; margin-bottom:12px; color:var(--ink);">Блок-схема циклу while з передумовою</h4>
+          <svg viewBox="0 0 600 320" width="600" height="320" xmlns="http://www.w3.org/2000/svg">
+            <!-- Start -->
+            <rect x="220" y="20" width="160" height="40" rx="20" fill="#ebe8e4" stroke="#000" stroke-width="1.5"/>
+            <text x="300" y="45" font-family="Inter, sans-serif" font-size="13" font-weight="600" text-anchor="middle" fill="#000">Початок (i = 0)</text>
+            
+            <line x1="300" y1="60" x2="300" y2="100" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"/>
+            
+            <!-- Diamond: condition -->
+            <polygon points="300,100 420,150 300,200 180,150" fill="#ffffff" stroke="#0447ff" stroke-width="2"/>
+            <text x="300" y="154" font-family="Inter, sans-serif" font-size="13" font-weight="600" text-anchor="middle" fill="#0447ff">i &lt; limit?</text>
+            
+            <!-- Yes branch down -->
+            <line x1="300" y1="200" x2="300" y2="240" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"/>
+            <text x="315" y="222" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#10b981">ТАК</text>
+            
+            <!-- Body -->
+            <rect x="210" y="240" width="180" height="45" rx="6" fill="#f5f3f1" stroke="#000" stroke-width="1.5"/>
+            <text x="300" y="267" font-family="Inter, sans-serif" font-size="12" font-weight="500" text-anchor="middle" fill="#000">Тіло: дія(); i++</text>
+            
+            <!-- Loopback Arrow: from body left, up, and back to condition line -->
+            <path d="M 210,262 L 120,262 L 120,80 L 300,80" fill="none" stroke="#ff4704" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrow-orange)"/>
+            <text x="130" y="170" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#ff4704" transform="rotate(-90 130 170)">Зворотний звʼязок</text>
+            
+            <!-- No branch right to End -->
+            <line x1="420" y1="150" x2="500" y2="150" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"/>
+            <text x="445" y="142" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#ef4444">НІ</text>
+            
+            <!-- End -->
+            <rect x="500" y="130" width="80" height="40" rx="20" fill="#ebe8e4" stroke="#000" stroke-width="1.5"/>
+            <text x="540" y="155" font-family="Inter, sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#000">Кінець</text>
+
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1 L 8 5 L 0 9 z" fill="#000" />
+              </marker>
+              <marker id="arrow-orange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1 L 8 5 L 0 9 z" fill="#ff4704" />
+              </marker>
+            </defs>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Module 7: Debugger Guide -->
+      <div class="theory-section">
+        <h2 class="theory-title">Модуль 7: Робота з відлагоджувачем (Debugger &amp; DevTools)</h2>
+        <p class="theory-p">
+          <b>Відлагоджувач (Debugger)</b> — це спеціалізований інструмент середовища розробки (Chrome DevTools, VS Code, Node.js inspector), призначений для детального дослідження поведінки програми в процесі її виконання, пошуку логічних помилок (багів) та контролю за станом змінних.
+        </p>
+
+        <div class="theory-grid-cards">
+          <div class="theory-card">
+            <h3 class="theory-card-title">🔍 Точка зупинки (Breakpoint)</h3>
+            <p style="font-size:13.5px; line-height:1.6; color:#444;">
+              Маркер на рядку коду, який тимчасово призупиняє виконання JavaScript-рушія. Можна встановити кліком на номер рядка в панелі Sources або через команду <code>debugger;</code> у вихідному коді.
+            </p>
+          </div>
+
+          <div class="theory-card">
+            <h3 class="theory-card-title">⏭️ Покрокове виконання (Stepping)</h3>
+            <p style="font-size:13.5px; line-height:1.6; color:#444;">
+              • <b>Step over (F10):</b> виконати наступний рядок без заглиблення у виклики функцій.<br>
+              • <b>Step into (F11):</b> увійти всередину викликаної функції.<br>
+              • <b>Step out (Shift+F11):</b> виконати залишок функції і вийти в місце виклику.<br>
+              • <b>Resume (F8):</b> продовжити звичайне виконання до наступного breakpoint.
+            </p>
+          </div>
+
+          <div class="theory-card">
+            <h3 class="theory-card-title">📦 Вікна Scopes, Watch та Call Stack</h3>
+            <p style="font-size:13.5px; line-height:1.6; color:#444;">
+              • <b>Scopes:</b> локальні змінні (Local), замикання (Closure) та глобальний обʼєкт (Global).<br>
+              • <b>Watch:</b> користувацькі вирази, які динамічно перераховуються на кожному кроці.<br>
+              • <b>Call Stack:</b> стек викликів функцій, що показує шлях до поточної точки зупинки.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: MASS RUNNER -->
+    <div id="tab-mass-runner" class="tab-content" style="display:none;">
+      <div class="mass-runner-box">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+          <div>
+            <h2 style="font-size:24px; font-weight:600; letter-spacing:-0.02em;">Масове тестування всіх 165 завдань</h2>
+            <p style="font-size:14px; color:var(--smoke); margin-top:4px;">Автоматичний прогін тестів по всіх 7 модулях тренажера з детальним логом.</p>
+          </div>
+          <button class="btn-pill btn-pill-primary" id="startMassRunnerBtn" style="padding:12px 24px; font-size:14px;">
+            ⚡ Запустити всі 165 тестів
+          </button>
+        </div>
+
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="massProgressBar"></div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:600; margin-bottom:12px;">
+          <span id="massRunnerStatusText">Готовий до запуску</span>
+          <span id="massRunnerPercentText">0%</span>
+        </div>
+
+        <div id="massConsoleLog">Очікування натискання кнопки "Запустити всі 165 тестів"...</div>
+      </div>
+    </div>
+
+    <!-- TAB 4: FINAL CERTIFICATION -->
+    <div id="tab-final-cert" class="tab-content" style="display:none;">
+      <div class="mass-runner-box" style="text-align:center; max-width:800px; margin:0 auto;">
+        <span class="audio-sphere" style="width:36px; height:36px; margin-bottom:12px;"></span>
+        <h2 style="font-size:28px; font-weight:300; letter-spacing:-0.02em; margin-bottom:8px;">Сертифікаційний тест</h2>
+        <p style="font-size:15px; color:var(--smoke); margin-bottom:24px;">
+          Пройдіть випадкову вибірку з 10 бойових завдань (по всіх типах циклів та відлагодженню), щоб отримати персональний сертифікат опанування модуля.
+        </p>
+        <button class="btn-pill btn-pill-primary" id="startCertExamBtn" style="padding:12px 28px; font-size:15px;">
+          Розпочати сертифікацію
+        </button>
+
+        <div id="certResultsArea" style="margin-top:32px; display:none;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast-box" id="toastBox">
+    <span class="audio-sphere" style="width:16px; height:16px;"></span>
+    <span id="toastMsg">Повідомлення</span>
+  </div>
+
+  <script type="module">
+    import { MODULES, ALL_TASKS } from './catalog.js';
+
+    // Application State
+    let currentModuleIdx = 1;
+    let currentTask = ALL_TASKS[0];
+    const completedTasks = new Set(JSON.parse(localStorage.getItem('js_loops_completed') || '[]'));
+    const userCodes = JSON.parse(localStorage.getItem('js_loops_codes') || '{}');
+
+    // DOM Elements
+    const tabs = document.querySelectorAll('.tab-btn');
+    const tabContents = {
+      trainer: document.getElementById('tab-trainer'),
+      theory: document.getElementById('tab-theory'),
+      'mass-runner': document.getElementById('tab-mass-runner'),
+      'final-cert': document.getElementById('tab-final-cert')
+    };
+
+    const moduleDropdownTrigger = document.getElementById('moduleDropdownTrigger');
+    const moduleDropdownMenu = document.getElementById('moduleDropdownMenu');
+    const activeModuleTitle = document.getElementById('activeModuleTitle');
+    const quickTaskPills = document.getElementById('quickTaskPills');
+
+    const taskIdBadge = document.getElementById('taskIdBadge');
+    const taskTitle = document.getElementById('taskTitle');
+    const taskLevelBadge = document.getElementById('taskLevelBadge');
+    const taskGoal = document.getElementById('taskGoal');
+    const taskReqs = document.getElementById('taskReqs');
+    const taskHintContent = document.getElementById('taskHintContent');
+    const editorFilename = document.getElementById('editorFilename');
+    const codeEditor = document.getElementById('codeEditor');
+    const saveNotice = document.getElementById('saveNotice');
+    const consoleBody = document.getElementById('consoleBody');
+    const testSummaryStatus = document.getElementById('testSummaryStatus');
+    const progressCount = document.getElementById('progressCount');
+    const toastBox = document.getElementById('toastBox');
+    const toastMsg = document.getElementById('toastMsg');
+
+    // Prettier Formatting
+    async function formatCurrentCode() {
+      if (!window.prettier || !window.prettierPlugins || !window.prettierPlugins.babel) {
+        showToast('Prettier ще завантажується...');
+        return;
+      }
+      try {
+        const plugins = [window.prettierPlugins.babel];
+        if (window.prettierPlugins.estree) plugins.push(window.prettierPlugins.estree);
+        const formatted = await window.prettier.format(codeEditor.value, {
+          parser: 'babel',
+          plugins: plugins,
+          semi: true,
+          singleQuote: true,
+          tabWidth: 2
+        });
+        codeEditor.value = formatted;
+        saveCurrentCode();
+        showToast('✨ Код успішно відформатовано!');
+      } catch (err) {
+        showToast('Помилка синтаксису: ' + err.message);
+      }
+    }
+
+    document.getElementById('formatCodeBtn').addEventListener('click', formatCurrentCode);
+
+    // Keyboard Shortcuts
+    codeEditor.addEventListener('keydown', (e) => {
+      // Tab indentation
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        const start = codeEditor.selectionStart;
+        const end = codeEditor.selectionEnd;
+        codeEditor.value = codeEditor.value.substring(0, start) + '  ' + codeEditor.value.substring(end);
+        codeEditor.selectionStart = codeEditor.selectionEnd = start + 2;
+        saveCurrentCode();
+      }
+      // Ctrl + Enter to run
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        runSingleTaskTest();
+      }
+      // Shift + Alt + F to format
+      if (e.shiftKey && e.altKey && (e.key === 'F' || e.key === 'f')) {
+        e.preventDefault();
+        formatCurrentCode();
+      }
+    });
+
+    codeEditor.addEventListener('input', () => {
+      saveCurrentCode();
+    });
+
+    function saveCurrentCode() {
+      userCodes[currentTask.id] = codeEditor.value;
+      localStorage.setItem('js_loops_codes', JSON.stringify(userCodes));
+      saveNotice.classList.add('visible');
+      setTimeout(() => saveNotice.classList.remove('visible'), 1200);
+    }
+
+    function showToast(msg) {
+      toastMsg.textContent = msg;
+      toastBox.classList.add('show');
+      setTimeout(() => toastBox.classList.remove('show'), 2500);
+    }
+
+    // Populate Modules Dropdown
+    function renderModuleDropdown() {
+      moduleDropdownMenu.innerHTML = '';
+      MODULES.forEach(m => {
+        const tasksInM = ALL_TASKS.filter(t => t.moduleIdx === m.idx);
+        const doneInM = tasksInM.filter(t => completedTasks.has(t.id)).length;
+        
+        const item = document.createElement('div');
+        item.className = 'dropdown-item' + (m.idx === currentModuleIdx ? ' active' : '');
+        item.innerHTML = `
+          <div class="dropdown-item-meta">
+            <span style="font-family:var(--font-mono); font-size:12px; font-weight:600; color:var(--smoke);">M${m.idx}</span>
+            <span>${m.title}</span>
+          </div>
+          <span class="pill-badge" style="font-size:11px; padding:2px 8px;">${doneInM}/${tasksInM.length}</span>
+        `;
+        item.addEventListener('click', () => {
+          currentModuleIdx = m.idx;
+          activeModuleTitle.textContent = m.title;
+          moduleDropdownMenu.classList.remove('open');
+          const firstTaskInM = ALL_TASKS.find(t => t.moduleIdx === m.idx);
+          selectTask(firstTaskInM);
+          renderModuleDropdown();
+        });
+        moduleDropdownMenu.appendChild(item);
+      });
+    }
+
+    moduleDropdownTrigger.addEventListener('click', () => {
+      moduleDropdownMenu.classList.toggle('open');
+    });
+
+    // Quick Task Pills
+    function renderQuickTaskPills() {
+      quickTaskPills.innerHTML = '';
+      const mTasks = ALL_TASKS.filter(t => t.moduleIdx === currentModuleIdx);
+      mTasks.forEach(t => {
+        const btn = document.createElement('button');
+        const isDone = completedTasks.has(t.id);
+        const isCur = t.id === currentTask.id;
+        btn.className = 'btn-pill ' + (isCur ? 'btn-pill-primary' : 'btn-pill-outline');
+        btn.style.padding = '4px 12px';
+        btn.style.fontSize = '12px';
+        btn.innerHTML = (isDone ? '✓ ' : '') + t.id;
+        if (isDone && !isCur) {
+          btn.style.borderColor = '#10b981';
+          btn.style.color = '#059669';
+        }
+        btn.addEventListener('click', () => selectTask(t));
+        quickTaskPills.appendChild(btn);
+      });
+    }
+
+    function selectTask(task) {
+      currentTask = task;
+      currentModuleIdx = task.moduleIdx;
+      const mod = MODULES.find(m => m.idx === task.moduleIdx);
+      activeModuleTitle.textContent = mod ? mod.title : '';
+
+      taskIdBadge.textContent = task.id;
+      taskTitle.textContent = task.name + ' — ' + task.title;
+      taskLevelBadge.textContent = task.level;
+      taskGoal.textContent = task.goal;
+
+      taskReqs.innerHTML = task.reqs.map(r => `<li>${r}</li>`).join('');
+      taskHintContent.innerHTML = task.hint;
+
+      editorFilename.textContent = `src/${mod.filename}`;
+
+      // Set code
+      if (userCodes[task.id]) {
+        codeEditor.value = userCodes[task.id];
+      } else {
+        codeEditor.value = `export function ${task.name}(${task.starterParams}) {\n  // TODO: напишіть вашу реалізацію тут\n  ${task.starterBody}\n}`;
+      }
+
+      consoleBody.innerHTML = '<div style="color:#6e7687;">Натисніть "Запустити тест" або комбінацію Ctrl + Enter для перевірки коду.</div>';
+      testSummaryStatus.textContent = 'Очікує запуску';
+      testSummaryStatus.style.color = '#9ba1b0';
+
+      renderQuickTaskPills();
+      updateProgress();
+    }
+
+    function updateProgress() {
+      progressCount.textContent = completedTasks.size;
+    }
+
+    // Run Single Task Test
+    function runSingleTaskTest() {
+      const code = codeEditor.value;
+      consoleBody.innerHTML = '';
+      let passedAll = true;
+
+      try {
+        // Clean export
+        const cleanCode = code.replace(/export\s+default\s+/g, '').replace(/export\s+/g, '');
+        // Extract function body or full function
+        const fnRunner = new Function(cleanCode + `\nreturn ${currentTask.name};`);
+        const userFn = fnRunner();
+
+        currentTask.tests.forEach((testCase, idx) => {
+          const row = document.createElement('div');
+          row.className = 'test-result-row';
+
+          try {
+            const runner = new Function(currentTask.name, 'return ' + testCase.expr);
+            const actual = runner(userFn);
+            const isMatch = JSON.stringify(actual) === JSON.stringify(testCase.expected);
+
+            if (isMatch) {
+              row.innerHTML = `
+                <span class="test-status-pill status-pass">PASS</span>
+                <div>
+                  <span style="color:#d1d5db;">${testCase.expr}</span>
+                  <div style="font-size:11px; color:#10b981;">Результат: ${JSON.stringify(actual)}</div>
+                </div>
+              `;
+            } else {
+              passedAll = false;
+              row.innerHTML = `
+                <span class="test-status-pill status-fail">FAIL</span>
+                <div>
+                  <span style="color:#f87171;">${testCase.expr}</span>
+                  <div style="font-size:11px; color:#a8a29a;">Очікувалось: <span style="color:#34d399;">${JSON.stringify(testCase.expected)}</span></div>
+                  <div style="font-size:11px; color:#f87171;">Отримано: <span>${JSON.stringify(actual)}</span></div>
+                </div>
+              `;
+            }
+          } catch (tErr) {
+            passedAll = false;
+            row.innerHTML = `
+              <span class="test-status-pill status-fail">ERROR</span>
+              <div>
+                <span style="color:#f87171;">${testCase.expr}</span>
+                <div style="font-size:11px; color:#ef4444;">Помилка: ${tErr.message}</div>
+              </div>
+            `;
+          }
+          consoleBody.appendChild(row);
+        });
+
+        if (passedAll) {
+          testSummaryStatus.textContent = '✓ ВСІ ТЕСТИ ПРОЙДЕНО!';
+          testSummaryStatus.style.color = '#34d399';
+          completedTasks.add(currentTask.id);
+          localStorage.setItem('js_loops_completed', JSON.stringify([...completedTasks]));
+          showToast('🎉 Завдання ' + currentTask.id + ' успішно виконано!');
+          renderQuickTaskPills();
+          renderModuleDropdown();
+          updateProgress();
+        } else {
+          testSummaryStatus.textContent = '✗ Є ПОМИЛКИ В ТЕСТАХ';
+          testSummaryStatus.style.color = '#f87171';
+        }
+      } catch (err) {
+        consoleBody.innerHTML = `<div style="color:#ef4444; font-weight:600;">Помилка виконання коду: ${err.message}</div>`;
+        testSummaryStatus.textContent = '✗ ПОМИЛКА СИНТАКСИСУ';
+        testSummaryStatus.style.color = '#ef4444';
+      }
+    }
+
+    document.getElementById('runTestBtn').addEventListener('click', runSingleTaskTest);
+
+    // Reveal Solution
+    document.getElementById('revealSolutionBtn').addEventListener('click', () => {
+      if (confirm('Підставити еталонне рішення? Це замінить ваш поточний код.')) {
+        codeEditor.value = `export function ${currentTask.name}(${currentTask.starterParams}) {\n  ${currentTask.solutionBody}\n}`;
+        saveCurrentCode();
+        showToast('Еталонне рішення вставлено.');
+      }
+    });
+
+    // Reset current task
+    document.getElementById('resetCurrentTaskBtn').addEventListener('click', () => {
+      if (confirm('Скинути код цього завдання до початкового шаблону?')) {
+        delete userCodes[currentTask.id];
+        localStorage.setItem('js_loops_codes', JSON.stringify(userCodes));
+        selectTask(currentTask);
+        showToast('Код завдання скинуто.');
+      }
+    });
+
+    // Reset all tasks
+    document.getElementById('resetAllBtn').addEventListener('click', () => {
+      if (confirm('Скинути весь прогрес і всі збережені розвʼязки?')) {
+        localStorage.removeItem('js_loops_codes');
+        localStorage.removeItem('js_loops_completed');
+        location.reload();
+      }
+    });
+
+    // Task navigation
+    document.getElementById('prevTaskBtn').addEventListener('click', () => {
+      const idx = ALL_TASKS.findIndex(t => t.id === currentTask.id);
+      if (idx > 0) selectTask(ALL_TASKS[idx - 1]);
+    });
+
+    document.getElementById('nextTaskBtn').addEventListener('click', () => {
+      const idx = ALL_TASKS.findIndex(t => t.id === currentTask.id);
+      if (idx < ALL_TASKS.length - 1) selectTask(ALL_TASKS[idx + 1]);
+    });
+
+    // Tab Switching
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        const target = tab.dataset.tab;
+        Object.keys(tabContents).forEach(k => {
+          tabContents[k].style.display = k === target ? 'block' : 'none';
+        });
+      });
+    });
+
+    // Mass Runner Execution
+    const startMassRunnerBtn = document.getElementById('startMassRunnerBtn');
+    const massProgressBar = document.getElementById('massProgressBar');
+    const massRunnerStatusText = document.getElementById('massRunnerStatusText');
+    const massRunnerPercentText = document.getElementById('massRunnerPercentText');
+    const massConsoleLog = document.getElementById('massConsoleLog');
+
+    startMassRunnerBtn.addEventListener('click', async () => {
+      startMassRunnerBtn.disabled = true;
+      massConsoleLog.innerHTML = '<div style="color:#60a5fa;">[ІНІЦІАЛІЗАЦІЯ] Запуск повного тестового циклу по 165 завданнях...</div>';
+      
+      let passedCount = 0;
+      let totalTests = 0;
+      let failedTasks = [];
+
+      for (let i = 0; i < ALL_TASKS.length; i++) {
+        const task = ALL_TASKS[i];
+        const percent = Math.round(((i + 1) / ALL_TASKS.length) * 100);
+        massProgressBar.style.width = percent + '%';
+        massRunnerPercentText.textContent = percent + '%';
+        massRunnerStatusText.textContent = `Тестування завдання ${task.id} (${task.name})...`;
+
+        // Code to test: user code if available and completed, otherwise reference solution
+        const codeToTest = userCodes[task.id] 
+          ? userCodes[task.id] 
+          : `function ${task.name}(${task.starterParams}) { ${task.solutionBody} }`;
+
+        let taskPassed = true;
+        try {
+          const clean = codeToTest.replace(/export\s+default\s+/g, '').replace(/export\s+/g, '');
+          const fn = new Function(clean + `\nreturn ${task.name};`)();
+
+          for (const tc of task.tests) {
+            totalTests++;
+            const runner = new Function(task.name, 'return ' + tc.expr);
+            const actual = runner(fn);
+            if (JSON.stringify(actual) !== JSON.stringify(tc.expected)) {
+              taskPassed = false;
+            }
+          }
+        } catch (e) {
+          taskPassed = false;
+        }
+
+        if (taskPassed) {
+          passedCount++;
+        } else {
+          failedTasks.push(task.id);
+        }
+
+        if (i % 10 === 0 || i === ALL_TASKS.length - 1) {
+          const logRow = document.createElement('div');
+          logRow.innerHTML = `<span style="color:#a8a29a;">[${new Date().toLocaleTimeString()}]</span> Опрацьовано ${i + 1}/${ALL_TASKS.length} завдань (Пройдено: <span style="color:#34d399;">${passedCount}</span>)`;
+          massConsoleLog.appendChild(logRow);
+          massConsoleLog.scrollTop = massConsoleLog.scrollHeight;
+          await new Promise(r => setTimeout(r, 10));
+        }
+      }
+
+      massRunnerStatusText.textContent = `Завершено! Успішно: ${passedCount} / ${ALL_TASKS.length}`;
+      const finalMsg = document.createElement('div');
+      finalMsg.style.marginTop = '14px';
+      finalMsg.style.padding = '12px';
+      finalMsg.style.borderRadius = '8px';
+      finalMsg.style.background = passedCount === ALL_TASKS.length ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)';
+      finalMsg.style.color = passedCount === ALL_TASKS.length ? '#34d399' : '#f87171';
+      finalMsg.innerHTML = `<b>ПІДСУМОК:</b> Пройдено ${passedCount} з ${ALL_TASKS.length} завдань. Загалом перевірено ${totalTests} тестових кейсів.`;
+      massConsoleLog.appendChild(finalMsg);
+      startMassRunnerBtn.disabled = false;
+    });
+
+    // Supabase Realtime Online presence
+    try {
+      const SUPABASE_URL = 'https://djjvceuzbvhfvfdcptwb.supabase.co';
+      const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqanZjZXV6YnZoZnZmZGNwdHdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg1Mzg1OTgsImV4cCI6MjA1NDExNDU5OH0.7YtGzJ66bZlIUXf2n3L1uW7Hk5k5u5U8X7';
+      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+      const room = supabase.channel('loops_workout_presence', {
+        config: { presence: { key: 'user_' + Math.random().toString(36).substring(7) } }
+      });
+      room.on('presence', { event: 'sync' }, () => {
+        const state = room.presenceState();
+        const count = Math.max(1, Object.keys(state).length);
+        document.getElementById('onlineCountText').textContent = count + ' онлайн';
+      });
+      room.subscribe(async (status) => {
+        if (status === 'SUBSCRIBED') {
+          await room.track({ online_at: new Date().toISOString() });
+        }
+      });
+    } catch (e) {
+      // Offline fallback
+      document.getElementById('onlineCountText').textContent = '1 онлайн';
+    }
+
+    // Initial render
+    renderModuleDropdown();
+    selectTask(ALL_TASKS[0]);
+  </script>
+</body>
+</html>

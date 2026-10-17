@@ -1,0 +1,17 @@
+{
+  "name": "js-loops-workout",
+  "version": "1.0.0",
+  "description": "Практичний воркаут з циклів та відлагодження коду в JavaScript (while, do-while, for, break, continue, вкладені цикли, блок-схеми, debugger) — 160+ завдань",
+  "type": "module",
+  "scripts": {
+    "start": "vite --open",
+    "dev": "vite --open",
+    "build": "vite build",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0",
+    "vitest": "^1.6.0"
+  }
+}
