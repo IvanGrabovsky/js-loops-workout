@@ -839,16 +839,6 @@
           🏆 <span id="progressCount">0</span> / 165 виконано
         </div>
 
-        
-        <button class="btn-pill btn-pill-outline" id="teacherAuthBtn" title="Вхід викладача (Ctrl+Shift+A)">
-          🔐 Ментор
-        </button>
-
-        
-        <button class="btn-pill btn-pill-outline" id="teacherAuthBtn" title="Вхід викладача (Ctrl+Shift+A)">
-          🔐 Ментор
-        </button>
-
         <button class="btn-pill btn-pill-outline" id="resetAllBtn" title="Скинути весь збережений код до початкового стану">
           ↺ Скинути
         </button>
@@ -1585,26 +1575,9 @@ do {
     }
 
     function applyTeacherUI(isUnlocked) {
-      const teacherBtn = document.getElementById('teacherAuthBtn');
-      const revealBtn = document.getElementById('revealSolutionBtn');
-      if (isUnlocked) {
-        if (teacherBtn) {
-          teacherBtn.innerHTML = '🎓 Ментор (Активно)';
-          teacherBtn.classList.add('teacher-active');
-          teacherBtn.title = 'Режим викладача активний. Натисніть, щоб вийти.';
-        }
-        if (revealBtn) {
-          revealBtn.style.display = 'inline-flex';
-        }
-      } else {
-        if (teacherBtn) {
-          teacherBtn.innerHTML = '🔐 Ментор';
-          teacherBtn.classList.remove('teacher-active');
-          teacherBtn.title = 'Вхід викладача (Ctrl+Shift+A)';
-        }
-        if (revealBtn) {
-          revealBtn.style.display = 'none';
-        }
+      const revealBtn = document.getElementById("revealSolutionBtn");
+      if (revealBtn) {
+        revealBtn.style.display = isUnlocked ? "inline-flex" : "none";
       }
     }
 
@@ -1675,7 +1648,7 @@ do {
       if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
         e.preventDefault();
         if (decryptedSolutionsCache) {
-          if (confirm('Вийти з режиму викладача?')) lockTeacherMode();
+          if (confirm("Вийти з режиму викладача та сховати еталонні рішення?")) { lockTeacherMode(); showToast("Режим викладача деактивовано."); }
         } else {
           openTeacherModal();
         }
