@@ -650,6 +650,144 @@
       gap: 8px;
     }
 
+    .theory-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: rgba(4, 71, 255, 0.08);
+      color: var(--accent-blue);
+      border: 1px solid rgba(4, 71, 255, 0.2);
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .theory-badge-green {
+      background: rgba(16, 185, 129, 0.1);
+      color: #059669;
+      border-color: rgba(16, 185, 129, 0.25);
+    }
+    .theory-badge-purple {
+      background: rgba(124, 58, 237, 0.1);
+      color: #7c3aed;
+      border-color: rgba(124, 58, 237, 0.25);
+    }
+    .theory-badge-orange {
+      background: rgba(255, 71, 4, 0.1);
+      color: #ff4704;
+      border-color: rgba(255, 71, 4, 0.25);
+    }
+    .theory-callout {
+      padding: 14px 18px;
+      border-radius: var(--radius-subcard);
+      margin: 16px 0;
+      border-left: 4px solid var(--accent-blue);
+      background: #f8fafc;
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: #334155;
+    }
+    .theory-callout-warn {
+      border-left-color: #f59e0b;
+      background: #fffbeb;
+      color: #92400e;
+    }
+    .theory-callout-danger {
+      border-left-color: #ef4444;
+      background: #fef2f2;
+      color: #991b1b;
+    }
+    .theory-callout-success {
+      border-left-color: #10b981;
+      background: #ecfdf5;
+      color: #065f46;
+    }
+    .theory-table-wrap {
+      overflow-x: auto;
+      margin: 16px 0;
+      border-radius: var(--radius-subcard);
+      border: 1px solid var(--border-stone);
+    }
+    .theory-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      background: #ffffff;
+    }
+    .theory-table th {
+      background: var(--surface-taupe);
+      padding: 10px 14px;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 1px solid var(--border-stone);
+      color: var(--ink);
+    }
+    .theory-table td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--border-stone);
+      color: #374151;
+      vertical-align: top;
+      line-height: 1.5;
+    }
+    .theory-table tr:last-child td {
+      border-bottom: none;
+    }
+    .theory-code-snippet {
+      background: #191c24;
+      color: #f4efea;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      line-height: 1.55;
+      margin: 10px 0;
+      overflow-x: auto;
+      border: 1px solid #2a2e3a;
+    }
+    .theory-exercise-card {
+      background: #ffffff;
+      border: 1px solid var(--border-stone);
+      border-radius: var(--radius-subcard);
+      padding: 18px 20px;
+      margin: 16px 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .theory-exercise-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .theory-exercise-title {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .theory-exercise-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--surface-taupe);
+      border: 1px solid var(--border-stone);
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--ink);
+      transition: all 0.15s;
+    }
+    .theory-exercise-btn:hover {
+      background: var(--ink);
+      color: #ffffff;
+      border-color: var(--ink);
+    }
+
     /* Mass Runner Tab */
     .mass-runner-box {
       background: #ffffff;
@@ -710,59 +848,6 @@
     .toast-box.show {
       transform: translateY(0);
       opacity: 1;
-    }
-
-    /* Teacher Modal & Auth styling */
-    .teacher-active {
-      background: rgba(16, 185, 129, 0.12) !important;
-      color: #047857 !important;
-      border-color: rgba(16, 185, 129, 0.4) !important;
-      font-weight: 600 !important;
-    }
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(4px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10000;
-      animation: fadeIn 0.15s ease-out;
-    }
-    .modal-card {
-      background: #ffffff;
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-card);
-      width: 100%;
-      max-width: 440px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-    .modal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border-color);
-    }
-    .modal-close {
-      background: none;
-      border: none;
-      font-size: 20px;
-      line-height: 1;
-      cursor: pointer;
-      color: var(--smoke);
-      padding: 4px;
-      border-radius: 4px;
-    }
-    .modal-close:hover {
-      color: var(--ink);
-    }
-    .modal-body {
-      padding: 20px;
     }
 
     /* Teacher Modal & Auth styling */
@@ -962,113 +1047,314 @@
 
     <!-- TAB 2: FULL THEORY -->
     <div id="tab-theory" class="tab-content" style="display:none;">
-      <div class="theory-section">
-        <h2 class="theory-title">Модуль 1–4: Цикли в JavaScript (while, do...while, for, break, continue)</h2>
-        <p class="theory-p">
-          <b>Цикл (Loop)</b> — це керуюча конструкція мови програмування, яка дозволяє багаторазово виконувати певну послідовність дій (тіло циклу) доти, доки виконується задана логічна умова.
-        </p>
-
-        <div class="theory-grid-cards">
-          <div class="theory-card">
-            <h3 class="theory-card-title">🔄 Цикл while (з передумовою)</h3>
-            <p style="font-size:13.5px; line-height:1.6; color:#444;">
-              Умова перевіряється <b>перед</b> кожною ітерацією. Якщо умова хибна з самого початку (<code>false</code>), тіло циклу не виконається <b>жодного разу</b>.
-            </p>
-            <pre style="background:#fff; border:1px solid var(--border-stone); padding:8px; border-radius:6px; margin-top:8px; font-family:var(--font-mono); font-size:12px;">let i = 0;
-while (i &lt; 5) {
-  console.log(i);
-  i++;
-}</pre>
-          </div>
-
-          <div class="theory-card">
-            <h3 class="theory-card-title">⚡ Цикл do...while (з післяумовою)</h3>
-            <p style="font-size:13.5px; line-height:1.6; color:#444;">
-              Тіло циклу виконується <b>гарантовано щонайменше 1 раз</b>, а умова перевіряється вже після виконання. Ідеально для повторних запитів, паролів та ігрових циклів.
-            </p>
-            <pre style="background:#fff; border:1px solid var(--border-stone); padding:8px; border-radius:6px; margin-top:8px; font-family:var(--font-mono); font-size:12px;">let input;
-do {
-  input = askUser();
-} while (!isValid(input));</pre>
-          </div>
-
-          <div class="theory-card">
-            <h3 class="theory-card-title">🎯 Цикл for (параметричний)</h3>
-            <p style="font-size:13.5px; line-height:1.6; color:#444;">
-              Обʼєднує 3 секції в одному заголовку: ініціалізацію, умову продовження та крок зміни лічильника: <code>for (init; condition; step)</code>.
-            </p>
-            <pre style="background:#fff; border:1px solid var(--border-stone); padding:8px; border-radius:6px; margin-top:8px; font-family:var(--font-mono); font-size:12px;">for (let i = 0; i &lt; arr.length; i++) {
-  console.log(arr[i]);
-}</pre>
-          </div>
-
-          <div class="theory-card">
-            <h3 class="theory-card-title">🛑 break та continue</h3>
-            <p style="font-size:13.5px; line-height:1.6; color:#444;">
-              <b>break</b> негайно зупиняє весь цикл і передає керування за його межі.<br>
-              <b>continue</b> завершує поточну ітерацію і одразу переходить до перевірки наступної.
-            </p>
-          </div>
-        </div>
-
-        <h3 class="theory-subtitle">⚠️ Вічний цикл (Infinite Loop) та запобіжники</h3>
-        <p class="theory-p">
-          Вічний цикл виникає тоді, коли умова циклу ніколи не стає <code>false</code> (наприклад, забули написати <code>i++</code> всередині <code>while</code>). У браузері це призводить до зависання вкладки та 100% навантаження CPU. Для захисту в критичних системах застосовують лічильник-сторож (<b>Watchdog Counter</b>): якщо кількість ітерацій перевищує безпечний ліміт (наприклад, 10 000), спрацьовує аварійний <code>break</code>.
+      
+      <!-- HEADER BANNER -->
+      <div class="theory-section" style="border-left:5px solid var(--accent-orange); background:linear-gradient(135deg, #ffffff 0%, var(--surface-taupe) 100%);">
+        <span class="theory-badge theory-badge-orange">Навчальний посібник · JS Loops &amp; Debugger</span>
+        <h1 class="theory-title" style="font-size:32px; font-weight:700; margin-bottom:8px;">Модуль 4. Цикли, використання відлагоджувача</h1>
+        <p class="theory-p" style="font-size:16px; color:#4b5563; margin-bottom:0;">
+          Повний фундаментальний конспект: від модальних вікон взаємодії з користувачем (<code>alert</code>, <code>prompt</code>, <code>confirm</code>) до всіх різновидів циклів, блок-схем за стандартом та професійного володіння Chrome DevTools Debugger.
         </p>
       </div>
 
-      <!-- Module 5: Flowcharts SVG -->
+      <!-- ========================================== -->
+      <!-- БЛОК 1: ВЗАЄМОДІЯ З КОРИСТУВАЧЕМ           -->
+      <!-- ========================================== -->
       <div class="theory-section">
-        <h2 class="theory-title">Модуль 5: Позначення циклів у блок-схемах</h2>
+        <span class="theory-badge theory-badge-green">Блок 1 · Взаємодія з браузером</span>
+        <h2 class="theory-title">1. Взаємодія з користувачем: alert, prompt та confirm</h2>
+        
         <p class="theory-p">
-          У класичних графічних блок-схемах алгоритмів використовують стандартизовані геометричні блоки:
+          У браузерному середовищі JavaScript має три вбудовані функції для швидкого спілкування з користувачем: <code>alert</code>, <code>prompt</code> та <code>confirm</code>. Усі вони створюють <b>модальні вікна</b> (modal windows).
         </p>
 
+        <div class="theory-callout">
+          <b>Що означає «модальне вікно»?</b><br>
+          Коли зʼявляється таке вікно, виконання JavaScript-коду <b>тимчасово зупиняється</b> (фризиться), а користувач не може взаємодіяти з рештою сторінки (клікати по кнопках, виділяти текст, скролити), доки не натисне кнопку підтвердження чи закриття. Розташування та дизайн цих вікон строго контролюються браузером і операційною системою — змінити їхній вигляд через CSS неможливо.
+        </div>
+
         <div class="theory-grid-cards">
+          <!-- Card alert -->
           <div class="theory-card">
-            <h4 style="font-size:14px; font-weight:600; margin-bottom:6px;">🔷 Ромб умови</h4>
-            <p style="font-size:13px; color:#555;">Містить умову циклу. Має два виходи: гілка «ТАК» (до тіла циклу) та гілка «НІ» (вихід із циклу).</p>
+            <h3 class="theory-card-title">💬 alert(message) — Сповіщення</h3>
+            <p style="font-size:13.5px; line-height:1.6; color:#444;">
+              Показує спливаюче вікно з переданим повідомленням і єдиною кнопкою «OK».<br>
+              • <b>Повертає:</b> завжди <code>undefined</code>.<br>
+              • <b>Призначення:</b> інформування про подію чи завершення обчислень.
+            </p>
+            <div class="theory-code-snippet">alert("Вітаємо у світі циклів JavaScript!");</div>
+            <button class="theory-exercise-btn" onclick="runTheoryAlertDemo()" style="margin-top:8px;">
+              ▶️ Спробувати alert()
+            </button>
           </div>
+
+          <!-- Card prompt -->
           <div class="theory-card">
-            <h4 style="font-size:14px; font-weight:600; margin-bottom:6px;">🛑 Шестикутник підготовки</h4>
-            <p style="font-size:13px; color:#555;">Позначає параметричний цикл for: вказуються змінна, початкове значення, кінцеве значення та крок: <code>i = 1, 10, 1</code>.</p>
+            <h3 class="theory-card-title">✏️ prompt(title, [default]) — Введення даних</h3>
+            <p style="font-size:13.5px; line-height:1.6; color:#444;">
+              Показує вікно з текстовим полем вводу та двома кнопками: «OK» і «Скасувати» («Cancel»).<br>
+              • <b>Повертає:</b> введений <b>рядок (string)</b> при «OK» або <b>null</b> при «Скасувати» чи натисканні <code>Esc</code>.<br>
+              • <code>default</code>: необов'язкове початкове значення в полі вводу.
+            </p>
+            <div class="theory-code-snippet">let userName = prompt("Як вас звати?", "Гість");</div>
+            <button class="theory-exercise-btn" onclick="runTheoryPromptDemo()" style="margin-top:8px;">
+              ▶️ Спробувати prompt()
+            </button>
           </div>
+
+          <!-- Card confirm -->
           <div class="theory-card">
-            <h4 style="font-size:14px; font-weight:600; margin-bottom:6px;">↩️ Стрілка зворотного звʼязку (Loopback)</h4>
-            <p style="font-size:13px; color:#555;">Повертає потік керування від кінця тіла циклу назад до ромба перевірки умови або кроку інкременту.</p>
+            <h3 class="theory-card-title">❓ confirm(question) — Підтвердження</h3>
+            <p style="font-size:13.5px; line-height:1.6; color:#444;">
+              Ставить запитання з варіантом вибору з двох кнопок: «OK» і «Скасувати».<br>
+              • <b>Повертає:</b> <code>true</code> при «OK», <code>false</code> при «Скасувати» чи <code>Esc</code>.<br>
+              • <b>Призначення:</b> захист від небезпечних дій (видалення, скидання, підтвердження замовлення).
+            </p>
+            <div class="theory-code-snippet">let isBoss = confirm("Ви справді готові до тестів?");</div>
+            <button class="theory-exercise-btn" onclick="runTheoryConfirmDemo()" style="margin-top:8px;">
+              ▶️ Спробувати confirm()
+            </button>
           </div>
         </div>
 
+        <h3 class="theory-subtitle">⚠️ Підводні камені та особливості (Must-Know)</h3>
+        
+        <div class="theory-table-wrap">
+          <table class="theory-table">
+            <thead>
+              <tr>
+                <th>Метод</th>
+                <th>Синтаксис</th>
+                <th>Що повертає</th>
+                <th>Типовий підводний камінь</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>alert(msg)</code></td>
+                <td><code>alert("Увага!")</code></td>
+                <td><code>undefined</code></td>
+                <td>Блокує рендеринг сторінки та весь UI до закриття вікна.</td>
+              </tr>
+              <tr>
+                <td><code>prompt(q, default)</code></td>
+                <td><code>prompt("Вік:", "18")</code></td>
+                <td>Рядок <code>string</code> або <code>null</code></td>
+                <td>
+                  <b>Рядкове додавання!</b> Завжди повертає текст! Вираз <code>prompt() + prompt()</code> дасть <code>"10" + "20" = "1020"</code> замість <code>30</code>. Обов'язково робіть явне приведення: <code>+prompt()</code> або <code>Number(prompt())</code>.
+                </td>
+              </tr>
+              <tr>
+                <td><code>confirm(q)</code></td>
+                <td><code>confirm("Ви впевнені?")</code></td>
+                <td>Булеве <code>true / false</code></td>
+                <td>Натискання клавіші <code>Esc</code> повертає <code>false</code>, як і клік по «Скасувати».</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="theory-callout theory-callout-warn">
+          <b>Сумісність та Internet Explorer:</b> У старих браузерах другий аргумент функції <code>prompt(title, [default])</code> був обовʼязковим. Якщо опустити <code>default</code>, у полі вводу могло зʼявитися слово <code>"undefined"</code>. Тому у професійному коді завжди передають порожній рядок другим аргументом: <code>prompt("Введіть email:", "")</code>.
+        </div>
+
+        <h3 class="theory-subtitle">🏋️‍♂️ Практичні завдання з alert, prompt, confirm (Спробуйте самі!)</h3>
+        <p class="theory-p">Виконайте завдання прямо зараз у консолі браузера або натиснувши інтерактивні кнопки:</p>
+
+        <!-- Exercise 1 -->
+        <div class="theory-exercise-card">
+          <div class="theory-exercise-header">
+            <span class="theory-exercise-title">Завдання 1.1: Знайомство та перевірка на null</span>
+            <button class="theory-exercise-btn" onclick="runTheoryPromptDemo()">▶️ Запустити в браузері</button>
+          </div>
+          <p style="font-size:13.5px; color:#4b5563; line-height:1.6; margin-bottom:8px;">
+            Запитайте в користувача його імʼя через <code>prompt</code>. Якщо користувач натиснув «Скасувати» (значення <code>null</code>), виведіть «Дію скасовано!». Якщо ввів імʼя — привітайте його: «Привіт, [імʼя]!».
+          </p>
+          <details style="font-size:13px; color:#6b7280;">
+            <summary style="cursor:pointer; font-weight:600; color:var(--accent-blue);">Показати еталонний код розвʼязку</summary>
+            <div class="theory-code-snippet">let name = prompt("Як вас звати?", "");
+if (name === null) {
+  alert("Дію скасовано!");
+} else if (name.trim() === "") {
+  alert("Ви не ввели жодної літери!");
+} else {
+  alert("Привіт, " + name + "!");
+}</div>
+          </details>
+        </div>
+
+        <!-- Exercise 2 -->
+        <div class="theory-exercise-card">
+          <div class="theory-exercise-header">
+            <span class="theory-exercise-title">Завдання 1.2: Калькулятор суми без конкатенації</span>
+            <button class="theory-exercise-btn" onclick="runTheorySumDemo()">▶️ Запустити в браузері</button>
+          </div>
+          <p style="font-size:13.5px; color:#4b5563; line-height:1.6; margin-bottom:8px;">
+            Запитайте у користувача два числа по черзі через <code>prompt</code>. Додайте їх математично (використавши унарний плюс <code>+</code> або <code>Number()</code>) та виведіть суму через <code>alert</code>.
+          </p>
+          <details style="font-size:13px; color:#6b7280;">
+            <summary style="cursor:pointer; font-weight:600; color:var(--accent-blue);">Показати еталонний код розвʼязку</summary>
+            <div class="theory-code-snippet">let a = prompt("Перше число:", "10");
+let b = prompt("Друге число:", "20");
+let sum = +a + +b; // або Number(a) + Number(b)
+alert("Сума чисел дорівнює: " + sum);</div>
+          </details>
+        </div>
+
+        <!-- Exercise 3 -->
+        <div class="theory-exercise-card">
+          <div class="theory-exercise-header">
+            <span class="theory-exercise-title">Завдання 1.3: Захист операції через confirm</span>
+            <button class="theory-exercise-btn" onclick="runTheoryConfirmDemo()">▶️ Запустити в браузері</button>
+          </div>
+          <p style="font-size:13.5px; color:#4b5563; line-height:1.6; margin-bottom:8px;">
+            Запитайте підтвердження: «Бажаєте запустити цикл від 1 до 5?». Якщо користувач натиснув «OK», виконайте цикл і покажіть результат. Якщо «Скасувати» — виведіть повідомлення про зупинку.
+          </p>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- БЛОК 2: ЦИКЛИ (0. ЦИКЛИ)                   -->
+      <!-- ========================================== -->
+      <div class="theory-section">
+        <span class="theory-badge theory-badge-purple">Блок 2 · 0 Цикли (Loops)</span>
+        <h2 class="theory-title">0. Цикли: Фундамент повторюваних алгоритмів</h2>
+
+        <h3 class="theory-subtitle">• Що таке цикл?</h3>
+        <p class="theory-p">
+          <b>Цикл (Loop)</b> — це фундаментальна синтаксична конструкція мови програмування, яка забезпечує багаторазове повторення певної послідовності інструкцій (тіла циклу) доти, доки істинна (<code>true</code>) задана логічна умова.
+        </p>
+
+        <h3 class="theory-subtitle">• Необхідність використання циклів. Приклади використання</h3>
+        <p class="theory-p">
+          Без циклів програмування перетворилося б на нескінченний копіпаст рядків коду (порушення ключового інженерного принципу <b>DRY — Don't Repeat Yourself</b>). Якщо вам треба вивести числа від 1 до 1000 або надіслати email 50 000 користувачів, писати 50 000 однакових команд неможливо.
+        </p>
+        <p class="theory-p"><b>Приклади бойового застосування циклів у реальних проектах:</b></p>
+        <ul style="font-size:14px; line-height:1.7; color:#374151; margin-left:20px; margin-bottom:18px;">
+          <li>🛒 <b>E-commerce:</b> перебір товарів у кошику клієнта для розрахунку загальної суми зі знижками.</li>
+          <li>💬 <b>Чати та стрічки новин:</b> рендеринг списку повідомлень, отриманих з сервера (WebSocket).</li>
+          <li>🎮 <b>Game Development:</b> ігровий цикл (Game Loop), що виконується 60 разів на секунду для оновлення координат і рендерингу кадрів.</li>
+          <li>🔄 <b>Long Polling / Retry:</b> повторне відправлення мережевого запиту у разі збою з затримкою до 3 спроб.</li>
+          <li>📊 <b>Аналітика даних:</b> фільтрація масивів, агрегація показників виручки, пошук екстремумів (min/max).</li>
+        </ul>
+
+        <h3 class="theory-subtitle">• Цикл while (з передумовою)</h3>
+        <p class="theory-p">
+          Синтаксис циклу <code>while</code>:
+        </p>
+        <div class="theory-code-snippet">while (умова) {
+  // тіло циклу (виконується, поки умова повертає true)
+}</div>
+        <p class="theory-p">
+          Цикл називається <b>циклом з передумовою</b>, оскільки умова обчислюється <b>ДО</b> виконання тіла циклу. Якщо умова хибна з самого початку (<code>false</code>), тіло циклу <b>не виконається жодного разу</b>.
+        </p>
+        <div class="theory-code-snippet">let count = 3;
+while (count > 0) {
+  console.log("Відлік: " + count);
+  count--; // декремент: зменшуємо змінну на 1
+}
+// Результат у консолі:
+// Відлік: 3
+// Відлік: 2
+// Відлік: 1</div>
+
+        <h3 class="theory-subtitle">• Поняття ітерації</h3>
+        <p class="theory-p">
+          <b>Ітерація (Iteration)</b> — це один одиничний повний прохід тіла циклу. Змінна, яка відстежує номер поточної ітерації і змінюється на кожному кроці, називається <b>лічильником циклу</b> (loop counter, зазвичай позначається літерами <code>i</code>, <code>j</code>, <code>k</code> від англійського <i>index / iterator</i>).
+        </p>
+        
+        <p class="theory-p"><b>Таблиця трасування стану пам'яті для <code>let i = 0; while (i &lt; 3) { i++; }</code>:</b></p>
+        <div class="theory-table-wrap">
+          <table class="theory-table">
+            <thead>
+              <tr>
+                <th>Ітерація</th>
+                <th>Значення <code>i</code> на вході</th>
+                <th>Перевірка умови <code>i &lt; 3</code></th>
+                <th>Дія в тілі циклу</th>
+                <th>Значення <code>i</code> після ітерації</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Початок</td>
+                <td>0</td>
+                <td><code>0 &lt; 3 → true</code> (входимо)</td>
+                <td><code>i++</code></td>
+                <td>1</td>
+              </tr>
+              <tr>
+                <td>1-а ітерація</td>
+                <td>1</td>
+                <td><code>1 &lt; 3 → true</code> (входимо)</td>
+                <td><code>i++</code></td>
+                <td>2</td>
+              </tr>
+              <tr>
+                <td>2-а ітерація</td>
+                <td>2</td>
+                <td><code>2 &lt; 3 → true</code> (входимо)</td>
+                <td><code>i++</code></td>
+                <td>3</td>
+              </tr>
+              <tr>
+                <td>Перевірка виходу</td>
+                <td>3</td>
+                <td><code>3 &lt; 3 → false</code> (вихід!)</td>
+                <td>—</td>
+                <td>3 (цикл завершено)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="theory-subtitle">• Позначення циклів у блок-схемах. Блок циклу</h3>
+        <p class="theory-p">
+          У класичному інженерному моделюванні алгоритмів (стандарт ISO 5807 / ГОСТ 19.701) цикли зображуються комбінацією стандартних геометричних фігур:
+        </p>
+        <div class="theory-grid-cards">
+          <div class="theory-card">
+            <h4 style="font-size:14px; font-weight:600; margin-bottom:6px;">🔷 Ромб (Decision)</h4>
+            <p style="font-size:13px; color:#555;">Перевірка умови продовження циклу. Має два виходи: гілка «ТАК / YES» (перехід до тіла) та гілка «НІ / NO» (вихід із циклу).</p>
+          </div>
+          <div class="theory-card">
+            <h4 style="font-size:14px; font-weight:600; margin-bottom:6px;">🛑 Шестикутник (Preparation)</h4>
+            <p style="font-size:13px; color:#555;">Спеціальний блок підготовки для параметричного циклу <code>for</code>. Вказує початкове значення, граничне значення та крок: <code>i = 1, 10, 1</code>.</p>
+          </div>
+          <div class="theory-card">
+            <h4 style="font-size:14px; font-weight:600; margin-bottom:6px;">↩️ Лінія петлі (Loopback)</h4>
+            <p style="font-size:13px; color:#555;">Зворотна стрілка, яка спрямовує потік виконання від нижнього краю тіла циклу назад на вхід перевірки умови.</p>
+          </div>
+        </div>
+
+        <h3 class="theory-subtitle">• Приклади побудови програм з використанням циклів мовою блок-схем</h3>
+        <p class="theory-p">
+          Нижче наведено інтерактивну SVG-діаграму алгоритму циклу <code>while</code>. Зверніть увагу на червону пунктирну лінію — це зворотний звʼязок (Loopback), що повторює кроки:
+        </p>
+
         <div class="flowchart-svg-container">
-          <h4 style="font-size:14px; font-weight:600; margin-bottom:12px; color:var(--ink);">Блок-схема циклу while з передумовою</h4>
+          <h4 style="font-size:14px; font-weight:600; margin-bottom:12px; color:var(--ink);">Блок-схема: Алгоритм циклу while з передумовою</h4>
           <svg viewBox="0 0 600 320" width="600" height="320" xmlns="http://www.w3.org/2000/svg">
-            <!-- Start -->
             <rect x="220" y="20" width="160" height="40" rx="20" fill="#ebe8e4" stroke="#000" stroke-width="1.5"/>
             <text x="300" y="45" font-family="Inter, sans-serif" font-size="13" font-weight="600" text-anchor="middle" fill="#000">Початок (i = 0)</text>
             
             <line x1="300" y1="60" x2="300" y2="100" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"/>
             
-            <!-- Diamond: condition -->
             <polygon points="300,100 420,150 300,200 180,150" fill="#ffffff" stroke="#0447ff" stroke-width="2"/>
             <text x="300" y="154" font-family="Inter, sans-serif" font-size="13" font-weight="600" text-anchor="middle" fill="#0447ff">i &lt; limit?</text>
             
-            <!-- Yes branch down -->
             <line x1="300" y1="200" x2="300" y2="240" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"/>
             <text x="315" y="222" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#10b981">ТАК</text>
             
-            <!-- Body -->
             <rect x="210" y="240" width="180" height="45" rx="6" fill="#f5f3f1" stroke="#000" stroke-width="1.5"/>
             <text x="300" y="267" font-family="Inter, sans-serif" font-size="12" font-weight="500" text-anchor="middle" fill="#000">Тіло: дія(); i++</text>
             
-            <!-- Loopback Arrow: from body left, up, and back to condition line -->
             <path d="M 210,262 L 120,262 L 120,80 L 300,80" fill="none" stroke="#ff4704" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrow-orange)"/>
-            <text x="130" y="170" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#ff4704" transform="rotate(-90 130 170)">Зворотний звʼязок</text>
+            <text x="130" y="170" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#ff4704" transform="rotate(-90 130 170)">Зворотний звʼязок (Loopback)</text>
             
-            <!-- No branch right to End -->
             <line x1="420" y1="150" x2="500" y2="150" stroke="#000" stroke-width="1.5" marker-end="url(#arrow)"/>
             <text x="445" y="142" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#ef4444">НІ</text>
             
-            <!-- End -->
             <rect x="500" y="130" width="80" height="40" rx="20" fill="#ebe8e4" stroke="#000" stroke-width="1.5"/>
             <text x="540" y="155" font-family="Inter, sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#000">Кінець</text>
 
@@ -1082,43 +1368,285 @@ do {
             </defs>
           </svg>
         </div>
-      </div>
 
-      <!-- Module 7: Debugger Guide -->
-      <div class="theory-section">
-        <h2 class="theory-title">Модуль 7: Робота з відлагоджувачем (Debugger &amp; DevTools)</h2>
+        <h3 class="theory-subtitle">• Оператори break i continue у циклах</h3>
         <p class="theory-p">
-          <b>Відлагоджувач (Debugger)</b> — це спеціалізований інструмент середовища розробки (Chrome DevTools, VS Code, Node.js inspector), призначений для детального дослідження поведінки програми в процесі її виконання, пошуку логічних помилок (багів) та контролю за станом змінних.
+          Зазвичай цикл завершується, коли його умова стає хибною. Проте ми можемо примусово втрутитися в хід виконання за допомогою двох операторів:
         </p>
 
         <div class="theory-grid-cards">
           <div class="theory-card">
-            <h3 class="theory-card-title">🔍 Точка зупинки (Breakpoint)</h3>
+            <h4 style="font-size:15px; font-weight:700; color:#ef4444; margin-bottom:8px;">🛑 break — Повний аварійний вихід</h4>
             <p style="font-size:13.5px; line-height:1.6; color:#444;">
-              Маркер на рядку коду, який тимчасово призупиняє виконання JavaScript-рушія. Можна встановити кліком на номер рядка в панелі Sources або через команду <code>debugger;</code> у вихідному коді.
+              Миттєво припиняє виконання всього циклу і передає керування на рядок одразу <b>після</b> фігурної дужки циклу.
+            </p>
+            <div class="theory-code-snippet">let sum = 0;
+while (true) {
+  let val = +prompt("Введіть число (0 для зупинки):", "0");
+  if (!val) break; // Вихід при введенні 0
+  sum += val;
+}
+alert("Сума: " + sum);</div>
+          </div>
+
+          <div class="theory-card">
+            <h4 style="font-size:15px; font-weight:700; color:#059669; margin-bottom:8px;">⏭️ continue — Пропуск поточної ітерації</h4>
+            <p style="font-size:13.5px; line-height:1.6; color:#444;">
+              Не зупиняє весь цикл, а лише достроково завершує <b>поточну ітерацію</b> й одразу переходить до перевірки умови наступної.
+            </p>
+            <div class="theory-code-snippet">for (let i = 0; i &lt; 10; i++) {
+  // Якщо число парне, пропускаємо його
+  if (i % 2 === 0) continue;
+  console.log(i); // Виведе 1, 3, 5, 7, 9
+}</div>
+          </div>
+        </div>
+
+        <div class="theory-callout">
+          <b>Мітки для break/continue (Labels):</b><br>
+          Що робити, коли треба вийти одразу з двох чи трьох вкладених циклів? Звичайний <code>break</code> зупинить лише внутрішній цикл. Для виходу з зовнішнього циклу використовують <b>мітку (label)</b>:
+          <div class="theory-code-snippet" style="margin-top:8px;">outerLoop: for (let i = 0; i &lt; 3; i++) {
+  for (let j = 0; j &lt; 3; j++) {
+    let input = prompt(`Координати (${i}, ${j}). Введіть 'stop' для виходу:`, "");
+    if (input === 'stop') break outerLoop; // Розриває ОБИДВА цикли!
+  }
+}
+alert("Завершено!");</div>
+        </div>
+
+        <h3 class="theory-subtitle">• Вічний цикл (Infinite Loop)</h3>
+        <p class="theory-p">
+          <b>Вічний цикл</b> — це критична помилка в коді, коли логічна умова циклу <b>ніколи не стає <code>false</code></b>.
+        </p>
+        <p class="theory-p"><b>Головні причини виникнення вічних циклів:</b></p>
+        <ol style="font-size:14px; line-height:1.7; color:#374151; margin-left:20px; margin-bottom:14px;">
+          <li>Забули написати крок інкременту/декременту лічильника (наприклад, пропустили <code>i++</code> всередині <code>while</code>).</li>
+          <li>Лічильник змінюється не в той бік (наприклад, <code>let i = 10; while (i &gt; 0) i++;</code> — змінна <code>i</code> росте в нескінченність).</li>
+          <li>Помилка точності дійсних чисел з рухомою комою (наприклад, <code>while (x !== 1.0) { x += 0.2; }</code> через специфіку IEEE 754 ніколи не дорівнюватиме строго 1.0).</li>
+        </ol>
+
+        <div class="theory-callout theory-callout-danger">
+          <b>Чим це небезпечно?</b><br>
+          Оскільки JavaScript є однопотоковим середовищем (Single-threaded Event Loop), вічний цикл на 100% завантажує процесорне ядро, браузер повністю перестає реагувати на кліки та дії користувача, вкладка зависає («Page Unresponsive»).<br>
+          <b>Як примусово зупинити у браузері:</b> комбінація <code>Shift + Esc</code> відкриває Диспетчер завдань Chrome, де можна примусово завершити процес завислої вкладки.
+        </div>
+
+        <div class="theory-callout theory-callout-success">
+          🛡️ <b>Запобіжник у промисловому коді (Watchdog Counter):</b><br>
+          Коли алгоритм складний (наприклад, обхід графу чи збірка даних), завжди додають лічильник-сторож:
+          <div class="theory-code-snippet" style="margin-top:6px;">let watchdog = 0;
+while (condition) {
+  if (++watchdog > 10000) {
+    console.error("Watchdog: Можливий вічний цикл! Аварійна зупинка.");
+    break;
+  }
+  // тіло циклу...
+}</div>
+        </div>
+
+        <h3 class="theory-subtitle">• Цикл for (параметричний)</h3>
+        <p class="theory-p">
+          Цикл <code>for</code> є найпопулярнішим у практиці розробника, оскільки компактно поєднує 3 частини в одному заголовку:
+        </p>
+        <div class="theory-code-snippet">for (початок; умова; крок) {
+  // ... тіло циклу ...
+}</div>
+        
+        <p class="theory-p"><b>Точний алгоритм виконання циклу JavaScript-рушієм:</b></p>
+        <ol style="font-size:14px; line-height:1.7; color:#374151; margin-left:20px; margin-bottom:14px;">
+          <li><b>Початок (ініціалізація):</b> виконується лише 1 раз при вході в цикл (<code>let i = 0</code>).</li>
+          <li><b>Умова:</b> перевіряється перед кожною ітерацією (<code>i &lt; 5</code>). Якщо <code>false</code> — вихід.</li>
+          <li><b>Тіло:</b> виконується блок коду у фігурних дужках <code>{ ... }</code>.</li>
+          <li><b>Крок (інкремент):</b> виконується після тіла (<code>i++</code>).</li>
+          <li><b>Повтор:</b> повернення до кроку 2 (перевірка умови).</li>
+        </ol>
+
+        <div class="theory-callout">
+          <b>Область видимості змінної <code>let i</code>:</b><br>
+          Змінна <code>i</code>, оголошена за допомогою <code>let</code> всередині заголовка циклу, видима <b>тільки всередині цього циклу</b>. Більше того, рушій JavaScript створює нове лексичне оточення (нову змінну) на <b>кожну ітерацію</b>. Це запобігає класичним багам з асинхронністю та замиканнями (наприклад, у <code>setTimeout</code>).
+        </div>
+
+        <p class="theory-p"><b>Пропуск частин у for:</b> будь-яку з трьох частин можна пропустити:</p>
+        <div class="theory-code-snippet">let i = 0;
+for (; i &lt; 3;) {
+  console.log(i++);
+}
+// for (;;) — синтаксис нескінченного циклу, повний еквівалент while(true)</div>
+
+        <h3 class="theory-subtitle">• Цикл do...while (з післяумовою)</h3>
+        <p class="theory-p">
+          Синтаксис циклу <code>do...while</code>:
+        </p>
+        <div class="theory-code-snippet">do {
+  // тіло циклу (гарантовано виконається щонайменше 1 раз!)
+} while (умова);</div>
+        <p class="theory-p">
+          Головна відмінність від <code>while</code>: умова перевіряється <b>ПІСЛЯ</b> виконання тіла циклу. Тіло гарантовано виконається <b>хоча б один раз</b>, навіть якщо умова з самого початку дорівнює <code>false</code>.
+        </p>
+        <div class="theory-code-snippet">// Класичний приклад: перепитувати користувача, доки він не введе число більше 100
+let num;
+do {
+  num = prompt("Введіть число більше 100:", 0);
+} while (num !== null && num &lt;= 100);</div>
+
+        <h3 class="theory-subtitle">• Вкладені цикли (Nested Loops). Приклади використання</h3>
+        <p class="theory-p">
+          <b>Вкладеним циклом</b> називається цикл, який розташований усередині тіла іншого циклу.
+        </p>
+        <p class="theory-p">
+          <b>Принцип роботи:</b> на кожну ОДНУ ітерацію зовнішнього циклу внутрішній цикл виконує ВСІ свої ітерації від початку до кінця.
+        </p>
+        <div class="theory-code-snippet">// Таблиця множення від 1 до 3:
+for (let i = 1; i &lt;= 3; i++) {
+  console.log(`--- Рядок ${i} ---`);
+  for (let j = 1; j &lt;= 3; j++) {
+    console.log(`${i} * ${j} = ${i * j}`);
+  }
+}</div>
+
+        <div class="theory-callout theory-callout-warn">
+          ⏱️ <b>Алгоритмічна складність і продуктивність:</b><br>
+          Якщо зовнішній цикл робить $N$ ітерацій, а внутрішній $M$ ітерацій, сумарна кількість кроків дорівнює $N \times M$ (складність $O(N^2)$ для однакових розмірів). Якщо $N = 10\,000$, внутрішній код виконається <b>100 мільйонів разів</b>! Тому уникайте глибокої вкладеності (3+ рівні) без явної потреби.
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- БЛОК 3: РОБОТА З ВІДЛАГОДЖУВАЧЕМ           -->
+      <!-- ========================================== -->
+      <div class="theory-section">
+        <span class="theory-badge theory-badge-purple">Блок 3 · 2 Робота з відлагоджувачем</span>
+        <h2 class="theory-title">2. Робота з відлагоджувачем (Debugger &amp; DevTools)</h2>
+
+        <h3 class="theory-subtitle">• Що таке відлагоджувач. Цілі та завдання відлагоджувача</h3>
+        <p class="theory-p">
+          <b>Відлагоджувач (Debugger)</b> — це вбудований у браузер (Chrome DevTools, Firefox Developer Tools) або редактор коду (VS Code) професійний програмний комплекс, який дозволяє досліджувати внутрішній стан працюючої програми в будь-яку мілісекунду.
+        </p>
+        <p class="theory-p"><b>Чому професіонали використовують Debugger замість <code>console.log</code>?</b></p>
+        <ul style="font-size:14px; line-height:1.7; color:#374151; margin-left:20px; margin-bottom:14px;">
+          <li><b>Зупинка часу:</b> Debugger «заморожує» виконання JS на потрібному рядку коду. Сторінка зупиняється у поточному стані.</li>
+          <li><b>Повний зріз памʼяті:</b> ви бачите абсолютно всі змінні програми, їхні типи та обʼєкти без необхідності заздалегідь писати 20 викликів <code>console.log</code>.</li>
+          <li><b>Редагування значень на льоту:</b> можна прямо в інтерфейсі відлагоджувача змінити значення змінної і подивитися, як код поведеться далі.</li>
+          <li><b>Відстеження ланцюжка викликів:</b> видно, яка функція викликала поточну функцію (Call Stack).</li>
+        </ul>
+
+        <h3 class="theory-subtitle">• Встановлення точки зупинки (Breakpoint)</h3>
+        <p class="theory-p">
+          <b>Точка зупинки (Breakpoint)</b> — це спеціальна мітка на конкретному рядку вихідного коду, яка вказує рушію JavaScript: <i>«Зупинись прямо перед виконанням цього рядка!»</i>.
+        </p>
+        <p class="theory-p"><b>Способи встановлення:</b></p>
+        <ol style="font-size:14px; line-height:1.7; color:#374151; margin-left:20px; margin-bottom:14px;">
+          <li><b>Клік по номеру рядка у DevTools:</b> відкрийте вкладку <b>Sources</b> (F12 або <code>Cmd+Option+I</code> у Chrome), знайдіть файл зі скриптом і клікніть мишкою по номеру рядка. Зʼявиться синій прапорець.</li>
+          <li><b>Ключове слово <code>debugger;</code> у коді:</b> спеціальна інструкція мови. Якщо інструменти розробника відкриті, браузер автоматично зупинить програму на цьому слові.</li>
+          <li><b>Умовні точки зупинки (Conditional Breakpoint):</b> правий клік по номеру рядка → <i>Add conditional breakpoint...</i> → введіть вираз (наприклад, <code>i === 50</code>). Зупинка відбудеться <b>лише тоді</b>, коли умова істинна! Це незамінно під час аналізу циклів на тисячі ітерацій.</li>
+        </ol>
+
+        <div style="margin:16px 0;">
+          <button class="theory-exercise-btn" onclick="runTheoryDebuggerDemo()" style="padding:10px 18px; font-size:13px; background:var(--ink); color:#ffffff;">
+            🐞 Запустити інтерактивний тест з 'debugger;'
+          </button>
+          <span style="font-size:12px; color:var(--smoke); margin-left:12px;">(Перед натисканням відкрийте Chrome DevTools через F12!)</span>
+        </div>
+
+        <h3 class="theory-subtitle">• Запуск програми за кроками та виконання одного кроку</h3>
+        <p class="theory-p">
+          Коли програма зупинилася на точці зупинки, у верхньому правому куті панелі Sources стають активними кнопки покрокового проходження алгоритму:
+        </p>
+
+        <div class="theory-table-wrap">
+          <table class="theory-table">
+            <thead>
+              <tr>
+                <th>Дія</th>
+                <th>Гаряча клавіша</th>
+                <th>Іконка</th>
+                <th>Опис поведінки</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>Resume</b></td>
+                <td><kbd style="background:#eee; padding:2px 6px; border-radius:4px;">F8</kbd></td>
+                <td>▶ (Play)</td>
+                <td>Продовжити звичайне швидке виконання програми до наступної точки зупинки.</td>
+              </tr>
+              <tr>
+                <td><b>Step over</b></td>
+                <td><kbd style="background:#eee; padding:2px 6px; border-radius:4px;">F10</kbd></td>
+                <td>↷ (Next line)</td>
+                <td>
+                  <b>Виконати один наступний рядок</b> коду в поточному контексті. Якщо на цьому рядку викликається інша функція, вона виконається цілком без заглиблення всередину її коду.
+                </td>
+              </tr>
+              <tr>
+                <td><b>Step into</b></td>
+                <td><kbd style="background:#eee; padding:2px 6px; border-radius:4px;">F11</kbd></td>
+                <td>⇲ (In)</td>
+                <td>
+                  <b>Увійти всередину функції</b>, яка викликається на поточному рядку, щоб покроково відлагодити її внутрішній код.
+                </td>
+              </tr>
+              <tr>
+                <td><b>Step out</b></td>
+                <td><kbd style="background:#eee; padding:2px 6px; border-radius:4px;">Shift+F11</kbd></td>
+                <td>⇱ (Out)</td>
+                <td>
+                  <b>Швидко добігти до кінця</b> поточної функції і зупинитися на рядку, звідки вона була викликана (в батьківському коді).
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="theory-subtitle">• Вікна для роботи з відлагоджувачем. Вікна змінних, локальних змінних, памʼяті</h3>
+        <p class="theory-p">
+          Під час паузи на точці зупинки бічна панель DevTools відкриває 4 ключові робочі вікна:
+        </p>
+
+        <div class="theory-grid-cards">
+          <div class="theory-card">
+            <h4 style="font-size:14.5px; font-weight:700; color:var(--ink); margin-bottom:8px;">📦 1. Вікно областей видимості (Scope)</h4>
+            <p style="font-size:13px; line-height:1.6; color:#444;">
+              Показує всі доступні на даному кроці змінні, розбиті за рівнями:<br>
+              • <b>Block:</b> змінні поточного блоку фігурних дужок (наприклад, лічильник циклу <code>let i</code>).<br>
+              • <b>Local:</b> змінні поточної функції та її аргументи.<br>
+              • <b>Closure:</b> змінні батьківських функцій, захоплені замиканням.<br>
+              • <b>Global:</b> глобальні властивості об'єкта <code>window</code>.<br>
+              💡 <i>Фішка: двічі клікніть на будь-яке число чи рядок у списку Scope і введіть нове значення — воно миттєво підставиться у виконання!</i>
             </p>
           </div>
 
           <div class="theory-card">
-            <h3 class="theory-card-title">⏭️ Покрокове виконання (Stepping)</h3>
-            <p style="font-size:13.5px; line-height:1.6; color:#444;">
-              • <b>Step over (F10):</b> виконати наступний рядок без заглиблення у виклики функцій.<br>
-              • <b>Step into (F11):</b> увійти всередину викликаної функції.<br>
-              • <b>Step out (Shift+F11):</b> виконати залишок функції і вийти в місце виклику.<br>
-              • <b>Resume (F8):</b> продовжити звичайне виконання до наступного breakpoint.
+            <h4 style="font-size:14.5px; font-weight:700; color:var(--ink); margin-bottom:8px;">👁️ 2. Вікно спостереження (Watch)</h4>
+            <p style="font-size:13px; line-height:1.6; color:#444;">
+              Дозволяє ввести будь-який користувацький вираз (натиснувши <b>+</b>):<br>
+              • <code>i * 2</code><br>
+              • <code>arr.length</code><br>
+              • <code>typeof data === "object"</code><br>
+              На кожному натисканні <kbd>F10</kbd> цей вираз буде автоматично перераховуватись і показувати свіже значення!
             </p>
           </div>
 
           <div class="theory-card">
-            <h3 class="theory-card-title">📦 Вікна Scopes, Watch та Call Stack</h3>
-            <p style="font-size:13.5px; line-height:1.6; color:#444;">
-              • <b>Scopes:</b> локальні змінні (Local), замикання (Closure) та глобальний обʼєкт (Global).<br>
-              • <b>Watch:</b> користувацькі вирази, які динамічно перераховуються на кожному кроці.<br>
-              • <b>Call Stack:</b> стек викликів функцій, що показує шлях до поточної точки зупинки.
+            <h4 style="font-size:14.5px; font-weight:700; color:var(--ink); margin-bottom:8px;">📚 3. Стек викликів (Call Stack)</h4>
+            <p style="font-size:13px; line-height:1.6; color:#444;">
+              Показує повну хронологічну ієрархію викликів функцій від початкової точки (наприклад, клік по кнопці <code>onClick</code>) до поточної вкладеної функції. Ви можете клікнути на будь-який попередній фрейм стеку і побачити змінні, які були в тій функції в момент виклику.
+            </p>
+          </div>
+
+          <div class="theory-card">
+            <h4 style="font-size:14.5px; font-weight:700; color:var(--ink); margin-bottom:8px;">📍 4. Панель точок зупинки (Breakpoints)</h4>
+            <p style="font-size:13px; line-height:1.6; color:#444;">
+              Централізований список усіх створених точок зупинки в усіх файлах проекту. Дозволяє тимчасово вимкнути або увімкнути їх усі одним кліком прапорця, не видаляючи з коду. Також містить опцію <b>«Pause on caught/uncaught exceptions»</b> (зупинятися автоматично при виникненні будь-якої помилки).
             </p>
           </div>
         </div>
+
+        <div class="theory-callout theory-callout-success" style="margin-top:20px;">
+          🚀 <b>Підсумок модуля:</b><br>
+          Опанувавши взаємодію через <code>alert/prompt/confirm</code>, цикли <code>while</code>, <code>do...while</code>, <code>for</code> та роботу з <code>Debugger</code>, ви володієте повним набором інструментів для написання та відлагодження будь-яких алгоритмічних завдань у JavaScript! Переходьте до вкладки <b>«Тренажер завдань»</b> і закріпіть знання на 165 практичних вправах!
+        </div>
       </div>
+
     </div>
 
     <!-- TAB 3: MASS RUNNER -->
@@ -1161,33 +1689,6 @@ do {
 
         <div id="certResultsArea" style="margin-top:32px; display:none;">
           <!-- Dynamically populated -->
-        </div>
-      </div>
-    </div>
-  </div>
-
-  
-  <!-- Teacher Auth Modal -->
-  <div id="teacherAuthModal" class="modal-overlay" style="display: none;">
-    <div class="modal-card">
-      <div class="modal-header">
-        <div style="display:flex; align-items:center; gap:8px;">
-          <span style="font-size:18px;">🔐</span>
-          <h3 style="margin:0; font-size:16px; font-weight:600;">Вхід для викладача</h3>
-        </div>
-        <button class="modal-close" id="closeTeacherModalBtn">&times;</button>
-      </div>
-      <div class="modal-body">
-        <p style="color:var(--smoke); font-size:13px; line-height:1.5; margin:0 0 16px 0;">
-          Еталонні рішення надійно зашифровані AES-256-GCM. Введіть пароль викладача для розблокування режиму ментора:
-        </p>
-        <div style="margin-bottom:12px;">
-          <input type="password" id="teacherPasswordInput" placeholder="Пароль викладача..." autocomplete="off" style="width:100%; box-sizing:border-box; padding:10px 14px; border-radius:var(--radius-pill); border:1px solid var(--border-color); background:#ffffff; color:var(--ink); font-size:14px; outline:none; font-family:inherit;" />
-        </div>
-        <div id="teacherAuthStatus" style="font-size:12px; margin-bottom:14px; min-height:16px; font-weight:500;"></div>
-        <div style="display:flex; justify-content:flex-end; gap:8px;">
-          <button class="btn-pill btn-pill-outline" id="cancelTeacherAuthBtn">Скасувати</button>
-          <button class="btn-pill btn-pill-primary" id="submitTeacherAuthBtn">Розблокувати</button>
         </div>
       </div>
     </div>
@@ -1290,6 +1791,18 @@ do {
 
     document.getElementById('formatCodeBtn').addEventListener('click', formatCurrentCode);
 
+    // Robust Format shortcut detector (works on Mac Option, Windows Alt, and Ukrainian/English layouts)
+    function isFormatShortcut(e) {
+      const isKeyF = e.code === 'KeyF' || 
+                     e.key === 'F' || e.key === 'f' || 
+                     e.key === 'Ï' || e.key === 'ƒ' || 
+                     e.key === 'А' || e.key === 'а';
+      
+      const isShiftAltF = e.shiftKey && e.altKey && isKeyF;
+      const isMacCmdShiftF = (e.metaKey || e.ctrlKey) && (e.shiftKey || e.altKey) && isKeyF;
+      return isShiftAltF || isMacCmdShiftF;
+    }
+
     // Keyboard Shortcuts
     codeEditor.addEventListener('keydown', (e) => {
       // Tab indentation
@@ -1301,14 +1814,15 @@ do {
         codeEditor.selectionStart = codeEditor.selectionEnd = start + 2;
         saveCurrentCode();
       }
-      // Ctrl + Enter to run
+      // Ctrl + Enter or Cmd + Enter to run
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
         e.preventDefault();
         runSingleTaskTest();
       }
-      // Shift + Alt + F to format
-      if (e.shiftKey && e.altKey && (e.key === 'F' || e.key === 'f')) {
+      // Shift + Alt + F (Option + Shift + F on Mac) to format
+      if (isFormatShortcut(e)) {
         e.preventDefault();
+        e.stopPropagation();
         formatCurrentCode();
       }
     });
@@ -1472,6 +1986,22 @@ do {
           consoleBody.appendChild(row);
         });
 
+    const DEV_INSPIRATIONS = [
+      { type: "quote", text: "Не важливо, як повільно ти йдеш, якщо не зупиняєшся.", author: "Конфуцій" },
+      { type: "quote", text: "Будь-який дурень може написати код, який зрозуміє комп’ютер. Хороші програмісти пишуть код, який зрозуміють люди.", author: "Мартін Фаулер" },
+      { type: "quote", text: "Майстер зазнав невдач більше разів, ніж новачок навіть пробував.", author: "Стівен Маккрейні" },
+      { type: "quote", text: "Простота — це передумова надійності.", author: "Едсгер Дейкстра" },
+      { type: "quote", text: "Успіх — це сума маленьких зусиль, які повторюються день за днем.", author: "Роберт Кольєр" },
+      { type: "quote", text: "Єдиний спосіб робити великі справи — любити те, що ти робиш.", author: "Стів Джобс" },
+      { type: "fact", title: "JavaScript за 10 днів", text: "Брендан Айк створив першу версію JS у травні 1995 року всього за 10 днів." },
+      { type: "fact", title: "Перший у світі баг", text: "У 1947 році команда Ґрейс Гоппер вилучила справжнього метелика з контактів комп'ютера Mark II." },
+      { type: "fact", title: "Місячна місія Apollo 11", text: "Бортовий комп'ютер AGC мав лише 4 КБ RAM — чиста архітектура творить історію." },
+      { type: "fact", title: "Linux починався як хобі", text: "У 1991 Лінус Торвальдс починав Linux як хобі, а зараз він керує 100% суперкомп'ютерів світу." },
+      { type: "tip", title: "Захист від вічних циклів", text: "Завжди перевіряйте, що лічильник циклу (i++) наближається до умови виходу." },
+      { type: "tip", title: "break та continue", text: "Використовуйте break для дострокового виходу, а continue — щоб уникнути зайвої вкладеності if." },
+      { type: "tip", title: "Читабельність", text: "Якщо тіло циклу розростається більше 15–20 рядків — винесіть логіку в окрему допоміжну функцію." }
+    ];
+
         if (passedAll) {
           testSummaryStatus.textContent = '✓ ВСІ ТЕСТИ ПРОЙДЕНО!';
           testSummaryStatus.style.color = '#34d399';
@@ -1481,6 +2011,19 @@ do {
           renderQuickTaskPills();
           renderModuleDropdown();
           updateProgress();
+
+          const spark = DEV_INSPIRATIONS[Math.floor(Math.random() * DEV_INSPIRATIONS.length)];
+          const sparkRow = document.createElement('div');
+          sparkRow.className = 'test-inspire-box';
+          sparkRow.style.cssText = 'margin-top:14px; padding:10px 14px; background:rgba(52,211,153,0.08); border-left:3px solid #10b981; border-radius:6px; font-size:12px; line-height:1.45; color:#d1d5db;';
+          if (spark.type === 'quote') {
+            sparkRow.innerHTML = `<span style="color:#34d399; font-weight:600;">✨ Думка дня:</span> «${spark.text}» <span style="color:#9ba1b0; font-style:italic;">— ${spark.author}</span>`;
+          } else if (spark.type === 'fact') {
+            sparkRow.innerHTML = `<span style="color:#38bdf8; font-weight:600;">🚀 Цікавий факт (${spark.title}):</span> ${spark.text}`;
+          } else {
+            sparkRow.innerHTML = `<span style="color:#fbbf24; font-weight:600;">💡 Порада розробника (${spark.title}):</span> ${spark.text}`;
+          }
+          consoleBody.appendChild(sparkRow);
         } else {
           testSummaryStatus.textContent = '✗ Є ПОМИЛКИ В ТЕСТАХ';
           testSummaryStatus.style.color = '#f87171';
@@ -1571,9 +2114,9 @@ do {
     }
 
     function applyTeacherUI(isUnlocked) {
-      const revealBtn = document.getElementById("revealSolutionBtn");
+      const revealBtn = document.getElementById('revealSolutionBtn');
       if (revealBtn) {
-        revealBtn.style.display = isUnlocked ? "inline-flex" : "none";
+        revealBtn.style.display = isUnlocked ? 'inline-flex' : 'none';
       }
     }
 
@@ -1641,12 +2184,23 @@ do {
     });
 
     window.addEventListener('keydown', (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+      // Teacher mode stealth toggle
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.code === 'KeyA' || e.key === 'A' || e.key === 'a')) {
         e.preventDefault();
         if (decryptedSolutionsCache) {
-          if (confirm("Вийти з режиму викладача та сховати еталонні рішення?")) { lockTeacherMode(); showToast("Режим викладача деактивовано."); }
+          if (confirm('Вийти з режиму викладача?')) lockTeacherMode();
         } else {
           openTeacherModal();
+        }
+        return;
+      }
+
+      // Format code shortcut from anywhere on the page
+      if (typeof isFormatShortcut === 'function' && isFormatShortcut(e)) {
+        const activeTag = document.activeElement ? document.activeElement.tagName : '';
+        if (activeTag !== 'INPUT') {
+          e.preventDefault();
+          formatCurrentCode();
         }
       }
     });
@@ -1658,9 +2212,11 @@ do {
         openTeacherModal();
         return;
       }
-      codeEditor.value = `export function ${currentTask.name}(${currentTask.starterParams}) {\n  ${decryptedSolutionsCache[currentTask.id]}\n}`;
-      saveCurrentCode();
-      showToast('💡 Еталонне рішення вставлено (Режим ментора).');
+      if (confirm('Підставити еталонне рішення? Це замінить ваш поточний код.')) {
+        codeEditor.value = `export function ${currentTask.name}(${currentTask.starterParams}) {\n  ${decryptedSolutionsCache[currentTask.id]}\n}`;
+        saveCurrentCode();
+        showToast('💡 Еталонне рішення вставлено (Режим ментора).');
+      }
     });
 
     // Check saved session
@@ -1806,6 +2362,61 @@ do {
       // Offline fallback
       document.getElementById('onlineCountText').textContent = '1 онлайн';
     }
+
+    // Interactive theory demo functions
+    window.runTheoryAlertDemo = function() {
+      alert("Це повідомлення виведено через alert('Hello, World!'). Натисніть OK для продовження.");
+    };
+
+    window.runTheoryPromptDemo = function() {
+      const name = prompt("Як вас звати?", "Студент");
+      if (name === null) {
+        alert("Ви натиснули «Скасувати» (prompt повернув null).");
+      } else if (name.trim() === "") {
+        alert("Ви залишили поле порожнім!");
+      } else {
+        alert("Приємно познайомитись, " + name + "! Готові опановувати цикли? 🚀");
+      }
+    };
+
+    window.runTheorySumDemo = function() {
+      const a = prompt("Завдання 1.2: Введіть перше число:", "15");
+      if (a === null) return alert("Скасовано!");
+      const b = prompt("Введіть друге число:", "27");
+      if (b === null) return alert("Скасовано!");
+
+      const concatResult = a + b;
+      const mathSum = Number(a) + Number(b);
+
+      alert(
+        "Ось чому важливо перетворювати тип даних:\n\n" +
+        "1) Без приведення типу (конкатенація рядків a + b): \"" + concatResult + "\" ❌\n" +
+        "2) З приведенням (числове додавання +a + +b): " + mathSum + " ✅"
+      );
+    };
+
+    window.runTheoryConfirmDemo = function() {
+      const proceed = confirm("Завдання 1.3: Запустити тестовий цикл for від 1 до 5?");
+      if (proceed) {
+        let log = [];
+        for (let i = 1; i <= 5; i++) {
+          log.push("Ітерація #" + i);
+        }
+        alert("Результат роботи циклу:\n" + log.join("\n"));
+      } else {
+        alert("Ви обрали «Скасувати» (confirm повернув false). Цикл не запускався.");
+      }
+    };
+
+    window.runTheoryDebuggerDemo = function() {
+      alert("⚠️ УВАГА! Зараз запуститься код з інструкцією 'debugger;'.\n\nЯкщо у вас відкрита вкладка 'Sources' у консолі розробника (F12 або Cmd+Option+I), браузер автоматично зупинить виконання програми на кожному кроці!");
+      let total = 0;
+      for (let i = 1; i <= 3; i++) {
+        debugger; // Точка зупинки!
+        total += i;
+      }
+      alert("Цикл завершено успішно! Загальна сума total = " + total);
+    };
 
     // Initial render
     renderModuleDropdown();
