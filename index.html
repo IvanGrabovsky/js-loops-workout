@@ -398,6 +398,83 @@
       color: var(--accent-violet);
     }
 
+    .hint-method-card {
+      background: #f8faff;
+      border-left: 3px solid var(--accent-violet);
+      padding: 10px 12px;
+      border-radius: 4px;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: #334155;
+      border: 1px solid rgba(4, 71, 255, 0.12);
+      border-left-width: 3px;
+    }
+
+    .hint-method-card b {
+      color: var(--ink);
+    }
+
+    .teacher-guide-box {
+      background: #ffffff;
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      border-radius: var(--radius-subcard);
+      padding: 16px;
+      margin-top: 14px;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.08);
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .teacher-guide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .teacher-guide-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #047857;
+      background: rgba(16, 185, 129, 0.1);
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .teacher-guide-content {
+      font-size: 12.5px;
+      line-height: 1.6;
+      color: #374151;
+    }
+
+    .teacher-guide-content b {
+      color: var(--ink);
+    }
+
+    .teacher-guide-content code {
+      background: var(--surface-taupe);
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: #047857;
+      font-weight: 600;
+    }
+
+    .teacher-guide-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-stone);
+    }
+
     .task-navigation {
       display: flex;
       justify-content: space-between;
@@ -987,6 +1064,20 @@
           <div class="theory-hint-box" id="taskHintBox">
             <div class="section-title" style="color:var(--accent-violet);">Підказка</div>
             <div id="taskHintContent">Використайте цикл while...</div>
+          </div>
+
+          <!-- Teacher Guide Box (visible only when Teacher Vault unlocked) -->
+          <div class="teacher-guide-box" id="teacherGuideBox" style="display:none;">
+            <div class="teacher-guide-header">
+              <span class="teacher-guide-badge">🎓 Менторський розбір завдання</span>
+              <button class="btn-pill btn-pill-outline" id="copyTeacherExplBtn" style="padding:3px 10px; font-size:11px;">📋 Скопіювати</button>
+            </div>
+            <div class="teacher-guide-content" id="teacherGuideContent">
+              <!-- Populated by JS -->
+            </div>
+            <div class="teacher-guide-actions">
+              <button class="btn-pill btn-pill-primary" id="pasteTeacherSolutionBtn" style="padding:6px 14px; font-size:12px;">💡 Підставити рішення в редактор</button>
+            </div>
           </div>
 
           <div class="task-navigation">
@@ -1924,6 +2015,10 @@ for (let i = 1; i &lt;= 3; i++) {
       testSummaryStatus.textContent = 'Очікує запуску';
       testSummaryStatus.style.color = '#9ba1b0';
 
+      if (decryptedSolutionsCache && decryptedSolutionsCache[task.id]) {
+        renderTeacherGuide(task.id);
+      }
+
       renderQuickTaskPills();
       updateProgress();
     }
@@ -2095,7 +2190,12 @@ for (let i = 1; i &lt;= 3; i++) {
 
         const cache = {};
         for (const [id, payload] of Object.entries(ENCRYPTED_SOLUTIONS)) {
-          cache[id] = await decryptPayloadWithKey(payload, key);
+          const raw = await decryptPayloadWithKey(payload, key);
+          try {
+            cache[id] = JSON.parse(raw);
+          } catch {
+            cache[id] = { code: raw, explanation: "" };
+          }
         }
         decryptedSolutionsCache = cache;
         sessionStorage.setItem('camp_teacher_pwd', password);
@@ -2113,10 +2213,25 @@ for (let i = 1; i &lt;= 3; i++) {
       applyTeacherUI(false);
     }
 
+    function renderTeacherGuide(taskId) {
+      const contentEl = document.getElementById('teacherGuideContent');
+      if (!contentEl || !decryptedSolutionsCache || !decryptedSolutionsCache[taskId]) return;
+      const data = decryptedSolutionsCache[taskId];
+      const expl = typeof data === 'object' && data.explanation ? data.explanation : '';
+      contentEl.innerHTML = expl || '<p style="color:#6b7280;">Пояснення для цього завдання готується.</p>';
+    }
+
     function applyTeacherUI(isUnlocked) {
       const revealBtn = document.getElementById('revealSolutionBtn');
       if (revealBtn) {
         revealBtn.style.display = isUnlocked ? 'inline-flex' : 'none';
+      }
+      const teacherGuideBox = document.getElementById('teacherGuideBox');
+      if (teacherGuideBox) {
+        teacherGuideBox.style.display = isUnlocked ? 'block' : 'none';
+        if (isUnlocked && decryptedSolutionsCache && currentTask) {
+          renderTeacherGuide(currentTask.id);
+        }
       }
     }
 
@@ -2157,7 +2272,7 @@ for (let i = 1; i &lt;= 3; i++) {
 
       if (ok) {
         closeTeacherModal();
-        showToast('🎓 Режим викладача активовано! Еталонні рішення розблоковано.');
+        showToast('🎓 Режим викладача активовано! Еталонні рішення та розбори розблоковано.');
       } else {
         teacherAuthStatus.textContent = '❌ Невірний пароль викладача';
         teacherAuthStatus.style.color = '#ef4444';
@@ -2202,21 +2317,46 @@ for (let i = 1; i &lt;= 3; i++) {
           e.preventDefault();
           formatCurrentCode();
         }
+        return;
+      }
+
+      // Ctrl + Enter or Cmd + Enter to run test from anywhere on the page
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'Enter' || e.code === 'Enter' || e.code === 'NumpadEnter')) {
+        const activeTag = document.activeElement ? document.activeElement.tagName : '';
+        if (activeTag !== 'INPUT') {
+          e.preventDefault();
+          runSingleTaskTest();
+        }
       }
     });
 
-    // Reveal Solution
-    document.getElementById('revealSolutionBtn').addEventListener('click', () => {
+    // Reveal & Paste Solution
+    function pasteTeacherSolution() {
       if (!decryptedSolutionsCache || !decryptedSolutionsCache[currentTask.id]) {
         showToast('Потрібна авторизація викладача');
         openTeacherModal();
         return;
       }
+      const data = decryptedSolutionsCache[currentTask.id];
+      const code = typeof data === 'object' && data.code ? data.code : data;
       if (confirm('Підставити еталонне рішення? Це замінить ваш поточний код.')) {
-        codeEditor.value = `export function ${currentTask.name}(${currentTask.starterParams}) {\n  ${decryptedSolutionsCache[currentTask.id]}\n}`;
+        codeEditor.value = `export function ${currentTask.name}(${currentTask.starterParams}) {\n  ${code}\n}`;
         saveCurrentCode();
         showToast('💡 Еталонне рішення вставлено (Режим ментора).');
       }
+    }
+
+    document.getElementById('revealSolutionBtn')?.addEventListener('click', pasteTeacherSolution);
+    document.getElementById('pasteTeacherSolutionBtn')?.addEventListener('click', pasteTeacherSolution);
+
+    document.getElementById('copyTeacherExplBtn')?.addEventListener('click', () => {
+      const contentEl = document.getElementById('teacherGuideContent');
+      if (!contentEl) return;
+      navigator.clipboard.writeText(contentEl.innerText).then(() => {
+        showToast('📋 Пояснення скопійовано в буфер обміну!');
+      }).catch(() => {
+        showToast('Не вдалося скопіювати текст');
+      });
     });
 
     // Check saved session
