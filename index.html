@@ -981,6 +981,26 @@
     .modal-body {
       padding: 20px;
     }
+  
+    /* ==========================================
+       CONTENT INTEGRITY & ANTI-COPY PROTECTION
+       ========================================== */
+    body {
+      -webkit-user-select: none !important;
+      -moz-user-select: none !important;
+      -ms-user-select: none !important;
+      user-select: none !important;
+    }
+    textarea, input {
+      -webkit-user-select: text !important;
+      -moz-user-select: text !important;
+      -ms-user-select: text !important;
+      user-select: text !important;
+    }
+    .theory-copy-btn {
+      display: none !important;
+    }
+
   </style>
 </head>
 <body>
@@ -1769,6 +1789,8 @@ for (let i = 1; i &lt;= 3; i++) {
     </div>
 
     
+    
+    
     <!-- TAB 4: FINAL CERTIFICATION -->
     <div id="tab-final-cert" class="tab-content" style="display:none;">
       <style>
@@ -1795,6 +1817,18 @@ for (let i = 1; i &lt;= 3; i++) {
           }
         }
       </style>
+      <!-- Exam Blur Overlay when window loses focus -->
+      <div id="certBlurOverlay" style="display:none; position:fixed; inset:0; background:rgba(15, 23, 42, 0.92); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); z-index:999999; flex-direction:column; align-items:center; justify-content:center; color:#fff; text-align:center; padding:24px;">
+        <span style="font-size:48px; margin-bottom:12px; display:inline-block;">⏸️</span>
+        <h2 style="font-size:24px; font-weight:700; margin-bottom:8px; color:#f8fafc;">Тест призупинено</h2>
+        <p style="font-size:15px; color:#cbd5e1; max-width:460px; margin-bottom:24px; line-height:1.6;">
+          Вікно тестування втратило фокус. Щоб продовжити роботу над завданнями, поверніться до цієї вкладки.
+        </p>
+        <button class="btn-pill btn-pill-primary" id="resumeCertFocusBtn" style="padding:12px 28px; font-size:15px;">
+          Повернутися до іспиту
+        </button>
+      </div>
+
       <!-- Welcome View -->
       <div id="certWelcomeBox" class="mass-runner-box" style="text-align:center; max-width:800px; margin:0 auto;">
         <span style="font-size:42px; display:inline-block; margin-bottom:12px;">🏆</span>
@@ -1890,6 +1924,128 @@ for (let i = 1; i &lt;= 3; i++) {
                 <div style="color:#9ba1b0;">Натисніть "Перевірити завдання" для перевірки коду на тестах.</div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results & Certificate View -->
+      <div id="certResultsBox" style="display:none; max-width:860px; margin:0 auto;">
+        <div class="mass-runner-box" style="text-align:center;">
+          <div id="certStatusIcon" style="font-size:48px; margin-bottom:8px;">🎉</div>
+          <h2 id="certResultHeadline" style="font-size:26px; font-weight:700; margin-bottom:8px;">Сертифікацію успішно складено!</h2>
+          <p id="certResultSubtext" style="font-size:15px; color:var(--color-graphite, #6e7687); margin-bottom:20px;">
+            Ви успішно розв'язали 9 з 10 завдань (90%).
+          </p>
+
+          <!-- Input student name for certificate -->
+          <div id="certNameInputSection" style="max-width:440px; margin:0 auto 28px auto; text-align:left;">
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:6px; color:#374151;">
+              Вкажіть ім'я та прізвище для сертифіката:
+            </label>
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="certStudentNameInput" placeholder="Наприклад: Олена Коваленко" style="flex:1; padding:10px 14px; border-radius:9999px; border:1px solid #000; font-family:inherit; font-size:14px; outline:none;" />
+              <button class="btn-pill btn-pill-primary" id="certApplyNameBtn">Оновити</button>
+            </div>
+          </div>
+
+          <!-- Printable Certificate Document -->
+          <div id="certDocContainer" class="certificate-paper" style="display:none; text-align:center; background:#fffdf8; border:8px double #b45309; border-radius:12px; padding:44px 36px; box-shadow:0 8px 24px rgba(0,0,0,0.08); margin-bottom:24px; position:relative;">
+            <div style="font-size:13px; letter-spacing:0.25em; text-transform:uppercase; color:#b45309; font-weight:700; margin-bottom:6px;">СЕРТИФІКАТ ПРО ОПАНУВАННЯ МОДУЛЯ</div>
+            <div style="font-size:11px; letter-spacing:0.1em; color:#78716c; margin-bottom:20px;">CERTIFICATE OF ACHIEVEMENT</div>
+            
+            <p style="font-size:14px; color:#57534e; margin-bottom:8px;">Цим засвідчується, що</p>
+            <h3 id="certDocStudentName" style="font-size:32px; font-weight:800; color:#1e1b4b; text-decoration:underline; text-decoration-color:#b45309; margin-bottom:12px; font-family:inherit;">Студент Студентович</h3>
+            <p style="font-size:14.5px; line-height:1.6; color:#44403c; max-width:580px; margin:0 auto 24px auto;">
+              успішно склав(ла) комплексний сертифікаційний іспит із курсу <br>
+              <b style="color:#0f172a; font-size:16px;">«Цикли та Відлагодження в JS»</b><br>
+              із результатом <span id="certDocScoreBadge" style="font-weight:700; color:#047857;">90%</span>.
+            </p>
+
+            <div style="display:flex; justify-content:space-between; align-items:flex-end; border-top:1px solid #e7e5e4; padding-top:18px; margin-top:28px; font-size:12px; color:#78716c;">
+              <div style="text-align:left;">
+                <div>Номер сертифіката: <span id="certDocId" style="font-family:var(--font-mono); font-weight:700; color:#1c1917;">CERT-2026-X89F</span></div>
+                <div>Дата видачі: <span id="certDocDate">31.10.2026</span></div>
+              </div>
+              <div style="text-align:center;">
+                <div style="width:50px; height:50px; border-radius:50%; border:2px dashed #b45309; display:inline-flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:4px;">🏅</div>
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; color:#b45309;">ПЕРЕВІРЕНО</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-weight:700; color:#1c1917;">Frontend Camp Mentorship</div>
+                <div style="font-size:11px;">Керівник програми</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+            <button class="btn-pill btn-pill-primary" id="certPrintDocBtn" style="display:none; padding:10px 22px;">🖨️ Друк / Зберегти як PDF</button>
+            <button class="btn-pill btn-pill-outline" id="certRetryExamBtn" style="padding:10px 22px;">🔄 Скласти ще раз</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+          </div>
+        </div>
+      </div>
+
+      <!-- Results & Certificate View -->
+      <div id="certResultsBox" style="display:none; max-width:860px; margin:0 auto;">
+        <div class="mass-runner-box" style="text-align:center;">
+          <div id="certStatusIcon" style="font-size:48px; margin-bottom:8px;">🎉</div>
+          <h2 id="certResultHeadline" style="font-size:26px; font-weight:700; margin-bottom:8px;">Сертифікацію успішно складено!</h2>
+          <p id="certResultSubtext" style="font-size:15px; color:var(--color-graphite, #6e7687); margin-bottom:20px;">
+            Ви успішно розв'язали 9 з 10 завдань (90%).
+          </p>
+
+          <!-- Input student name for certificate -->
+          <div id="certNameInputSection" style="max-width:440px; margin:0 auto 28px auto; text-align:left;">
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:6px; color:#374151;">
+              Вкажіть ім'я та прізвище для сертифіката:
+            </label>
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="certStudentNameInput" placeholder="Наприклад: Олена Коваленко" style="flex:1; padding:10px 14px; border-radius:9999px; border:1px solid #000; font-family:inherit; font-size:14px; outline:none;" />
+              <button class="btn-pill btn-pill-primary" id="certApplyNameBtn">Оновити</button>
+            </div>
+          </div>
+
+          <!-- Printable Certificate Document -->
+          <div id="certDocContainer" class="certificate-paper" style="display:none; text-align:center; background:#fffdf8; border:8px double #b45309; border-radius:12px; padding:44px 36px; box-shadow:0 8px 24px rgba(0,0,0,0.08); margin-bottom:24px; position:relative;">
+            <div style="font-size:13px; letter-spacing:0.25em; text-transform:uppercase; color:#b45309; font-weight:700; margin-bottom:6px;">СЕРТИФІКАТ ПРО ОПАНУВАННЯ МОДУЛЯ</div>
+            <div style="font-size:11px; letter-spacing:0.1em; color:#78716c; margin-bottom:20px;">CERTIFICATE OF ACHIEVEMENT</div>
+            
+            <p style="font-size:14px; color:#57534e; margin-bottom:8px;">Цим засвідчується, що</p>
+            <h3 id="certDocStudentName" style="font-size:32px; font-weight:800; color:#1e1b4b; text-decoration:underline; text-decoration-color:#b45309; margin-bottom:12px; font-family:inherit;">Студент Студентович</h3>
+            <p style="font-size:14.5px; line-height:1.6; color:#44403c; max-width:580px; margin:0 auto 24px auto;">
+              успішно склав(ла) комплексний сертифікаційний іспит із курсу <br>
+              <b style="color:#0f172a; font-size:16px;">«Цикли та Відлагодження в JS»</b><br>
+              із результатом <span id="certDocScoreBadge" style="font-weight:700; color:#047857;">90%</span>.
+            </p>
+
+            <div style="display:flex; justify-content:space-between; align-items:flex-end; border-top:1px solid #e7e5e4; padding-top:18px; margin-top:28px; font-size:12px; color:#78716c;">
+              <div style="text-align:left;">
+                <div>Номер сертифіката: <span id="certDocId" style="font-family:var(--font-mono); font-weight:700; color:#1c1917;">CERT-2026-X89F</span></div>
+                <div>Дата видачі: <span id="certDocDate">31.10.2026</span></div>
+              </div>
+              <div style="text-align:center;">
+                <div style="width:50px; height:50px; border-radius:50%; border:2px dashed #b45309; display:inline-flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:4px;">🏅</div>
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; color:#b45309;">ПЕРЕВІРЕНО</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-weight:700; color:#1c1917;">Frontend Camp Mentorship</div>
+                <div style="font-size:11px;">Керівник програми</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+            <button class="btn-pill btn-pill-primary" id="certPrintDocBtn" style="display:none; padding:10px 22px;">🖨️ Друк / Зберегти як PDF</button>
+            <button class="btn-pill btn-pill-outline" id="certRetryExamBtn" style="padding:10px 22px;">🔄 Скласти ще раз</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
           </div>
         </div>
       </div>
@@ -2807,6 +2963,30 @@ for (let i = 1; i &lt;= 3; i++) {
           showToast('Помилка форматування: ' + e.message);
         }
       });
+
+      // Focus & blur protection during active exam
+      function handleExamBlur() {
+        if (!certActive) return;
+        const overlay = document.getElementById('certBlurOverlay');
+        if (overlay) overlay.style.display = 'flex';
+      }
+
+      function handleExamFocus() {
+        const overlay = document.getElementById('certBlurOverlay');
+        if (overlay) overlay.style.display = 'none';
+      }
+
+      window.addEventListener('blur', handleExamBlur);
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden && certActive) {
+          handleExamBlur();
+        }
+      });
+
+      document.getElementById('resumeCertFocusBtn')?.addEventListener('click', () => {
+        handleExamFocus();
+        window.focus();
+      });
     }
 
     function startCertificationExam() {
@@ -3007,6 +3187,8 @@ for (let i = 1; i &lt;= 3; i++) {
     function finishCertificationExam() {
       if (certTimerInterval) clearInterval(certTimerInterval);
       certActive = false;
+      const blurEl = document.getElementById('certBlurOverlay');
+      if (blurEl) blurEl.style.display = 'none';
 
       let passedCount = 0;
       for (let i = 0; i < certExamTasks.length; i++) {
@@ -3056,6 +3238,49 @@ for (let i = 1; i &lt;= 3; i++) {
 
     // Call init
     initCertificationModule();
+
+    // ==========================================
+    // ANTI-COPY & SHORTCUT INTEGRITY CONTROLLER
+    // ==========================================
+    document.addEventListener('contextmenu', (e) => {
+      if (e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'INPUT') {
+        e.preventDefault();
+      }
+    });
+
+    document.addEventListener('copy', (e) => {
+      if (e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'INPUT') {
+        e.preventDefault();
+        if (typeof showToast === 'function') {
+          showToast('⚠️ Копіювання матеріалів курсу захищено авторським правом');
+        }
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      const isInput = e.target.tagName === 'TEXTAREA' || e.target.tagName === 'INPUT';
+      const isMod = e.ctrlKey || e.metaKey;
+      if (isMod && (e.key === 'c' || e.key === 'C') && !isInput) {
+        e.preventDefault();
+        if (typeof showToast === 'function') {
+          showToast('⚠️ Копіювання матеріалів курсу вимкнено');
+        }
+      }
+      if (isMod && (e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S')) {
+        e.preventDefault();
+      }
+      // Never block Ctrl+Shift+A (mentor secret hotkey)
+      if (isMod && !e.shiftKey && (e.key === 'a' || e.key === 'A') && !isInput) {
+        e.preventDefault();
+      }
+    });
+
+    document.addEventListener('dragstart', (e) => {
+      if (e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'INPUT') {
+        e.preventDefault();
+      }
+    });
+
   
 
     // Initial render
