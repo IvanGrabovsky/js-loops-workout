@@ -1791,6 +1791,7 @@ for (let i = 1; i &lt;= 3; i++) {
     
     
     
+    
     <!-- TAB 4: FINAL CERTIFICATION -->
     <div id="tab-final-cert" class="tab-content" style="display:none;">
       <style>
@@ -1924,6 +1925,130 @@ for (let i = 1; i &lt;= 3; i++) {
                 <div style="color:#9ba1b0;">Натисніть "Перевірити завдання" для перевірки коду на тестах.</div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results & Certificate View -->
+      <div id="certResultsBox" style="display:none; max-width:880px; margin:0 auto;">
+        <div class="mass-runner-box" style="text-align:center;">
+          <div id="certStatusIcon" style="font-size:48px; margin-bottom:8px;">🎉</div>
+          <h2 id="certResultHeadline" style="font-size:26px; font-weight:700; margin-bottom:8px;">Сертифікацію успішно складено!</h2>
+          <p id="certResultSubtext" style="font-size:15px; color:var(--color-graphite, #6e7687); margin-bottom:20px;">
+            Ви успішно розв'язали 9 з 10 завдань (90%).
+          </p>
+
+          <!-- Input student name for certificate -->
+          <div id="certNameInputSection" style="max-width:440px; margin:0 auto 28px auto; text-align:left;">
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:6px; color:#374151;">
+              Вкажіть ім'я та прізвище для сертифіката:
+            </label>
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="certStudentNameInput" placeholder="Наприклад: Олена Коваленко" style="flex:1; padding:10px 14px; border-radius:9999px; border:1px solid #000; font-family:inherit; font-size:14px; outline:none;" />
+              <button class="btn-pill btn-pill-primary" id="certApplyNameBtn">Оновити</button>
+            </div>
+          </div>
+
+          <!-- Printable Certificate Document -->
+          <div id="certDocContainer" class="certificate-paper" style="display:none; text-align:center; background:#fffdf8; border:8px double #b45309; border-radius:12px; padding:44px 36px; box-shadow:0 8px 24px rgba(0,0,0,0.08); margin-bottom:24px; position:relative;">
+            <div style="font-size:13px; letter-spacing:0.25em; text-transform:uppercase; color:#b45309; font-weight:700; margin-bottom:6px;">СЕРТИФІКАТ ПРО ОПАНУВАННЯ МОДУЛЯ</div>
+            <div style="font-size:11px; letter-spacing:0.1em; color:#78716c; margin-bottom:20px;">CERTIFICATE OF ACHIEVEMENT</div>
+            
+            <p style="font-size:14px; color:#57534e; margin-bottom:8px;">Цим засвідчується, що</p>
+            <h3 id="certDocStudentName" style="font-size:32px; font-weight:800; color:#1e1b4b; text-decoration:underline; text-decoration-color:#b45309; margin-bottom:12px; font-family:inherit;">Студент Студентович</h3>
+            <p style="font-size:14.5px; line-height:1.6; color:#44403c; max-width:580px; margin:0 auto 24px auto;">
+              успішно склав(ла) комплексний сертифікаційний іспит із курсу <br>
+              <b style="color:#0f172a; font-size:16px;">«Цикли та Відлагодження в JS»</b><br>
+              із результатом <span id="certDocScoreBadge" style="font-weight:700; color:#047857;">90%</span>.
+            </p>
+
+            <div style="display:flex; justify-content:space-between; align-items:flex-end; border-top:1px solid #e7e5e4; padding-top:18px; margin-top:28px; font-size:12px; color:#78716c;">
+              <div style="text-align:left;">
+                <div>Номер сертифіката: <span id="certDocId" style="font-family:var(--font-mono); font-weight:700; color:#1c1917;">CERT-2026-X89F</span></div>
+                <div>Дата видачі: <span id="certDocDate">31.10.2026</span></div>
+              </div>
+              <div style="text-align:center;">
+                <div style="width:50px; height:50px; border-radius:50%; border:2px dashed #b45309; display:inline-flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:4px;">🏅</div>
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; color:#b45309;">ПЕРЕВІРЕНО</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-weight:700; color:#1c1917;">Frontend Camp Mentorship</div>
+                <div style="font-size:11px;">Керівник програми</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Student Performance Breakdown Table (Variant A) -->
+          <div id="certStudentTableContainer" style="margin-top:28px; text-align:left; background:rgba(0,0,0,0.02); border:1px solid rgba(125,125,125,0.2); border-radius:12px; padding:20px; overflow-x:auto;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:14px; border-bottom:1px solid rgba(125,125,125,0.15); padding-bottom:12px;">
+              <h3 style="margin:0; font-size:16px; font-weight:700;">📊 Зведена відомість результатів та часу</h3>
+              <div id="certTotalTimeBadge" style="font-size:13px; font-weight:600; color:var(--color-graphite, #9ba1b0); background:rgba(125,125,125,0.1); padding:4px 12px; border-radius:9999px;">
+                ⏱️ Загальний час: 00:00
+              </div>
+            </div>
+
+            <table style="width:100%; border-collapse:collapse; font-size:13px;">
+              <thead>
+                <tr style="border-bottom:1px solid rgba(125,125,125,0.2); color:var(--color-graphite, #9ba1b0); text-align:left;">
+                  <th style="padding:8px 10px; width:40px;">#</th>
+                  <th style="padding:8px 10px;">Завдання</th>
+                  <th style="padding:8px 10px;">Складність</th>
+                  <th style="padding:8px 10px; text-align:center;">Тести</th>
+                  <th style="padding:8px 10px; text-align:center;">Витрачений час</th>
+                  <th style="padding:8px 10px; text-align:right;">Підсумок</th>
+                </tr>
+              </thead>
+              <tbody id="certStudentTableBody">
+                <!-- Dynamically populated rows -->
+              </tbody>
+            </table>
+          </div>
+
+          <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:24px;">
+            <button class="btn-pill btn-pill-primary" id="certPrintDocBtn" style="display:none; padding:10px 22px;">🖨️ Друк / Зберегти як PDF</button>
+            <button class="btn-pill btn-pill-outline" id="certRetryExamBtn" style="padding:10px 22px;">🔄 Скласти ще раз</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Teacher Exam Analytics Dashboard (Variant B - Revealed in Teacher Mode) -->
+      <div id="teacherAnalyticsBox" class="mass-runner-box" style="display:none; max-width:920px; margin:28px auto 0 auto; border:2px solid #b45309; text-align:left;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px; border-bottom:1px solid rgba(125,125,125,0.2); padding-bottom:12px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:22px;">📊</span>
+            <div>
+              <h3 style="margin:0; font-size:17px; font-weight:700;">Журнал сертифікацій студентів (Менторський аналіз)</h3>
+              <div style="font-size:12px; color:var(--color-graphite, #9ba1b0);">Зведена аналітика успішності, часу та типових помилок групи</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn-pill btn-pill-primary" id="exportExamCsvBtn" style="padding:6px 14px; font-size:12px;">📥 Експорт CSV (Excel)</button>
+            <button class="btn-pill btn-pill-outline" id="clearExamLogBtn" style="padding:6px 14px; font-size:12px; color:#ef4444; border-color:rgba(239,68,68,0.3);">🗑️ Очистити</button>
+          </div>
+        </div>
+
+        <div style="overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse; font-size:13px;" id="teacherExamRecordsTable">
+            <thead>
+              <tr style="border-bottom:1px solid rgba(125,125,125,0.2); color:var(--color-graphite, #9ba1b0); text-align:left;">
+                <th style="padding:8px 10px;">Дата</th>
+                <th style="padding:8px 10px;">Студент</th>
+                <th style="padding:8px 10px; text-align:center;">Бал</th>
+                <th style="padding:8px 10px; text-align:center;">Час</th>
+                <th style="padding:8px 10px; text-align:center;">Статус</th>
+                <th style="padding:8px 10px; text-align:right;">Дії</th>
+              </tr>
+            </thead>
+            <tbody id="teacherExamRecordsBody">
+              <tr>
+                <td colspan="6" style="padding:20px; text-align:center; color:#9ba1b0;">Записів сертифікацій ще немає. Коли студенти складають тест, дані з'являються тут автоматично.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  
           </div>
         </div>
       </div>
@@ -2553,6 +2678,8 @@ for (let i = 1; i &lt;= 3; i++) {
       const teacherGuideBox = document.getElementById('teacherGuideBox');
       if (teacherGuideBox) {
         teacherGuideBox.style.display = isUnlocked ? 'block' : 'none';
+      const teacherAnalyticsBox = document.getElementById('teacherAnalyticsBox');
+      if (teacherAnalyticsBox) teacherAnalyticsBox.style.display = isUnlocked ? 'block' : 'none';
         if (isUnlocked && decryptedSolutionsCache && currentTask) {
           renderTeacherGuide(currentTask.id);
         }
@@ -2884,7 +3011,7 @@ for (let i = 1; i &lt;= 3; i++) {
 
     
     // ==========================================
-    // FINAL CERTIFICATION EXAM CONTROLLER
+    // FINAL CERTIFICATION EXAM CONTROLLER (WITH TIMING & ANALYTICS)
     // ==========================================
     let certActive = false;
     let certExamTasks = [];
@@ -2894,6 +3021,19 @@ for (let i = 1; i &lt;= 3; i++) {
     let certTimerInterval = null;
     let certSecondsLeft = 45 * 60; // 45 mins
     let certStudentName = localStorage.getItem('camp_student_name') || 'Студент Курсу';
+
+    // Timing tracking per task
+    let certExamStartTime = 0;
+    let certTaskStartTimestamp = 0;
+    let certTaskTimeSpent = new Array(10).fill(0);
+
+    function formatDuration(sec) {
+      const s = Math.max(0, Math.round(sec));
+      const m = Math.floor(s / 60);
+      const rem = s % 60;
+      if (m === 0) return `${rem} с`;
+      return `${m} хв ${String(rem).padStart(2, '0')} с`;
+    }
 
     function initCertificationModule() {
       const startBtn = document.getElementById('startCertExamBtn');
@@ -2987,6 +3127,19 @@ for (let i = 1; i &lt;= 3; i++) {
         handleExamFocus();
         window.focus();
       });
+
+      // Mentor analytics actions
+      document.getElementById('exportExamCsvBtn')?.addEventListener('click', exportExamRecordsCsv);
+      document.getElementById('clearExamLogBtn')?.addEventListener('click', () => {
+        if (confirm('Ви дійсно бажаєте очистити журнал сертифікацій?')) {
+          localStorage.removeItem('camp_exam_records');
+          renderTeacherExamAnalytics();
+          showToast('Журнал сертифікацій очищено.');
+        }
+      });
+
+      // Render initial analytics if teacher mode is active
+      renderTeacherExamAnalytics();
     }
 
     function startCertificationExam() {
@@ -3015,6 +3168,11 @@ for (let i = 1; i &lt;= 3; i++) {
       Object.keys(certPassedMap).forEach(k => delete certPassedMap[k]);
       certSecondsLeft = 45 * 60;
       certActive = true;
+
+      // Start timing
+      certExamStartTime = Date.now();
+      certTaskStartTimestamp = Date.now();
+      certTaskTimeSpent = new Array(10).fill(0);
 
       document.getElementById('certWelcomeBox').style.display = 'none';
       document.getElementById('certResultsBox').style.display = 'none';
@@ -3084,7 +3242,14 @@ for (let i = 1; i &lt;= 3; i++) {
     }
 
     function selectCertExamTask(idx) {
+      // Record elapsed time on previous task
+      if (certActive && certTaskStartTimestamp > 0) {
+        const elapsed = Math.round((Date.now() - certTaskStartTimestamp) / 1000);
+        certTaskTimeSpent[certCurrentIdx] = (certTaskTimeSpent[certCurrentIdx] || 0) + elapsed;
+      }
       certCurrentIdx = idx;
+      certTaskStartTimestamp = Date.now();
+
       const task = certExamTasks[idx];
 
       document.getElementById('certTaskIdBadge').textContent = `Завдання ${idx + 1} / 10 (${task.id})`;
@@ -3190,6 +3355,13 @@ for (let i = 1; i &lt;= 3; i++) {
       const blurEl = document.getElementById('certBlurOverlay');
       if (blurEl) blurEl.style.display = 'none';
 
+      // Record final task time
+      if (certTaskStartTimestamp > 0) {
+        const elapsed = Math.round((Date.now() - certTaskStartTimestamp) / 1000);
+        certTaskTimeSpent[certCurrentIdx] = (certTaskTimeSpent[certCurrentIdx] || 0) + elapsed;
+      }
+      const totalElapsedSeconds = Math.max(1, Math.round((Date.now() - certExamStartTime) / 1000));
+
       let passedCount = 0;
       for (let i = 0; i < certExamTasks.length; i++) {
         if (certPassedMap[i] === true) passedCount++;
@@ -3234,6 +3406,157 @@ for (let i = 1; i &lt;= 3; i++) {
         doc.style.display = 'none';
         printBtn.style.display = 'none';
       }
+
+      // Populate Student Performance Breakdown Table (Variant A)
+      const tableBody = document.getElementById('certStudentTableBody');
+      if (tableBody) {
+        tableBody.innerHTML = '';
+        certExamTasks.forEach((t, i) => {
+          const row = document.createElement('tr');
+          row.style.borderBottom = '1px solid rgba(125,125,125,0.15)';
+          const isPass = certPassedMap[i] === true;
+          const timeStr = formatDuration(certTaskTimeSpent[i] || 0);
+
+          row.innerHTML = `
+            <td style="padding:10px 8px; font-weight:700;">${i + 1}</td>
+            <td style="padding:10px 8px;">
+              <div style="font-weight:600;">${t.name}</div>
+              <div style="font-size:11.5px; color:var(--color-graphite, #9ba1b0);">${t.title} (${t.id})</div>
+            </td>
+            <td style="padding:10px 8px; font-size:12px;">${t.level}</td>
+            <td style="padding:10px 8px; text-align:center;">${t.tests.length}/${t.tests.length}</td>
+            <td style="padding:10px 8px; text-align:center; font-family:var(--font-mono); font-weight:600;">${timeStr}</td>
+            <td style="padding:10px 8px; text-align:right;">
+              <span class="test-status-pill ${isPass ? 'status-pass' : 'status-fail'}">${isPass ? 'PASS' : 'FAIL'}</span>
+            </td>
+          `;
+          tableBody.appendChild(row);
+        });
+
+        const totalTimeBadge = document.getElementById('certTotalTimeBadge');
+        if (totalTimeBadge) {
+          totalTimeBadge.textContent = `⏱️ Загальний час: ${formatDuration(totalElapsedSeconds)} з 45:00`;
+        }
+      }
+
+      // Record exam attempt for mentor analytics (Variant B)
+      const examRecord = {
+        id: 'EXAM-' + Math.random().toString(36).substring(2, 8).toUpperCase(),
+        date: new Date().toLocaleString('uk-UA'),
+        studentName: certStudentName,
+        courseTitle: 'Цикли та Відлагодження в JS',
+        passedCount,
+        totalTasks: certExamTasks.length,
+        percent,
+        isCertified,
+        totalElapsedSeconds,
+        tasks: certExamTasks.map((t, idx) => ({
+          id: t.id,
+          name: t.name,
+          title: t.title,
+          passed: certPassedMap[idx] === true,
+          timeSpent: certTaskTimeSpent[idx] || 0
+        }))
+      };
+
+      try {
+        const records = JSON.parse(localStorage.getItem('camp_exam_records') || '[]');
+        records.unshift(examRecord);
+        localStorage.setItem('camp_exam_records', JSON.stringify(records.slice(0, 50)));
+
+        // Broadcast to mentor channel if Supabase is active
+        if (window.campRealtimePresence) {
+          window.campRealtimePresence.send({
+            type: 'broadcast',
+            event: 'exam_completed',
+            payload: examRecord
+          });
+        }
+      } catch (e) {
+        console.warn('Could not save exam record:', e);
+      }
+
+      renderTeacherExamAnalytics();
+    }
+
+    // Mentor Analytics View (Variant B)
+    function renderTeacherExamAnalytics() {
+      const tbody = document.getElementById('teacherExamRecordsBody');
+      if (!tbody) return;
+
+      const records = JSON.parse(localStorage.getItem('camp_exam_records') || '[]');
+      if (records.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="padding:20px; text-align:center; color:#9ba1b0;">Записів сертифікацій ще немає.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = '';
+      records.forEach((rec, idx) => {
+        const row = document.createElement('tr');
+        row.style.borderBottom = '1px solid rgba(125,125,125,0.15)';
+        row.innerHTML = `
+          <td style="padding:10px 8px; font-size:12px; color:var(--color-graphite, #9ba1b0);">${rec.date}</td>
+          <td style="padding:10px 8px; font-weight:600;">${rec.studentName}</td>
+          <td style="padding:10px 8px; text-align:center; font-weight:700;">${rec.passedCount}/${rec.totalTasks} (${rec.percent}%)</td>
+          <td style="padding:10px 8px; text-align:center; font-family:var(--font-mono);">${formatDuration(rec.totalElapsedSeconds)}</td>
+          <td style="padding:10px 8px; text-align:center;">
+            <span class="test-status-pill ${rec.isCertified ? 'status-pass' : 'status-fail'}" style="font-size:11px;">
+              ${rec.isCertified ? 'Складено' : 'Не складено'}
+            </span>
+          </td>
+          <td style="padding:10px 8px; text-align:right;">
+            <button class="btn-pill btn-pill-outline" onclick="toggleExamDetailRow(${idx})" style="padding:3px 8px; font-size:11px;">Деталі ▾</button>
+          </td>
+        `;
+        tbody.appendChild(row);
+
+        // Expandable Detail Row
+        const detailRow = document.createElement('tr');
+        detailRow.id = `examDetailRow_${idx}`;
+        detailRow.style.display = 'none';
+        detailRow.style.background = 'rgba(0,0,0,0.03)';
+        detailRow.innerHTML = `
+          <td colspan="6" style="padding:12px 16px;">
+            <div style="font-size:12px; font-weight:700; margin-bottom:8px; color:var(--color-graphite, #9ba1b0);">Хронометраж завдань тесту:</div>
+            <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:8px;">
+              ${(rec.tasks || []).map((t, ti) => `
+                <div style="padding:6px 10px; border-radius:6px; background:rgba(125,125,125,0.08); font-size:11.5px; display:flex; justify-content:space-between; align-items:center;">
+                  <span><b>#${ti + 1}</b> ${t.name}</span>
+                  <span style="font-family:var(--font-mono); color:${t.passed ? '#10b981' : '#ef4444'}; font-weight:600;">${formatDuration(t.timeSpent)}</span>
+                </div>
+              `).join('')}
+            </div>
+          </td>
+        `;
+        tbody.appendChild(detailRow);
+      });
+    }
+
+    window.toggleExamDetailRow = function(idx) {
+      const el = document.getElementById(`examDetailRow_${idx}`);
+      if (el) {
+        el.style.display = el.style.display === 'none' ? 'table-row' : 'none';
+      }
+    };
+
+    function exportExamRecordsCsv() {
+      const records = JSON.parse(localStorage.getItem('camp_exam_records') || '[]');
+      if (!records.length) {
+        showToast('Журнал порожній, немає даних для експорту.');
+        return;
+      }
+      let csv = 'ID,Дата,Студент,Курс,Бали,Відсоток,Статус,Час (сек),Загальний час\n';
+      records.forEach(r => {
+        csv += `"${r.id}","${r.date}","${r.studentName.replace(/"/g, '""')}","${r.courseTitle}",${r.passedCount}/${r.totalTasks},${r.percent}%,${r.isCertified ? 'Сертифіковано' : 'Не подолано'},${r.totalElapsedSeconds},"${formatDuration(r.totalElapsedSeconds)}"\n`;
+      });
+      const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `exam-results-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('📥 CSV-файл з оцінками завантажено!');
     }
 
     // Call init
