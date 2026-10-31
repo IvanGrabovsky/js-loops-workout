@@ -1768,23 +1768,189 @@ for (let i = 1; i &lt;= 3; i++) {
       </div>
     </div>
 
+    
     <!-- TAB 4: FINAL CERTIFICATION -->
     <div id="tab-final-cert" class="tab-content" style="display:none;">
-      <div class="mass-runner-box" style="text-align:center; max-width:800px; margin:0 auto;">
-        <span class="audio-sphere" style="width:36px; height:36px; margin-bottom:12px;"></span>
-        <h2 style="font-size:28px; font-weight:300; letter-spacing:-0.02em; margin-bottom:8px;">Сертифікаційний тест</h2>
-        <p style="font-size:15px; color:var(--smoke); margin-bottom:24px;">
-          Пройдіть випадкову вибірку з 10 бойових завдань (по всіх типах циклів та відлагодженню), щоб отримати персональний сертифікат опанування модуля.
+      <style>
+        @media print {
+          body * {
+            visibility: hidden !important;
+          }
+          #tab-final-cert, #certResultsBox, #certDocContainer, #certDocContainer * {
+            visibility: visible !important;
+          }
+          #certDocContainer {
+            position: fixed !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 40px !important;
+            box-shadow: none !important;
+            border: 6px double #b45309 !important;
+            background: #fffdf8 !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+        }
+      </style>
+      <!-- Welcome View -->
+      <div id="certWelcomeBox" class="mass-runner-box" style="text-align:center; max-width:800px; margin:0 auto;">
+        <span style="font-size:42px; display:inline-block; margin-bottom:12px;">🏆</span>
+        <h2 style="font-size:28px; font-weight:700; letter-spacing:-0.02em; margin-bottom:8px;">Сертифікаційний тест: Цикли та Відлагодження в JS</h2>
+        <p style="font-size:15px; color:var(--color-graphite, #6e7687); line-height:1.6; margin-bottom:24px; max-width:620px; margin-left:auto; margin-right:auto;">
+          Перевірте свої навички у форматі підсумкового іспиту! Вам буде запропоновано <b>10 випадкових завдань</b> із різних модулів курсу. Для отримання іменного сертифіката необхідно успішно скласти щонайменше <b>8 з 10 завдань (80%)</b>.
         </p>
-        <button class="btn-pill btn-pill-primary" id="startCertExamBtn" style="padding:12px 28px; font-size:15px;">
-          Розпочати сертифікацію
+        <button class="btn-pill btn-pill-primary" id="startCertExamBtn" style="padding:14px 32px; font-size:16px;">
+          🚀 Розпочати сертифікацію
         </button>
+      </div>
 
-        <div id="certResultsArea" style="margin-top:32px; display:none;">
-          <!-- Dynamically populated -->
+      <!-- Active Exam View -->
+      <div id="certActiveBox" style="display:none;">
+        <div class="mass-runner-box" style="margin-bottom:16px; padding:18px 24px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <span style="font-weight:700; font-size:16px;">⏱️ Сертифікаційний екзамен</span>
+              <span id="certTimerDisplay" class="pill-badge" style="font-family:var(--font-mono); font-weight:700; color:#b45309; background:#fffbeb;">45:00</span>
+            </div>
+
+            <!-- Question Pills 1..10 -->
+            <div id="certQuestionPills" style="display:flex; gap:6px; flex-wrap:wrap;">
+              <!-- 1..10 pills populated by JS -->
+            </div>
+
+            <button class="btn-pill btn-pill-outline" id="finishCertEarlyBtn" style="padding:6px 14px; font-size:12px; color:#ef4444; border-color:rgba(239,68,68,0.3);">
+              Завершити іспит
+            </button>
+          </div>
+        </div>
+
+        <div class="trainer-grid">
+          <!-- Left: Task Description -->
+          <div class="task-card">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
+              <div>
+                <span class="task-number" id="certTaskIdBadge">1.1</span>
+                <h2 class="task-title" id="certTaskTitle" style="margin-top:8px;">Назва завдання</h2>
+              </div>
+              <span class="task-badge-level" id="certTaskLevelBadge">Базовий рівень</span>
+            </div>
+
+            <div>
+              <div class="section-title">Мета завдання</div>
+              <p class="task-goal" id="certTaskGoal">Опис завдання...</p>
+            </div>
+
+            <div>
+              <div class="section-title">Вимоги</div>
+              <ul class="req-list" id="certTaskReqs"></ul>
+            </div>
+
+            <div class="theory-callout" style="margin-top:auto; font-size:12.5px;">
+              🔒 <i>Підказки під час сертифікаційного тесту вимкнено для об'єктивної оцінки знань.</i>
+            </div>
+
+            <div class="task-navigation">
+              <button class="btn-pill btn-pill-outline" id="certPrevBtn">← Попереднє</button>
+              <button class="btn-pill btn-pill-primary" id="certNextBtn">Наступне →</button>
+            </div>
+          </div>
+
+          <!-- Right: Code Editor & Tester -->
+          <div>
+            <div class="editor-card">
+              <div class="editor-topbar">
+                <div class="editor-filename">
+                  <span>📄</span>
+                  <span id="certEditorFilename">exam-solution.js</span>
+                </div>
+                <div class="editor-actions">
+                  <button class="format-btn" id="certFormatBtn">✨ Форматувати</button>
+                  <button class="btn-pill btn-pill-outline" id="certResetTaskBtn" style="padding:4px 12px; font-size:12px;">Скинути</button>
+                </div>
+              </div>
+
+              <textarea class="editor-textarea" id="certCodeEditor" spellcheck="false" style="height:340px;"></textarea>
+
+              <div class="editor-bottombar">
+                <span style="font-size:12px; color:#9ba1b0;">Перевірте результат перед переходом до наступного завдання.</span>
+                <button class="btn-pill btn-pill-primary" id="certRunTestBtn">▶ Перевірити завдання</button>
+              </div>
+            </div>
+
+            <!-- Exam Test Results Console -->
+            <div class="console-card">
+              <div class="console-header">
+                <span>Результати перевірки завдання</span>
+                <span id="certTestStatus" style="color:#9ba1b0;">Очікує запуску</span>
+              </div>
+              <div class="console-body" id="certConsoleBody">
+                <div style="color:#9ba1b0;">Натисніть "Перевірити завдання" для перевірки коду на тестах.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results & Certificate View -->
+      <div id="certResultsBox" style="display:none; max-width:860px; margin:0 auto;">
+        <div class="mass-runner-box" style="text-align:center;">
+          <div id="certStatusIcon" style="font-size:48px; margin-bottom:8px;">🎉</div>
+          <h2 id="certResultHeadline" style="font-size:26px; font-weight:700; margin-bottom:8px;">Сертифікацію успішно складено!</h2>
+          <p id="certResultSubtext" style="font-size:15px; color:var(--color-graphite, #6e7687); margin-bottom:20px;">
+            Ви успішно розв'язали 9 з 10 завдань (90%).
+          </p>
+
+          <!-- Input student name for certificate -->
+          <div id="certNameInputSection" style="max-width:440px; margin:0 auto 28px auto; text-align:left;">
+            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:6px; color:#374151;">
+              Вкажіть ім'я та прізвище для сертифіката:
+            </label>
+            <div style="display:flex; gap:8px;">
+              <input type="text" id="certStudentNameInput" placeholder="Наприклад: Олена Коваленко" style="flex:1; padding:10px 14px; border-radius:9999px; border:1px solid #000; font-family:inherit; font-size:14px; outline:none;" />
+              <button class="btn-pill btn-pill-primary" id="certApplyNameBtn">Оновити</button>
+            </div>
+          </div>
+
+          <!-- Printable Certificate Document -->
+          <div id="certDocContainer" class="certificate-paper" style="display:none; text-align:center; background:#fffdf8; border:8px double #b45309; border-radius:12px; padding:44px 36px; box-shadow:0 8px 24px rgba(0,0,0,0.08); margin-bottom:24px; position:relative;">
+            <div style="font-size:13px; letter-spacing:0.25em; text-transform:uppercase; color:#b45309; font-weight:700; margin-bottom:6px;">СЕРТИФІКАТ ПРО ОПАНУВАННЯ МОДУЛЯ</div>
+            <div style="font-size:11px; letter-spacing:0.1em; color:#78716c; margin-bottom:20px;">CERTIFICATE OF ACHIEVEMENT</div>
+            
+            <p style="font-size:14px; color:#57534e; margin-bottom:8px;">Цим засвідчується, що</p>
+            <h3 id="certDocStudentName" style="font-size:32px; font-weight:800; color:#1e1b4b; text-decoration:underline; text-decoration-color:#b45309; margin-bottom:12px; font-family:inherit;">Студент Студентович</h3>
+            <p style="font-size:14.5px; line-height:1.6; color:#44403c; max-width:580px; margin:0 auto 24px auto;">
+              успішно склав(ла) комплексний сертифікаційний іспит із курсу <br>
+              <b style="color:#0f172a; font-size:16px;">«Цикли та Відлагодження в JS»</b><br>
+              із результатом <span id="certDocScoreBadge" style="font-weight:700; color:#047857;">90%</span>.
+            </p>
+
+            <div style="display:flex; justify-content:space-between; align-items:flex-end; border-top:1px solid #e7e5e4; padding-top:18px; margin-top:28px; font-size:12px; color:#78716c;">
+              <div style="text-align:left;">
+                <div>Номер сертифіката: <span id="certDocId" style="font-family:var(--font-mono); font-weight:700; color:#1c1917;">CERT-2026-X89F</span></div>
+                <div>Дата видачі: <span id="certDocDate">31.10.2026</span></div>
+              </div>
+              <div style="text-align:center;">
+                <div style="width:50px; height:50px; border-radius:50%; border:2px dashed #b45309; display:inline-flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:4px;">🏅</div>
+                <div style="font-size:10px; font-weight:700; text-transform:uppercase; color:#b45309;">ПЕРЕВІРЕНО</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-weight:700; color:#1c1917;">Frontend Camp Mentorship</div>
+                <div style="font-size:11px;">Керівник програми</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+            <button class="btn-pill btn-pill-primary" id="certPrintDocBtn" style="display:none; padding:10px 22px;">🖨️ Друк / Зберегти як PDF</button>
+            <button class="btn-pill btn-pill-outline" id="certRetryExamBtn" style="padding:10px 22px;">🔄 Скласти ще раз</button>
+          </div>
         </div>
       </div>
     </div>
+  
   </div>
 
   
@@ -2559,6 +2725,338 @@ for (let i = 1; i &lt;= 3; i++) {
       }
       alert("Цикл завершено успішно! Загальна сума total = " + total);
     };
+
+    
+    // ==========================================
+    // FINAL CERTIFICATION EXAM CONTROLLER
+    // ==========================================
+    let certActive = false;
+    let certExamTasks = [];
+    let certCurrentIdx = 0;
+    const certUserCodes = {};
+    const certPassedMap = {};
+    let certTimerInterval = null;
+    let certSecondsLeft = 45 * 60; // 45 mins
+    let certStudentName = localStorage.getItem('camp_student_name') || 'Студент Курсу';
+
+    function initCertificationModule() {
+      const startBtn = document.getElementById('startCertExamBtn');
+      if (startBtn) {
+        startBtn.addEventListener('click', () => startCertificationExam());
+      }
+
+      document.getElementById('certPrevBtn')?.addEventListener('click', () => {
+        if (certCurrentIdx > 0) selectCertExamTask(certCurrentIdx - 1);
+      });
+
+      document.getElementById('certNextBtn')?.addEventListener('click', () => {
+        if (certCurrentIdx < certExamTasks.length - 1) selectCertExamTask(certCurrentIdx + 1);
+      });
+
+      document.getElementById('certRunTestBtn')?.addEventListener('click', runCertSingleTaskTest);
+      document.getElementById('finishCertEarlyBtn')?.addEventListener('click', () => {
+        if (confirm('Ви впевнені, що бажаєте завершити іспит достроково?')) {
+          finishCertificationExam();
+        }
+      });
+
+      document.getElementById('certRetryExamBtn')?.addEventListener('click', () => {
+        startCertificationExam();
+      });
+
+      document.getElementById('certApplyNameBtn')?.addEventListener('click', () => {
+        const input = document.getElementById('certStudentNameInput');
+        const name = input ? input.value.trim() : '';
+        if (name) {
+          certStudentName = name;
+          localStorage.setItem('camp_student_name', name);
+          const nameEl = document.getElementById('certDocStudentName');
+          if (nameEl) nameEl.textContent = name;
+          showToast('Ім\'я в сертифікаті оновлено!');
+        }
+      });
+
+      document.getElementById('certPrintDocBtn')?.addEventListener('click', () => {
+        window.print();
+      });
+
+      document.getElementById('certResetTaskBtn')?.addEventListener('click', () => {
+        if (confirm('Скинути код поточного екзаменаційного завдання?')) {
+          const task = certExamTasks[certCurrentIdx];
+          delete certUserCodes[task.id];
+          document.getElementById('certCodeEditor').value = `export function ${task.name}(${task.starterParams}) {\n  // TODO: Напишіть вашу реалізацію тут\n  ${task.starterBody}\n}`;
+          showToast('Код завдання скинуто.');
+        }
+      });
+
+      document.getElementById('certFormatBtn')?.addEventListener('click', async () => {
+        const editor = document.getElementById('certCodeEditor');
+        if (!editor || !window.prettier || !window.prettierPlugins?.babel) return;
+        try {
+          const plugins = [window.prettierPlugins.babel];
+          if (window.prettierPlugins.estree) plugins.push(window.prettierPlugins.estree);
+          editor.value = await window.prettier.format(editor.value, {
+            parser: 'babel',
+            plugins,
+            semi: true,
+            singleQuote: true,
+            tabWidth: 2
+          });
+          showToast('✨ Відформатовано!');
+        } catch (e) {
+          showToast('Помилка форматування: ' + e.message);
+        }
+      });
+    }
+
+    function startCertificationExam() {
+      // Pick 10 balanced random tasks across modules
+      certExamTasks = [];
+      const shuffledModules = [...MODULES].sort(() => Math.random() - 0.5);
+      for (const mod of shuffledModules) {
+        const mTasks = ALL_TASKS.filter(t => t.moduleIdx === mod.idx);
+        if (mTasks.length > 0) {
+          const chosen = mTasks[Math.floor(Math.random() * mTasks.length)];
+          if (!certExamTasks.some(t => t.id === chosen.id)) {
+            certExamTasks.push(chosen);
+          }
+        }
+        if (certExamTasks.length === 10) break;
+      }
+      while (certExamTasks.length < 10 && certExamTasks.length < ALL_TASKS.length) {
+        const chosen = ALL_TASKS[Math.floor(Math.random() * ALL_TASKS.length)];
+        if (!certExamTasks.some(t => t.id === chosen.id)) {
+          certExamTasks.push(chosen);
+        }
+      }
+
+      certCurrentIdx = 0;
+      Object.keys(certUserCodes).forEach(k => delete certUserCodes[k]);
+      Object.keys(certPassedMap).forEach(k => delete certPassedMap[k]);
+      certSecondsLeft = 45 * 60;
+      certActive = true;
+
+      document.getElementById('certWelcomeBox').style.display = 'none';
+      document.getElementById('certResultsBox').style.display = 'none';
+      document.getElementById('certActiveBox').style.display = 'block';
+
+      renderCertExamPills();
+      selectCertExamTask(0);
+      startCertTimer();
+      showToast('🚀 Сертифікаційний іспит розпочато! Успіхів!');
+    }
+
+    function startCertTimer() {
+      if (certTimerInterval) clearInterval(certTimerInterval);
+      updateCertTimerDisplay();
+      certTimerInterval = setInterval(() => {
+        certSecondsLeft--;
+        if (certSecondsLeft <= 0) {
+          clearInterval(certTimerInterval);
+          alert('Час екзамену вичерпано!');
+          finishCertificationExam();
+        } else {
+          updateCertTimerDisplay();
+        }
+      }, 1000);
+    }
+
+    function updateCertTimerDisplay() {
+      const el = document.getElementById('certTimerDisplay');
+      if (!el) return;
+      const mins = Math.floor(certSecondsLeft / 60);
+      const secs = certSecondsLeft % 60;
+      el.textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+      if (certSecondsLeft < 300) {
+        el.style.color = '#ef4444';
+        el.style.background = '#fef2f2';
+      }
+    }
+
+    function renderCertExamPills() {
+      const container = document.getElementById('certQuestionPills');
+      if (!container) return;
+      container.innerHTML = '';
+      certExamTasks.forEach((t, i) => {
+        const btn = document.createElement('button');
+        const isCur = i === certCurrentIdx;
+        const isPassed = certPassedMap[i] === true;
+        const isFailed = certPassedMap[i] === false;
+
+        btn.className = 'btn-pill ' + (isCur ? 'btn-pill-primary' : 'btn-pill-outline');
+        btn.style.padding = '3px 10px';
+        btn.style.fontSize = '12px';
+        btn.textContent = (isPassed ? '✓ ' : '') + (i + 1);
+
+        if (isPassed && !isCur) {
+          btn.style.borderColor = '#10b981';
+          btn.style.color = '#047857';
+          btn.style.background = 'rgba(16, 185, 129, 0.1)';
+        } else if (isFailed && !isCur) {
+          btn.style.borderColor = '#ef4444';
+          btn.style.color = '#b91c1c';
+          btn.style.background = 'rgba(239, 68, 68, 0.1)';
+        }
+
+        btn.addEventListener('click', () => selectCertExamTask(i));
+        container.appendChild(btn);
+      });
+    }
+
+    function selectCertExamTask(idx) {
+      certCurrentIdx = idx;
+      const task = certExamTasks[idx];
+
+      document.getElementById('certTaskIdBadge').textContent = `Завдання ${idx + 1} / 10 (${task.id})`;
+      document.getElementById('certTaskTitle').textContent = task.name + ' — ' + task.title;
+      document.getElementById('certTaskLevelBadge').textContent = task.level;
+      document.getElementById('certTaskGoal').textContent = task.goal;
+      document.getElementById('certTaskReqs').innerHTML = task.reqs.map(r => `<li>${r}</li>`).join('');
+      document.getElementById('certEditorFilename').textContent = `exam-${task.id}.js`;
+
+      const editor = document.getElementById('certCodeEditor');
+      if (certUserCodes[task.id]) {
+        editor.value = certUserCodes[task.id];
+      } else {
+        editor.value = `export function ${task.name}(${task.starterParams}) {\n  // TODO: Напишіть вашу реалізацію тут\n  ${task.starterBody}\n}`;
+      }
+
+      const consoleBody = document.getElementById('certConsoleBody');
+      const testStatus = document.getElementById('certTestStatus');
+      consoleBody.innerHTML = '<div style="color:#9ba1b0;">Натисніть "Перевірити завдання" для запуску тестів.</div>';
+      testStatus.textContent = certPassedMap[idx] ? 'Пройдено' : 'Очікує запуску';
+      testStatus.style.color = certPassedMap[idx] ? '#10b981' : '#9ba1b0';
+
+      renderCertExamPills();
+    }
+
+    function runCertSingleTaskTest() {
+      const task = certExamTasks[certCurrentIdx];
+      const editor = document.getElementById('certCodeEditor');
+      const code = editor.value;
+      certUserCodes[task.id] = code;
+
+      const consoleBody = document.getElementById('certConsoleBody');
+      const testStatus = document.getElementById('certTestStatus');
+      consoleBody.innerHTML = '';
+      let passedAll = true;
+
+      try {
+        const clean = code.replace(/export\s+default\s+/g, '').replace(/export\s+/g, '');
+        const fnRunner = new Function(clean + `\nreturn ${task.name};`);
+        const userFn = fnRunner();
+
+        task.tests.forEach(tc => {
+          const row = document.createElement('div');
+          row.className = 'test-result-row';
+          try {
+            const runner = new Function(task.name, 'return ' + tc.expr);
+            const actual = runner(userFn);
+            const isMatch = JSON.stringify(actual) === JSON.stringify(tc.expected);
+            if (isMatch) {
+              row.innerHTML = `
+                <span class="test-status-pill status-pass">PASS</span>
+                <div>
+                  <span style="color:#d1d5db;">${tc.expr}</span>
+                  <div style="font-size:11px; color:#10b981;">Результат: ${JSON.stringify(actual)}</div>
+                </div>
+              `;
+            } else {
+              passedAll = false;
+              row.innerHTML = `
+                <span class="test-status-pill status-fail">FAIL</span>
+                <div>
+                  <span style="color:#f87171;">${tc.expr}</span>
+                  <div style="font-size:11px; color:#a8a29a;">Очікувалось: <span style="color:#34d399;">${JSON.stringify(tc.expected)}</span></div>
+                  <div style="font-size:11px; color:#f87171;">Отримано: <span>${JSON.stringify(actual)}</span></div>
+                </div>
+              `;
+            }
+          } catch (tErr) {
+            passedAll = false;
+            row.innerHTML = `
+              <span class="test-status-pill status-fail">ERROR</span>
+              <div>
+                <span style="color:#f87171;">${tc.expr}</span>
+                <div style="font-size:11px; color:#ef4444;">Помилка: ${tErr.message}</div>
+              </div>
+            `;
+          }
+          consoleBody.appendChild(row);
+        });
+
+        certPassedMap[certCurrentIdx] = passedAll;
+        testStatus.textContent = passedAll ? 'Усі тести пройдено!' : 'Помилки в тестах';
+        testStatus.style.color = passedAll ? '#10b981' : '#ef4444';
+        renderCertExamPills();
+
+        if (passedAll) {
+          showToast(`✓ Завдання ${certCurrentIdx + 1} успішно зараховано!`);
+        } else {
+          showToast(`❌ Завдання ${certCurrentIdx + 1}: деякі тести не пройшли.`);
+        }
+      } catch (err) {
+        certPassedMap[certCurrentIdx] = false;
+        testStatus.textContent = 'Синтаксична помилка';
+        testStatus.style.color = '#ef4444';
+        consoleBody.innerHTML = `<div style="color:#ef4444;">Помилка: ${err.message}</div>`;
+        renderCertExamPills();
+      }
+    }
+
+    function finishCertificationExam() {
+      if (certTimerInterval) clearInterval(certTimerInterval);
+      certActive = false;
+
+      let passedCount = 0;
+      for (let i = 0; i < certExamTasks.length; i++) {
+        if (certPassedMap[i] === true) passedCount++;
+      }
+
+      const percent = Math.round((passedCount / certExamTasks.length) * 100);
+      const isCertified = passedCount >= 8;
+
+      document.getElementById('certActiveBox').style.display = 'none';
+      const resultsBox = document.getElementById('certResultsBox');
+      resultsBox.style.display = 'block';
+
+      const icon = document.getElementById('certStatusIcon');
+      const headline = document.getElementById('certResultHeadline');
+      const subtext = document.getElementById('certResultSubtext');
+      const doc = document.getElementById('certDocContainer');
+      const printBtn = document.getElementById('certPrintDocBtn');
+      const nameInputSec = document.getElementById('certNameInputSection');
+
+      if (isCertified) {
+        icon.textContent = '🎉';
+        headline.textContent = 'Вітаємо! Сертифікаційний екзамен успішно складено!';
+        subtext.innerHTML = `Ваш результат: <b>${passedCount} з 10 завдань (${percent}%)</b>. Ви продемонстрували високий рівень володіння матеріалом!`;
+        nameInputSec.style.display = 'block';
+        doc.style.display = 'block';
+        printBtn.style.display = 'inline-flex';
+
+        // Fill document
+        const studentNameInput = document.getElementById('certStudentNameInput');
+        if (studentNameInput) studentNameInput.value = certStudentName;
+        document.getElementById('certDocStudentName').textContent = certStudentName;
+        document.getElementById('certDocScoreBadge').textContent = `${percent}% (${passedCount}/10)`;
+        
+        const randomHex = Math.random().toString(16).substring(2, 8).toUpperCase();
+        document.getElementById('certDocId').textContent = `${'CERT-LOOPS-2026'}-${randomHex}`;
+        document.getElementById('certDocDate').textContent = new Date().toLocaleDateString('uk-UA');
+      } else {
+        icon.textContent = '📚';
+        headline.textContent = 'Сертифікаційний поріг не подолано';
+        subtext.innerHTML = `Ваш результат: <b>${passedCount} з 10 завдань (${percent}%)</b>. Для отримання сертифіката потрібно набрати щонайменше 8 із 10 (80%). Рекомендуємо повторити теми та спробувати знову.`;
+        nameInputSec.style.display = 'none';
+        doc.style.display = 'none';
+        printBtn.style.display = 'none';
+      }
+    }
+
+    // Call init
+    initCertificationModule();
+  
 
     // Initial render
     renderModuleDropdown();
