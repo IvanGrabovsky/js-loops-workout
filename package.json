@@ -7,7 +7,9 @@
     "start": "vite --open",
     "dev": "vite --open",
     "build": "vite build",
-    "test": "vitest run",
+    "test": "vitest run test/all-solutions.test.js",
+    "test:student": "vitest run test/0*.test.js",
+    "test:all": "vitest run",
     "test:watch": "vitest"
   },
   "devDependencies": {

@@ -982,26 +982,377 @@
       padding: 20px;
     }
   
-    /* ==========================================
-       CONTENT INTEGRITY & ANTI-COPY PROTECTION
-       ========================================== */
-    body {
-      -webkit-user-select: none !important;
-      -moz-user-select: none !important;
-      -ms-user-select: none !important;
-      user-select: none !important;
-    }
-    textarea, input {
-      -webkit-user-select: text !important;
-      -moz-user-select: text !important;
-      -ms-user-select: text !important;
-      user-select: text !important;
-    }
-    .theory-copy-btn {
-      display: none !important;
+    
+    /* ========================================================
+       ACCESSIBLE HIGH-CONTRAST THEME STYLES: JS LOOPS WORKOUT
+       ======================================================== */
+
+    /* LIGHT THEME (Default ElevenLabs Taupe) */
+    :root, [data-theme="light"] {
+      --canvas: #fcfbfa;
+      --surface-taupe: #f6f4f0;
+      --surface-stone: #ece9e3;
+      --border-stone: #dcd7ce;
+      --ink: #0f172a;
+      --smoke: #475569;
+      --smoke-light: #64748b;
     }
 
-  </style>
+    [data-theme="light"] body,
+    body:not([data-theme="dark"]) {
+      background-color: #fcfbfa;
+      color: #0f172a;
+    }
+
+    [data-theme="light"] header,
+    body:not([data-theme="dark"]) header {
+      background: #ffffff !important;
+      border: 1px solid #dcd7ce !important;
+      color: #0f172a !important;
+    }
+
+    [data-theme="light"] .brand-title,
+    body:not([data-theme="dark"]) .brand-title {
+      color: #0f172a !important;
+    }
+
+    [data-theme="light"] .task-title,
+    body:not([data-theme="dark"]) .task-title {
+      color: #0f172a !important;
+    }
+
+    [data-theme="light"] .task-goal,
+    body:not([data-theme="dark"]) .task-goal {
+      color: #1e293b !important;
+    }
+
+    [data-theme="light"] .req-list li,
+    body:not([data-theme="dark"]) .req-list li {
+      color: #1e293b !important;
+    }
+
+    [data-theme="light"] .section-title,
+    body:not([data-theme="dark"]) .section-title {
+      color: #475569 !important;
+    }
+
+    [data-theme="light"] .theory-hint-box,
+    body:not([data-theme="dark"]) .theory-hint-box {
+      background: #ffffff !important;
+      border: 1px solid #dcd7ce !important;
+      color: #1e293b !important;
+    }
+
+    [data-theme="light"] #taskHintContent,
+    body:not([data-theme="dark"]) #taskHintContent {
+      color: #1e293b !important;
+    }
+
+    [data-theme="light"] .dropdown-menu,
+    body:not([data-theme="dark"]) .dropdown-menu {
+      background: #ffffff !important;
+      border: 1px solid #dcd7ce !important;
+      color: #0f172a !important;
+    }
+
+    [data-theme="light"] .dropdown-item,
+    body:not([data-theme="dark"]) .dropdown-item {
+      color: #0f172a !important;
+    }
+
+    [data-theme="light"] .dropdown-item-title,
+    body:not([data-theme="dark"]) .dropdown-item-title {
+      color: #0f172a !important;
+    }
+
+    [data-theme="light"] .dropdown-item-meta,
+    body:not([data-theme="dark"]) .dropdown-item-meta {
+      color: #475569 !important;
+    }
+
+    [data-theme="light"] .tab-btn,
+    body:not([data-theme="dark"]) .tab-btn {
+      background: #f6f4f0 !important;
+      color: #334155 !important;
+      border: 1px solid #dcd7ce !important;
+    }
+
+    [data-theme="light"] .tab-btn.active,
+    body:not([data-theme="dark"]) .tab-btn.active {
+      background: #ffffff !important;
+      color: #0f172a !important;
+      font-weight: 600 !important;
+      border-color: #94a3b8 !important;
+    }
+
+    [data-theme="light"] .task-pill,
+    body:not([data-theme="dark"]) .task-pill {
+      background: #ffffff !important;
+      color: #1e293b !important;
+      border: 1px solid #dcd7ce !important;
+    }
+
+    [data-theme="light"] .task-pill.active,
+    body:not([data-theme="dark"]) .task-pill.active {
+      background: #6366f1 !important;
+      color: #ffffff !important;
+      font-weight: 700 !important;
+    }
+
+    /* DARK THEME: Loops Workout */
+    :root[data-theme="dark"],
+    [data-theme="dark"] {
+      --canvas: #090d16;
+      --surface-taupe: #0f1523;
+      --surface-stone: #161e31;
+      --border-stone: #243048;
+      --border-subtle: rgba(255, 255, 255, 0.1);
+      --ink: #f8fafc;
+      --smoke: #94a3b8;
+      --smoke-light: #64748b;
+    }
+
+    [data-theme="dark"] body,
+    body[data-theme="dark"] {
+      background-color: #090d16 !important;
+      color: #f8fafc !important;
+    }
+
+    [data-theme="dark"] header {
+      background: #0f1523 !important;
+      border: 1px solid #243048 !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+      color: #f8fafc !important;
+    }
+
+    [data-theme="dark"] .brand-title {
+      color: #f8fafc !important;
+    }
+
+    [data-theme="dark"] .task-card,
+    [data-theme="dark"] .card-taupe,
+    [data-theme="dark"] .card-stone,
+    [data-theme="dark"] .card-base {
+      background: #0f1523 !important;
+      border: 1px solid #243048 !important;
+      color: #f8fafc !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+    }
+
+    [data-theme="dark"] .task-title {
+      color: #ffffff !important;
+    }
+
+    [data-theme="dark"] .task-goal {
+      color: #e2e8f0 !important;
+    }
+
+    [data-theme="dark"] .task-number {
+      background: #161e31 !important;
+      color: #a78bfa !important;
+      border: 1px solid #243048 !important;
+    }
+
+    [data-theme="dark"] .task-badge-level {
+      background: #161e31 !important;
+      color: #94a3b8 !important;
+      border: 1px solid #243048 !important;
+    }
+
+    [data-theme="dark"] .section-title {
+      color: #94a3b8 !important;
+    }
+
+    [data-theme="dark"] .req-list li {
+      color: #cbd5e1 !important;
+    }
+
+    [data-theme="dark"] .req-list li::before {
+      color: #f97316 !important;
+    }
+
+    [data-theme="dark"] .theory-hint-box {
+      background: #161e31 !important;
+      border: 1px solid #243048 !important;
+      color: #cbd5e1 !important;
+    }
+
+    [data-theme="dark"] .theory-hint-box code {
+      background: #090d16 !important;
+      color: #a78bfa !important;
+      border: 1px solid #243048 !important;
+    }
+
+    [data-theme="dark"] #taskHintContent {
+      color: #e2e8f0 !important;
+    }
+
+    [data-theme="dark"] .hint-method-card {
+      background: #172554 !important;
+      border: 1px solid #1e3a8a !important;
+      border-left: 3px solid #6366f1 !important;
+      color: #e0f2fe !important;
+    }
+
+    [data-theme="dark"] .hint-method-card b {
+      color: #ffffff !important;
+    }
+
+    [data-theme="dark"] .teacher-guide-box {
+      background: #062b1e !important;
+      border-color: #059669 !important;
+      box-shadow: 0 4px 14px rgba(16, 185, 129, 0.2) !important;
+    }
+
+    [data-theme="dark"] .teacher-guide-content,
+    [data-theme="dark"] .teacher-guide-content p {
+      color: #d1fae5 !important;
+    }
+
+    [data-theme="dark"] .dropdown-trigger {
+      background: #0f1523 !important;
+      color: #f8fafc !important;
+      border: 1px solid #243048 !important;
+    }
+
+    [data-theme="dark"] .dropdown-menu {
+      background: #0f1523 !important;
+      border: 1px solid #243048 !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7) !important;
+    }
+
+    [data-theme="dark"] .dropdown-item {
+      color: #cbd5e1 !important;
+      border-radius: 8px !important;
+    }
+
+    [data-theme="dark"] .dropdown-item:hover {
+      background: #1e293b !important;
+      color: #ffffff !important;
+    }
+
+    [data-theme="dark"] .dropdown-item.active {
+      background: #243048 !important;
+      color: #ffffff !important;
+      font-weight: 600 !important;
+    }
+
+    [data-theme="dark"] .dropdown-item-title {
+      color: #f1f5f9 !important;
+    }
+
+    [data-theme="dark"] .dropdown-item-meta {
+      color: #94a3b8 !important;
+    }
+
+    [data-theme="dark"] .tab-btn {
+      background: #161e31 !important;
+      color: #cbd5e1 !important;
+      border: 1px solid #243048 !important;
+    }
+
+    [data-theme="dark"] .tab-btn:hover {
+      background: #1e293b !important;
+      color: #ffffff !important;
+    }
+
+    [data-theme="dark"] .tab-btn.active {
+      background: #6366f1 !important;
+      color: #ffffff !important;
+      font-weight: 600 !important;
+    }
+
+    [data-theme="dark"] .task-pill {
+      background: #161e31 !important;
+      color: #cbd5e1 !important;
+      border: 1px solid #243048 !important;
+    }
+
+    [data-theme="dark"] .task-pill:hover {
+      background: #1e293b !important;
+      color: #ffffff !important;
+    }
+
+    [data-theme="dark"] .task-pill.active {
+      background: #6366f1 !important;
+      color: #ffffff !important;
+      font-weight: 700 !important;
+    }
+
+    [data-theme="dark"] .task-pill.completed {
+      background: rgba(16, 185, 129, 0.2) !important;
+      color: #34d399 !important;
+      border-color: rgba(16, 185, 129, 0.4) !important;
+    }
+
+    [data-theme="dark"] .pill-badge {
+      background: #0f1523 !important;
+      color: #cbd5e1 !important;
+      border: 1px solid #243048 !important;
+    }
+
+    [data-theme="dark"] .btn-pill-outline {
+      background: #161e31 !important;
+      color: #cbd5e1 !important;
+      border: 1px solid #243048 !important;
+    }
+
+    [data-theme="dark"] .btn-pill-outline:hover {
+      background: #1e293b !important;
+      color: #ffffff !important;
+    }
+
+    [data-theme="dark"] .task-navigation {
+      border-top: 1px solid #243048 !important;
+    }
+
+
+    /* Theme Toggle Styles for Loops Workout */
+    [data-theme="dark"] {
+      --canvas: #0c0f17;
+      --surface-taupe: #141a24;
+      --surface-stone: #1e2634;
+      --border-stone: #2b3648;
+      --border-subtle: rgba(255, 255, 255, 0.1);
+      --ink: #f8fafc;
+      --smoke: #94a3b8;
+      --smoke-light: #64748b;
+    }
+    [data-theme="dark"] body {
+      background-color: var(--canvas);
+      color: var(--ink);
+    }
+    [data-theme="dark"] .card-taupe,
+    [data-theme="dark"] .card-stone,
+    [data-theme="dark"] .card-base,
+    [data-theme="dark"] .card-interactive,
+    [data-theme="dark"] .editor-card,
+    [data-theme="dark"] .tabs-bar,
+    [data-theme="dark"] .tab-btn {
+      background: var(--surface-taupe);
+      color: var(--ink);
+      border-color: var(--border-stone);
+    }
+    [data-theme="dark"] .pill-badge {
+      background: var(--surface-stone);
+      color: var(--ink);
+      border-color: var(--border-stone);
+    }
+    [data-theme="dark"] .task-pill {
+      background: var(--surface-stone);
+      color: #cbd5e1;
+      border-color: var(--border-stone);
+    }
+    [data-theme="dark"] .task-pill.active {
+      background: var(--accent-violet);
+      color: #ffffff;
+    }
+    [data-theme="dark"] .tab-btn.active {
+      background: var(--accent-violet);
+      color: #ffffff;
+    }
+  
+</style>
 </head>
 <body>
   <div class="container">
@@ -1014,6 +1365,14 @@
       </div>
 
       <div class="header-actions">
+
+        <button id="themeToggleBtn" class="btn-pill" title="Змінити тему (Світла / Темна)" style="padding:6px 12px; font-size:15px; cursor:pointer;" aria-label="Toggle theme">
+          ☀️
+        </button>
+        <button id="openTheoryHandbookBtn" class="btn-pill" title="Довідник базової теорії (HTML, CSS, DOM)" style="padding:6px 14px; font-size:13px; font-weight:700; cursor:pointer;">
+          📖 Теорія (HTML, CSS, DOM)
+        </button>
+
         <div class="pill-badge" id="onlineBadge">
           <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#10b981;"></span>
           <span id="onlineCountText">1 онлайн</span>
@@ -2054,314 +2413,6 @@ for (let i = 1; i &lt;= 3; i++) {
         </div>
       </div>
     </div>
-  
-          </div>
-        </div>
-      </div>
-
-      <!-- Results & Certificate View -->
-      <div id="certResultsBox" style="display:none; max-width:880px; margin:0 auto;">
-        <div class="mass-runner-box" style="text-align:center;">
-          <div id="certStatusIcon" style="font-size:48px; margin-bottom:8px;">🎉</div>
-          <h2 id="certResultHeadline" style="font-size:26px; font-weight:700; margin-bottom:8px;">Сертифікацію успішно складено!</h2>
-          <p id="certResultSubtext" style="font-size:15px; color:var(--color-graphite, #6e7687); margin-bottom:20px;">
-            Ви успішно розв'язали 9 з 10 завдань (90%).
-          </p>
-
-          <!-- Input student name for certificate -->
-          <div id="certNameInputSection" style="max-width:440px; margin:0 auto 28px auto; text-align:left;">
-            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:6px; color:#374151;">
-              Вкажіть ім'я та прізвище для сертифіката:
-            </label>
-            <div style="display:flex; gap:8px;">
-              <input type="text" id="certStudentNameInput" placeholder="Наприклад: Олена Коваленко" style="flex:1; padding:10px 14px; border-radius:9999px; border:1px solid #000; font-family:inherit; font-size:14px; outline:none;" />
-              <button class="btn-pill btn-pill-primary" id="certApplyNameBtn">Оновити</button>
-            </div>
-          </div>
-
-          <!-- Printable Certificate Document -->
-          <div id="certDocContainer" class="certificate-paper" style="display:none; text-align:center; background:#fffdf8; border:8px double #b45309; border-radius:12px; padding:44px 36px; box-shadow:0 8px 24px rgba(0,0,0,0.08); margin-bottom:24px; position:relative;">
-            <div style="font-size:13px; letter-spacing:0.25em; text-transform:uppercase; color:#b45309; font-weight:700; margin-bottom:6px;">СЕРТИФІКАТ ПРО ОПАНУВАННЯ МОДУЛЯ</div>
-            <div style="font-size:11px; letter-spacing:0.1em; color:#78716c; margin-bottom:20px;">CERTIFICATE OF ACHIEVEMENT</div>
-            
-            <p style="font-size:14px; color:#57534e; margin-bottom:8px;">Цим засвідчується, що</p>
-            <h3 id="certDocStudentName" style="font-size:32px; font-weight:800; color:#1e1b4b; text-decoration:underline; text-decoration-color:#b45309; margin-bottom:12px; font-family:inherit;">Студент Студентович</h3>
-            <p style="font-size:14.5px; line-height:1.6; color:#44403c; max-width:580px; margin:0 auto 24px auto;">
-              успішно склав(ла) комплексний сертифікаційний іспит із курсу <br>
-              <b style="color:#0f172a; font-size:16px;">«Цикли та Відлагодження в JS»</b><br>
-              із результатом <span id="certDocScoreBadge" style="font-weight:700; color:#047857;">90%</span>.
-            </p>
-
-            <div style="display:flex; justify-content:space-between; align-items:flex-end; border-top:1px solid #e7e5e4; padding-top:18px; margin-top:28px; font-size:12px; color:#78716c;">
-              <div style="text-align:left;">
-                <div>Номер сертифіката: <span id="certDocId" style="font-family:var(--font-mono); font-weight:700; color:#1c1917;">CERT-2026-X89F</span></div>
-                <div>Дата видачі: <span id="certDocDate">31.10.2026</span></div>
-              </div>
-              <div style="text-align:center;">
-                <div style="width:50px; height:50px; border-radius:50%; border:2px dashed #b45309; display:inline-flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:4px;">🏅</div>
-                <div style="font-size:10px; font-weight:700; text-transform:uppercase; color:#b45309;">ПЕРЕВІРЕНО</div>
-              </div>
-              <div style="text-align:right;">
-                <div style="font-weight:700; color:#1c1917;">Frontend Camp Mentorship</div>
-                <div style="font-size:11px;">Керівник програми</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Student Performance Breakdown Table (Variant A) -->
-          <div id="certStudentTableContainer" style="margin-top:28px; text-align:left; background:rgba(0,0,0,0.02); border:1px solid rgba(125,125,125,0.2); border-radius:12px; padding:20px; overflow-x:auto;">
-            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:14px; border-bottom:1px solid rgba(125,125,125,0.15); padding-bottom:12px;">
-              <h3 style="margin:0; font-size:16px; font-weight:700;">📊 Зведена відомість результатів та часу</h3>
-              <div id="certTotalTimeBadge" style="font-size:13px; font-weight:600; color:var(--color-graphite, #9ba1b0); background:rgba(125,125,125,0.1); padding:4px 12px; border-radius:9999px;">
-                ⏱️ Загальний час: 00:00
-              </div>
-            </div>
-
-            <table style="width:100%; border-collapse:collapse; font-size:13px;">
-              <thead>
-                <tr style="border-bottom:1px solid rgba(125,125,125,0.2); color:var(--color-graphite, #9ba1b0); text-align:left;">
-                  <th style="padding:8px 10px; width:40px;">#</th>
-                  <th style="padding:8px 10px;">Завдання</th>
-                  <th style="padding:8px 10px;">Складність</th>
-                  <th style="padding:8px 10px; text-align:center;">Тести</th>
-                  <th style="padding:8px 10px; text-align:center;">Витрачений час</th>
-                  <th style="padding:8px 10px; text-align:right;">Підсумок</th>
-                </tr>
-              </thead>
-              <tbody id="certStudentTableBody">
-                <!-- Dynamically populated rows -->
-              </tbody>
-            </table>
-          </div>
-
-          <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap; margin-top:24px;">
-            <button class="btn-pill btn-pill-primary" id="certPrintDocBtn" style="display:none; padding:10px 22px;">🖨️ Друк / Зберегти як PDF</button>
-            <button class="btn-pill btn-pill-outline" id="certRetryExamBtn" style="padding:10px 22px;">🔄 Скласти ще раз</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Teacher Exam Analytics Dashboard (Variant B - Revealed in Teacher Mode) -->
-      <div id="teacherAnalyticsBox" class="mass-runner-box" style="display:none; max-width:920px; margin:28px auto 0 auto; border:2px solid #b45309; text-align:left;">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px; border-bottom:1px solid rgba(125,125,125,0.2); padding-bottom:12px;">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <span style="font-size:22px;">📊</span>
-            <div>
-              <h3 style="margin:0; font-size:17px; font-weight:700;">Журнал сертифікацій студентів (Менторський аналіз)</h3>
-              <div style="font-size:12px; color:var(--color-graphite, #9ba1b0);">Зведена аналітика успішності, часу та типових помилок групи</div>
-            </div>
-          </div>
-          <div style="display:flex; gap:8px;">
-            <button class="btn-pill btn-pill-primary" id="exportExamCsvBtn" style="padding:6px 14px; font-size:12px;">📥 Експорт CSV (Excel)</button>
-            <button class="btn-pill btn-pill-outline" id="clearExamLogBtn" style="padding:6px 14px; font-size:12px; color:#ef4444; border-color:rgba(239,68,68,0.3);">🗑️ Очистити</button>
-          </div>
-        </div>
-
-        <div style="overflow-x:auto;">
-          <table style="width:100%; border-collapse:collapse; font-size:13px;" id="teacherExamRecordsTable">
-            <thead>
-              <tr style="border-bottom:1px solid rgba(125,125,125,0.2); color:var(--color-graphite, #9ba1b0); text-align:left;">
-                <th style="padding:8px 10px;">Дата</th>
-                <th style="padding:8px 10px;">Студент</th>
-                <th style="padding:8px 10px; text-align:center;">Бал</th>
-                <th style="padding:8px 10px; text-align:center;">Час</th>
-                <th style="padding:8px 10px; text-align:center;">Статус</th>
-                <th style="padding:8px 10px; text-align:right;">Дії</th>
-              </tr>
-            </thead>
-            <tbody id="teacherExamRecordsBody">
-              <tr>
-                <td colspan="6" style="padding:20px; text-align:center; color:#9ba1b0;">Записів сертифікацій ще немає. Коли студенти складають тест, дані з'являються тут автоматично.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  
-          </div>
-        </div>
-      </div>
-
-      <!-- Results & Certificate View -->
-      <div id="certResultsBox" style="display:none; max-width:860px; margin:0 auto;">
-        <div class="mass-runner-box" style="text-align:center;">
-          <div id="certStatusIcon" style="font-size:48px; margin-bottom:8px;">🎉</div>
-          <h2 id="certResultHeadline" style="font-size:26px; font-weight:700; margin-bottom:8px;">Сертифікацію успішно складено!</h2>
-          <p id="certResultSubtext" style="font-size:15px; color:var(--color-graphite, #6e7687); margin-bottom:20px;">
-            Ви успішно розв'язали 9 з 10 завдань (90%).
-          </p>
-
-          <!-- Input student name for certificate -->
-          <div id="certNameInputSection" style="max-width:440px; margin:0 auto 28px auto; text-align:left;">
-            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:6px; color:#374151;">
-              Вкажіть ім'я та прізвище для сертифіката:
-            </label>
-            <div style="display:flex; gap:8px;">
-              <input type="text" id="certStudentNameInput" placeholder="Наприклад: Олена Коваленко" style="flex:1; padding:10px 14px; border-radius:9999px; border:1px solid #000; font-family:inherit; font-size:14px; outline:none;" />
-              <button class="btn-pill btn-pill-primary" id="certApplyNameBtn">Оновити</button>
-            </div>
-          </div>
-
-          <!-- Printable Certificate Document -->
-          <div id="certDocContainer" class="certificate-paper" style="display:none; text-align:center; background:#fffdf8; border:8px double #b45309; border-radius:12px; padding:44px 36px; box-shadow:0 8px 24px rgba(0,0,0,0.08); margin-bottom:24px; position:relative;">
-            <div style="font-size:13px; letter-spacing:0.25em; text-transform:uppercase; color:#b45309; font-weight:700; margin-bottom:6px;">СЕРТИФІКАТ ПРО ОПАНУВАННЯ МОДУЛЯ</div>
-            <div style="font-size:11px; letter-spacing:0.1em; color:#78716c; margin-bottom:20px;">CERTIFICATE OF ACHIEVEMENT</div>
-            
-            <p style="font-size:14px; color:#57534e; margin-bottom:8px;">Цим засвідчується, що</p>
-            <h3 id="certDocStudentName" style="font-size:32px; font-weight:800; color:#1e1b4b; text-decoration:underline; text-decoration-color:#b45309; margin-bottom:12px; font-family:inherit;">Студент Студентович</h3>
-            <p style="font-size:14.5px; line-height:1.6; color:#44403c; max-width:580px; margin:0 auto 24px auto;">
-              успішно склав(ла) комплексний сертифікаційний іспит із курсу <br>
-              <b style="color:#0f172a; font-size:16px;">«Цикли та Відлагодження в JS»</b><br>
-              із результатом <span id="certDocScoreBadge" style="font-weight:700; color:#047857;">90%</span>.
-            </p>
-
-            <div style="display:flex; justify-content:space-between; align-items:flex-end; border-top:1px solid #e7e5e4; padding-top:18px; margin-top:28px; font-size:12px; color:#78716c;">
-              <div style="text-align:left;">
-                <div>Номер сертифіката: <span id="certDocId" style="font-family:var(--font-mono); font-weight:700; color:#1c1917;">CERT-2026-X89F</span></div>
-                <div>Дата видачі: <span id="certDocDate">31.10.2026</span></div>
-              </div>
-              <div style="text-align:center;">
-                <div style="width:50px; height:50px; border-radius:50%; border:2px dashed #b45309; display:inline-flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:4px;">🏅</div>
-                <div style="font-size:10px; font-weight:700; text-transform:uppercase; color:#b45309;">ПЕРЕВІРЕНО</div>
-              </div>
-              <div style="text-align:right;">
-                <div style="font-weight:700; color:#1c1917;">Frontend Camp Mentorship</div>
-                <div style="font-size:11px;">Керівник програми</div>
-              </div>
-            </div>
-          </div>
-
-          <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
-            <button class="btn-pill btn-pill-primary" id="certPrintDocBtn" style="display:none; padding:10px 22px;">🖨️ Друк / Зберегти як PDF</button>
-            <button class="btn-pill btn-pill-outline" id="certRetryExamBtn" style="padding:10px 22px;">🔄 Скласти ще раз</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  
-          </div>
-        </div>
-      </div>
-
-      <!-- Results & Certificate View -->
-      <div id="certResultsBox" style="display:none; max-width:860px; margin:0 auto;">
-        <div class="mass-runner-box" style="text-align:center;">
-          <div id="certStatusIcon" style="font-size:48px; margin-bottom:8px;">🎉</div>
-          <h2 id="certResultHeadline" style="font-size:26px; font-weight:700; margin-bottom:8px;">Сертифікацію успішно складено!</h2>
-          <p id="certResultSubtext" style="font-size:15px; color:var(--color-graphite, #6e7687); margin-bottom:20px;">
-            Ви успішно розв'язали 9 з 10 завдань (90%).
-          </p>
-
-          <!-- Input student name for certificate -->
-          <div id="certNameInputSection" style="max-width:440px; margin:0 auto 28px auto; text-align:left;">
-            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:6px; color:#374151;">
-              Вкажіть ім'я та прізвище для сертифіката:
-            </label>
-            <div style="display:flex; gap:8px;">
-              <input type="text" id="certStudentNameInput" placeholder="Наприклад: Олена Коваленко" style="flex:1; padding:10px 14px; border-radius:9999px; border:1px solid #000; font-family:inherit; font-size:14px; outline:none;" />
-              <button class="btn-pill btn-pill-primary" id="certApplyNameBtn">Оновити</button>
-            </div>
-          </div>
-
-          <!-- Printable Certificate Document -->
-          <div id="certDocContainer" class="certificate-paper" style="display:none; text-align:center; background:#fffdf8; border:8px double #b45309; border-radius:12px; padding:44px 36px; box-shadow:0 8px 24px rgba(0,0,0,0.08); margin-bottom:24px; position:relative;">
-            <div style="font-size:13px; letter-spacing:0.25em; text-transform:uppercase; color:#b45309; font-weight:700; margin-bottom:6px;">СЕРТИФІКАТ ПРО ОПАНУВАННЯ МОДУЛЯ</div>
-            <div style="font-size:11px; letter-spacing:0.1em; color:#78716c; margin-bottom:20px;">CERTIFICATE OF ACHIEVEMENT</div>
-            
-            <p style="font-size:14px; color:#57534e; margin-bottom:8px;">Цим засвідчується, що</p>
-            <h3 id="certDocStudentName" style="font-size:32px; font-weight:800; color:#1e1b4b; text-decoration:underline; text-decoration-color:#b45309; margin-bottom:12px; font-family:inherit;">Студент Студентович</h3>
-            <p style="font-size:14.5px; line-height:1.6; color:#44403c; max-width:580px; margin:0 auto 24px auto;">
-              успішно склав(ла) комплексний сертифікаційний іспит із курсу <br>
-              <b style="color:#0f172a; font-size:16px;">«Цикли та Відлагодження в JS»</b><br>
-              із результатом <span id="certDocScoreBadge" style="font-weight:700; color:#047857;">90%</span>.
-            </p>
-
-            <div style="display:flex; justify-content:space-between; align-items:flex-end; border-top:1px solid #e7e5e4; padding-top:18px; margin-top:28px; font-size:12px; color:#78716c;">
-              <div style="text-align:left;">
-                <div>Номер сертифіката: <span id="certDocId" style="font-family:var(--font-mono); font-weight:700; color:#1c1917;">CERT-2026-X89F</span></div>
-                <div>Дата видачі: <span id="certDocDate">31.10.2026</span></div>
-              </div>
-              <div style="text-align:center;">
-                <div style="width:50px; height:50px; border-radius:50%; border:2px dashed #b45309; display:inline-flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:4px;">🏅</div>
-                <div style="font-size:10px; font-weight:700; text-transform:uppercase; color:#b45309;">ПЕРЕВІРЕНО</div>
-              </div>
-              <div style="text-align:right;">
-                <div style="font-weight:700; color:#1c1917;">Frontend Camp Mentorship</div>
-                <div style="font-size:11px;">Керівник програми</div>
-              </div>
-            </div>
-          </div>
-
-          <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
-            <button class="btn-pill btn-pill-primary" id="certPrintDocBtn" style="display:none; padding:10px 22px;">🖨️ Друк / Зберегти як PDF</button>
-            <button class="btn-pill btn-pill-outline" id="certRetryExamBtn" style="padding:10px 22px;">🔄 Скласти ще раз</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  
-          </div>
-        </div>
-      </div>
-
-      <!-- Results & Certificate View -->
-      <div id="certResultsBox" style="display:none; max-width:860px; margin:0 auto;">
-        <div class="mass-runner-box" style="text-align:center;">
-          <div id="certStatusIcon" style="font-size:48px; margin-bottom:8px;">🎉</div>
-          <h2 id="certResultHeadline" style="font-size:26px; font-weight:700; margin-bottom:8px;">Сертифікацію успішно складено!</h2>
-          <p id="certResultSubtext" style="font-size:15px; color:var(--color-graphite, #6e7687); margin-bottom:20px;">
-            Ви успішно розв'язали 9 з 10 завдань (90%).
-          </p>
-
-          <!-- Input student name for certificate -->
-          <div id="certNameInputSection" style="max-width:440px; margin:0 auto 28px auto; text-align:left;">
-            <label style="display:block; font-size:13px; font-weight:700; margin-bottom:6px; color:#374151;">
-              Вкажіть ім'я та прізвище для сертифіката:
-            </label>
-            <div style="display:flex; gap:8px;">
-              <input type="text" id="certStudentNameInput" placeholder="Наприклад: Олена Коваленко" style="flex:1; padding:10px 14px; border-radius:9999px; border:1px solid #000; font-family:inherit; font-size:14px; outline:none;" />
-              <button class="btn-pill btn-pill-primary" id="certApplyNameBtn">Оновити</button>
-            </div>
-          </div>
-
-          <!-- Printable Certificate Document -->
-          <div id="certDocContainer" class="certificate-paper" style="display:none; text-align:center; background:#fffdf8; border:8px double #b45309; border-radius:12px; padding:44px 36px; box-shadow:0 8px 24px rgba(0,0,0,0.08); margin-bottom:24px; position:relative;">
-            <div style="font-size:13px; letter-spacing:0.25em; text-transform:uppercase; color:#b45309; font-weight:700; margin-bottom:6px;">СЕРТИФІКАТ ПРО ОПАНУВАННЯ МОДУЛЯ</div>
-            <div style="font-size:11px; letter-spacing:0.1em; color:#78716c; margin-bottom:20px;">CERTIFICATE OF ACHIEVEMENT</div>
-            
-            <p style="font-size:14px; color:#57534e; margin-bottom:8px;">Цим засвідчується, що</p>
-            <h3 id="certDocStudentName" style="font-size:32px; font-weight:800; color:#1e1b4b; text-decoration:underline; text-decoration-color:#b45309; margin-bottom:12px; font-family:inherit;">Студент Студентович</h3>
-            <p style="font-size:14.5px; line-height:1.6; color:#44403c; max-width:580px; margin:0 auto 24px auto;">
-              успішно склав(ла) комплексний сертифікаційний іспит із курсу <br>
-              <b style="color:#0f172a; font-size:16px;">«Цикли та Відлагодження в JS»</b><br>
-              із результатом <span id="certDocScoreBadge" style="font-weight:700; color:#047857;">90%</span>.
-            </p>
-
-            <div style="display:flex; justify-content:space-between; align-items:flex-end; border-top:1px solid #e7e5e4; padding-top:18px; margin-top:28px; font-size:12px; color:#78716c;">
-              <div style="text-align:left;">
-                <div>Номер сертифіката: <span id="certDocId" style="font-family:var(--font-mono); font-weight:700; color:#1c1917;">CERT-2026-X89F</span></div>
-                <div>Дата видачі: <span id="certDocDate">31.10.2026</span></div>
-              </div>
-              <div style="text-align:center;">
-                <div style="width:50px; height:50px; border-radius:50%; border:2px dashed #b45309; display:inline-flex; align-items:center; justify-content:center; font-size:20px; margin-bottom:4px;">🏅</div>
-                <div style="font-size:10px; font-weight:700; text-transform:uppercase; color:#b45309;">ПЕРЕВІРЕНО</div>
-              </div>
-              <div style="text-align:right;">
-                <div style="font-weight:700; color:#1c1917;">Frontend Camp Mentorship</div>
-                <div style="font-size:11px;">Керівник програми</div>
-              </div>
-            </div>
-          </div>
-
-          <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
-            <button class="btn-pill btn-pill-primary" id="certPrintDocBtn" style="display:none; padding:10px 22px;">🖨️ Друк / Зберегти як PDF</button>
-            <button class="btn-pill btn-pill-outline" id="certRetryExamBtn" style="padding:10px 22px;">🔄 Скласти ще раз</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  
   </div>
 
   
@@ -3192,7 +3243,7 @@ for (let i = 1; i &lt;= 3; i++) {
         startCertificationExam();
       });
 
-      document.getElementById('certApplyNameBtn')?.addEventListener('click', () => {
+      const updateStudentName = (showToastNotice = false) => {
         const input = document.getElementById('certStudentNameInput');
         const name = input ? input.value.trim() : '';
         if (name) {
@@ -3200,9 +3251,18 @@ for (let i = 1; i &lt;= 3; i++) {
           localStorage.setItem('camp_student_name', name);
           const nameEl = document.getElementById('certDocStudentName');
           if (nameEl) nameEl.textContent = name;
-          showToast('Ім\'я в сертифікаті оновлено!');
+          if (showToastNotice) showToast('Ім\'я в сертифікаті оновлено!');
+        }
+      };
+
+      document.getElementById('certApplyNameBtn')?.addEventListener('click', () => updateStudentName(true));
+      document.getElementById('certStudentNameInput')?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          updateStudentName(true);
         }
       });
+      document.getElementById('certStudentNameInput')?.addEventListener('input', () => updateStudentName(false));
 
       document.getElementById('certPrintDocBtn')?.addEventListener('click', () => {
         window.print();
@@ -3771,5 +3831,276 @@ for (let i = 1; i &lt;= 3; i++) {
     renderModuleDropdown();
     selectTask(ALL_TASKS[0]);
   </script>
+
+<!-- ==========================================
+     THEORY HANDBOOK MODAL (HTML, CSS, DOM)
+     ========================================== -->
+<div class="modal-overlay" id="theoryHandbookModal" style="display:none; z-index:10001;">
+  <div class="modal-card" style="max-width:880px; width:94%; max-height:88vh; display:flex; flex-direction:column; overflow:hidden;">
+    <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1); padding:16px 20px;">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span style="font-size:22px;">📖</span>
+        <div>
+          <h3 style="margin:0; font-size:17px; font-weight:700;">Базова теорія: HTML, CSS та DOM API</h3>
+          <span style="font-size:12px; color:var(--text-muted, #94a3b8);">Швидкий довідник концепцій та офіційна документація MDN</span>
+        </div>
+      </div>
+      <button class="modal-close" id="closeTheoryHandbookBtn" style="background:none; border:none; font-size:24px; color:#94a3b8; cursor:pointer;">&times;</button>
+    </div>
+
+    <!-- Search & Tabs -->
+    <div style="padding:14px 20px; border-bottom:1px solid rgba(255,255,255,0.08); display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between; background:rgba(0,0,0,0.15);">
+      <div style="display:flex; gap:8px;">
+        <button class="th-tab-btn active" data-th-tab="dom" style="padding:7px 16px; border-radius:20px; border:1px solid rgba(255,255,255,0.15); background:var(--color-primary, #3ecf8e); color:#000; font-weight:700; font-size:13px; cursor:pointer;">⚡ DOM API</button>
+        <button class="th-tab-btn" data-th-tab="html" style="padding:7px 16px; border-radius:20px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.06); color:var(--text-main, #fff); font-weight:600; font-size:13px; cursor:pointer;">🌐 HTML5</button>
+        <button class="th-tab-btn" data-th-tab="css" style="padding:7px 16px; border-radius:20px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.06); color:var(--text-main, #fff); font-weight:600; font-size:13px; cursor:pointer;">🎨 CSS3</button>
+      </div>
+      <input type="text" id="thSearchInput" placeholder="🔍 Пошук по темах..." style="padding:7px 14px; border-radius:8px; border:1px solid rgba(255,255,255,0.15); background:rgba(0,0,0,0.3); color:#fff; font-size:13px; min-width:200px;">
+    </div>
+
+    <!-- Scrollable Content -->
+    <div style="padding:20px; overflow-y:auto; flex:1;" id="thContentArea">
+      <!-- DOM TAB -->
+      <div class="th-pane active" id="th-pane-dom">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(360px, 1fr)); gap:16px;">
+          <div class="th-card" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <h4 style="margin:0; font-size:14.5px; color:var(--color-primary, #3ecf8e);">Створення та додавання вузлів</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement" target="_blank" rel="noopener" style="color:#38bdf8; font-size:12px; text-decoration:none;">MDN ↗</a>
+            </div>
+            <p style="font-size:12.5px; color:var(--text-muted, #94a3b8); margin-bottom:10px;">
+              <code>document.createElement(tag)</code> створює новий елемент. Додавання в дерево: <code>parent.appendChild(el)</code>, <code>parent.prepend(el)</code>. Видалення: <code>el.remove()</code>.
+            </p>
+            <pre style="background:#111; padding:10px; border-radius:6px; font-size:12px; font-family:monospace; color:#ededed; margin:0; overflow-x:auto;">const btn = document.createElement('button');
+btn.textContent = 'Натисни мене';
+document.body.appendChild(btn);</pre>
+          </div>
+
+          <div class="th-card" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <h4 style="margin:0; font-size:14.5px; color:var(--color-primary, #3ecf8e);">Пошук елементів у дереві</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector" target="_blank" rel="noopener" style="color:#38bdf8; font-size:12px; text-decoration:none;">MDN ↗</a>
+            </div>
+            <p style="font-size:12.5px; color:var(--text-muted, #94a3b8); margin-bottom:10px;">
+              <code>querySelector(selector)</code> повертає перший знайдений елемент або null. <code>querySelectorAll(selector)</code> повертає NodeList (перебирається forEach або Array.from).
+            </p>
+            <pre style="background:#111; padding:10px; border-radius:6px; font-size:12px; font-family:monospace; color:#ededed; margin:0; overflow-x:auto;">const active = document.querySelector('.card.active');
+const allBtns = document.querySelectorAll('button.tab');
+allBtns.forEach(b => console.log(b.textContent));</pre>
+          </div>
+
+          <div class="th-card" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <h4 style="margin:0; font-size:14.5px; color:var(--color-primary, #3ecf8e);">Обробка подій (Event Listeners)</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener" target="_blank" rel="noopener" style="color:#38bdf8; font-size:12px; text-decoration:none;">MDN ↗</a>
+            </div>
+            <p style="font-size:12.5px; color:var(--text-muted, #94a3b8); margin-bottom:10px;">
+              <code>el.addEventListener(event, callback)</code> додає слухач. Популярні події: <code>'click'</code>, <code>'input'</code>, <code>'change'</code>, <code>'keydown'</code>, <code>'submit'</code>.
+            </p>
+            <pre style="background:#111; padding:10px; border-radius:6px; font-size:12px; font-family:monospace; color:#ededed; margin:0; overflow-x:auto;">inp.addEventListener('input', (e) => {
+  console.log('Поточне значення:', e.target.value);
+});</pre>
+          </div>
+
+          <div class="th-card" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <h4 style="margin:0; font-size:14.5px; color:var(--color-primary, #3ecf8e);">Керування класами та стилями</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/classList" target="_blank" rel="noopener" style="color:#38bdf8; font-size:12px; text-decoration:none;">MDN ↗</a>
+            </div>
+            <p style="font-size:12.5px; color:var(--text-muted, #94a3b8); margin-bottom:10px;">
+              <code>classList.add('cls')</code>, <code>remove('cls')</code>, <code>toggle('cls')</code>, <code>contains('cls')</code>. Inline стилі: <code>el.style.display = 'none'</code>.
+            </p>
+            <pre style="background:#111; padding:10px; border-radius:6px; font-size:12px; font-family:monospace; color:#ededed; margin:0; overflow-x:auto;">item.classList.toggle('selected');
+item.style.backgroundColor = '#3ecf8e';</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- HTML TAB -->
+      <div class="th-pane" id="th-pane-html" style="display:none;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(360px, 1fr)); gap:16px;">
+          <div class="th-card" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <h4 style="margin:0; font-size:14.5px; color:#38bdf8;">Семантичні теги розмітки</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element" target="_blank" rel="noopener" style="color:#38bdf8; font-size:12px; text-decoration:none;">MDN ↗</a>
+            </div>
+            <p style="font-size:12.5px; color:var(--text-muted, #94a3b8); margin-bottom:10px;">
+              Використовуйте <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;footer&gt;</code> замість безконтрольних <code>&lt;div&gt;</code>.
+            </p>
+            <pre style="background:#111; padding:10px; border-radius:6px; font-size:12px; font-family:monospace; color:#ededed; margin:0; overflow-x:auto;">&lt;nav class="navbar"&gt;
+  &lt;a href="/"&gt;Головна&lt;/a&gt;
+&lt;/nav&gt;</pre>
+          </div>
+
+          <div class="th-card" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <h4 style="margin:0; font-size:14.5px; color:#38bdf8;">HTML Таблиці (&lt;table&gt;)</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/table" target="_blank" rel="noopener" style="color:#38bdf8; font-size:12px; text-decoration:none;">MDN ↗</a>
+            </div>
+            <p style="font-size:12.5px; color:var(--text-muted, #94a3b8); margin-bottom:10px;">
+              Таблична структура: <code>&lt;table&gt;</code>, <code>&lt;thead&gt;&lt;tr&gt;&lt;th&gt;</code> для заголовків, <code>&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;</code> для даних, <code>&lt;tfoot&gt;</code> для підсумків.
+            </p>
+            <pre style="background:#111; padding:10px; border-radius:6px; font-size:12px; font-family:monospace; color:#ededed; margin:0; overflow-x:auto;">&lt;table&gt;
+  &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Колонка&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+  &lt;tbody&gt;&lt;tr&gt;&lt;td&gt;Значення&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;
+&lt;/table&gt;</pre>
+          </div>
+
+          <div class="th-card" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <h4 style="margin:0; font-size:14.5px; color:#38bdf8;">Елементи форм та вводу</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form" target="_blank" rel="noopener" style="color:#38bdf8; font-size:12px; text-decoration:none;">MDN ↗</a>
+            </div>
+            <p style="font-size:12.5px; color:var(--text-muted, #94a3b8); margin-bottom:10px;">
+              <code>&lt;input type="text|checkbox|radio|number"&gt;</code>, <code>&lt;textarea&gt;</code>, <code>&lt;select&gt;</code>, <code>&lt;button&gt;</code>. Завжди пов'язуйте з <code>&lt;label for="..."&gt;</code>.
+            </p>
+            <pre style="background:#111; padding:10px; border-radius:6px; font-size:12px; font-family:monospace; color:#ededed; margin:0; overflow-x:auto;">&lt;label&gt;
+  &lt;input type="checkbox" id="agree" /&gt; Погоджуюсь
+&lt;/label&gt;</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- CSS TAB -->
+      <div class="th-pane" id="th-pane-css" style="display:none;">
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(360px, 1fr)); gap:16px;">
+          <div class="th-card" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <h4 style="margin:0; font-size:14.5px; color:#f59e0b;">Flexbox Layout</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout" target="_blank" rel="noopener" style="color:#38bdf8; font-size:12px; text-decoration:none;">MDN ↗</a>
+            </div>
+            <p style="font-size:12.5px; color:var(--text-muted, #94a3b8); margin-bottom:10px;">
+              <code>display: flex</code>, <code>justify-content: space-between|center</code>, <code>align-items: center</code>, <code>gap: 12px</code>, <code>flex-wrap: wrap</code>.
+            </p>
+            <pre style="background:#111; padding:10px; border-radius:6px; font-size:12px; font-family:monospace; color:#ededed; margin:0; overflow-x:auto;">.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}</pre>
+          </div>
+
+          <div class="th-card" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <h4 style="margin:0; font-size:14.5px; color:#f59e0b;">CSS Grid Layout</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout" target="_blank" rel="noopener" style="color:#38bdf8; font-size:12px; text-decoration:none;">MDN ↗</a>
+            </div>
+            <p style="font-size:12.5px; color:var(--text-muted, #94a3b8); margin-bottom:10px;">
+              <code>display: grid</code>, <code>grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))</code>, <code>gap: 16px</code>. Ідеально для 2D сіток карток та матриць.
+            </p>
+            <pre style="background:#111; padding:10px; border-radius:6px; font-size:12px; font-family:monospace; color:#ededed; margin:0; overflow-x:auto;">.matrix-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}</pre>
+          </div>
+
+          <div class="th-card" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+              <h4 style="margin:0; font-size:14.5px; color:#f59e0b;">CSS Змінні (Custom Properties)</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties" target="_blank" rel="noopener" style="color:#38bdf8; font-size:12px; text-decoration:none;">MDN ↗</a>
+            </div>
+            <p style="font-size:12.5px; color:var(--text-muted, #94a3b8); margin-bottom:10px;">
+              Оголошуються через <code>--ім'я: значення;</code> у <code>:root</code> або селекторі теми. Використовуються через <code>var(--ім'я)</code>.
+            </p>
+            <pre style="background:#111; padding:10px; border-radius:6px; font-size:12px; font-family:monospace; color:#ededed; margin:0; overflow-x:auto;">:root { --primary: #3ecf8e; }
+[data-theme="dark"] { --bg: #121212; }
+body { background: var(--bg); }</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+  
+
+</script>
+
+<!-- ==========================================
+     STANDALONE THEME & THEORY CONTROLLER
+     ========================================== -->
+<script>
+(function initThemeAndTheory() {
+  const themeBtn = document.getElementById('themeToggleBtn');
+  const savedTheme = localStorage.getItem('camp_theme') || (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    if (document.body) document.body.setAttribute('data-theme', theme);
+    localStorage.setItem('camp_theme', theme);
+    if (themeBtn) {
+      themeBtn.textContent = theme === 'dark' ? '☀️' : '🌙';
+      themeBtn.title = theme === 'dark' ? 'Увімкнути світлу тему' : 'Увімкнути темну тему';
+    }
+  }
+
+  applyTheme(savedTheme);
+
+  if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+      const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+      const next = cur === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+    });
+  }
+
+  
+  // Theory Handbook Logic
+  const openTheoryBtn = document.getElementById('openTheoryHandbookBtn');
+  const theoryModal = document.getElementById('theoryHandbookModal');
+  const closeTheoryBtn = document.getElementById('closeTheoryHandbookBtn');
+
+  if (openTheoryBtn && theoryModal) {
+    openTheoryBtn.addEventListener('click', () => {
+      theoryModal.style.display = 'flex';
+    });
+  }
+
+  if (closeTheoryBtn && theoryModal) {
+    closeTheoryBtn.addEventListener('click', () => {
+      theoryModal.style.display = 'none';
+    });
+    theoryModal.addEventListener('click', (e) => {
+      if (e.target === theoryModal) theoryModal.style.display = 'none';
+    });
+  }
+
+  // Theory Tab Switching
+  document.querySelectorAll('.th-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.th-tab-btn').forEach(b => {
+        b.style.background = 'rgba(255,255,255,0.06)';
+        b.style.color = 'var(--text-main, #fff)';
+        b.classList.remove('active');
+      });
+      btn.style.background = 'var(--color-primary, #3ecf8e)';
+      btn.style.color = '#000';
+      btn.classList.add('active');
+
+      const targetTab = btn.dataset.thTab;
+      document.querySelectorAll('.th-pane').forEach(p => p.style.display = 'none');
+      const activePane = document.getElementById('th-pane-' + targetTab);
+      if (activePane) activePane.style.display = 'block';
+    });
+  });
+
+  // Theory Search Filter
+  const thSearch = document.getElementById('thSearchInput');
+  if (thSearch) {
+    thSearch.addEventListener('input', () => {
+      const q = thSearch.value.toLowerCase().trim();
+      document.querySelectorAll('.th-card').forEach(card => {
+        const text = card.textContent.toLowerCase();
+        card.style.display = (!q || text.includes(q)) ? 'block' : 'none';
+      });
+    });
+  }
+
+})();
+</script>
+
 </body>
 </html>

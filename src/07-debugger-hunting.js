@@ -26,12 +26,14 @@ export function fixOffByOneSum(n) {
 export function fixInfiniteWhileIncrement(target) {
   // TODO: напишіть вашу реалізацію тут
   const res = [];
-    let i = 0;
-    while (i < target) {
-      res.push(i);
-      // УВАГА: тут бракує інкременту лічильника
-    }
-    return res;
+  let i = 0;
+  let watchdog = 0;
+  while (i < target) {
+    if (++watchdog > 50000) break; // Запобіжник вічного циклу
+    res.push(i);
+    // УВАГА: тут бракує інкременту лічильника
+  }
+  return res;
 }
 
 /**
@@ -118,13 +120,15 @@ export function fixDoWhileCondition(max, step) {
 export function fixContinueSkippingIncrement(numbers) {
   // TODO: напишіть вашу реалізацію тут
   let sum = 0;
-    let i = 0;
-    while (i < numbers.length) {
-      if (numbers[i] % 2 === 0) continue; // Зависання: i не збільшився!
-      sum += numbers[i];
-      i++;
-    }
-    return sum;
+  let i = 0;
+  let watchdog = 0;
+  while (i < numbers.length) {
+    if (++watchdog > 50000) break; // Запобіжник вічного циклу
+    if (numbers[i] % 2 === 0) continue; // Зависання: i не збільшився!
+    sum += numbers[i];
+    i++;
+  }
+  return sum;
 }
 
 /**
