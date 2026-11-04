@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JS Loops & Debugger Workout | 165 завдань, блок-схеми та відлагоджувач</title>
-  <meta name="description" content="Інтенсивний практичний тренажер з циклів (while, do...while, for, break, continue, вкладені цикли), алгоритмічних блок-схем та роботи з відлагоджувачем (Debugger, DevTools, breakpoints). 165 завдань.">
+  <title>JS Loops & Debugger Workout | 201 завдання, блок-схеми та відлагоджувач</title>
+  <meta name="description" content="Інтенсивний практичний тренажер з циклів (while, do...while, for, break, continue, вкладені цикли), алгоритмічних блок-схем, роботи з відлагоджувачем (Debugger, DevTools, breakpoints) та DOM/UI-компонентів. 201 завдання.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -13,6 +13,8 @@
   <script src="https://cdn.jsdelivr.net/npm/prettier@3.3.3/standalone.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/prettier@3.3.3/plugins/babel.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/prettier@3.3.3/plugins/estree.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prettier@3.3.3/plugins/html.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prettier@3.3.3/plugins/postcss.js"></script>
 
   <style>
     :root {
@@ -149,13 +151,14 @@
     }
 
     .btn-pill-primary {
-      background: var(--ink);
-      color: #ffffff;
-      border: 1px solid var(--ink);
+      background: #0f172a;
+      color: #ffffff !important;
+      border: 1px solid #0f172a;
     }
 
     .btn-pill-primary:hover {
-      background: #222222;
+      background: #1e293b;
+      border-color: #1e293b;
       transform: translateY(-1px);
     }
 
@@ -504,6 +507,61 @@
       gap: 10px;
     }
 
+        .editor-file-tabs {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(0, 0, 0, 0.05);
+      padding: 3px 4px;
+      border-radius: 8px;
+      border: 1px solid var(--border-stone);
+    }
+
+    [data-theme="dark"] .editor-file-tabs {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: #243048;
+    }
+
+    .editor-tab {
+      padding: 3px 10px;
+      font-size: 11.5px;
+      font-family: var(--font-mono);
+      font-weight: 600;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--smoke);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .editor-tab:hover {
+      color: var(--ink);
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    [data-theme="dark"] .editor-tab:hover {
+      color: #f8fafc;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .editor-tab.active {
+      background: #ffffff;
+      color: #0f172a;
+      border-color: #d1d5db;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+
+    [data-theme="dark"] .editor-tab.active {
+      background: #6366f1;
+      color: #ffffff;
+      border-color: #6366f1;
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+    }
+
     .editor-filename {
       display: flex;
       align-items: center;
@@ -521,13 +579,13 @@
     }
 
     .format-btn {
-      background: #ffffff;
+      background: #f8fafc;
       border: 1px solid var(--border-stone);
       border-radius: var(--radius-pill);
       padding: 6px 14px;
       font-size: 12px;
       font-weight: 600;
-      color: var(--ink);
+      color: #0f172a;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -536,8 +594,8 @@
     }
 
     .format-btn:hover {
-      background: var(--surface-stone);
-      border-color: #d1ccc5;
+      background: #f1f5f9;
+      border-color: #cbd5e1;
     }
 
     .save-notice {
@@ -605,6 +663,235 @@
       border: 1px solid #2a2e3a;
     }
 
+    /* Live DOM Component Preview Sandbox (Modules 8, 9, 10) */
+    .live-preview-card {
+      margin-top: 18px;
+      background: var(--surface-taupe);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      border-radius: var(--radius-card);
+      padding: 18px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+    [data-theme="dark"] .live-preview-card {
+      background: #0f1523 !important;
+      border-color: rgba(99, 102, 241, 0.4) !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+    }
+    .live-preview-container {
+      background: #ffffff;
+      border: 1px dashed var(--border-stone);
+      border-radius: var(--radius-subcard);
+      padding: 20px;
+      min-height: 90px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      gap: 16px;
+      overflow: auto;
+      width: 100%;
+    }
+    [data-theme="dark"] .live-preview-container {
+      background: #070a12 !important;
+      border-color: #243048 !important;
+    }
+    .student-custom-html-wrapper,
+    .student-js-component-wrapper {
+      width: 100%;
+    }
+
+    .task-code-inline {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 4px;
+      background: #eef2ff;
+      color: #4338ca;
+      border: 1px solid #c7d2fe;
+      margin: 1px 2px;
+      vertical-align: baseline;
+      user-select: text;
+    }
+    [data-theme="dark"] .task-code-inline {
+      background: #1e1b4b !important;
+      color: #c7d2fe !important;
+      border: 1px solid #3730a3 !important;
+    }
+    .task-pre {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      overflow-x: auto;
+      margin: 8px 0;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      line-height: 1.5;
+      user-select: text;
+    }
+    [data-theme="dark"] .task-pre {
+      background: #090d16 !important;
+      border-color: #1e293b !important;
+    }
+
+    /* UI Component Styles for DOM Tasks (Modules 8, 9, 10) */
+    .product-cards-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; width: 100%; }
+    .product-card { border: 1px solid var(--border-stone); border-radius: 8px; padding: 14px; background: var(--surface-stone); display: flex; flex-direction: column; gap: 6px; }
+    .product-card__title { margin: 0; font-size: 14px; font-weight: 600; color: var(--ink); }
+    .product-card__price { margin: 0; font-size: 13px; font-weight: 700; color: var(--accent-violet); }
+    
+    .star-rating { display: inline-flex; gap: 4px; font-size: 20px; }
+    .star--filled { color: #f59e0b; }
+    .star--empty { color: #94a3b8; }
+    
+    .breadcrumbs { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; }
+    .breadcrumbs__link { color: var(--accent-violet); text-decoration: none; font-weight: 500; }
+    .breadcrumbs__link:hover { text-decoration: underline; }
+    .breadcrumbs__sep { color: var(--smoke); }
+    .breadcrumbs__current { color: var(--ink); font-weight: 600; }
+    
+    .badge-container { display: flex; gap: 8px; flex-wrap: wrap; }
+    .badge { padding: 4px 10px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+    .badge--success { background: #10b981; color: #fff; }
+    .badge--warning { background: #f59e0b; color: #fff; }
+    .badge--danger { background: #ef4444; color: #fff; }
+    .badge--neutral { background: #64748b; color: #fff; }
+    
+    .message-list { display: flex; flex-direction: column; gap: 8px; list-style: none; margin: 0; padding: 0; width: 100%; }
+    .message-item { background: var(--surface-stone); border: 1px solid var(--border-stone); border-radius: 8px; padding: 8px 12px; max-width: 80%; font-size: 13px; }
+    .message-item--mine { align-self: flex-end; background: rgba(99, 102, 241, 0.15); border-color: rgba(99, 102, 241, 0.4); }
+    .message-item--other { align-self: flex-start; }
+    .message-item__author { font-weight: 700; margin-right: 4px; }
+    
+    .tag-cloud { display: flex; gap: 8px; flex-wrap: wrap; }
+    .tag-chip { padding: 4px 10px; border-radius: 9999px; background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); font-size: 12px; font-weight: 600; }
+    .tag-chip--popular { background: rgba(16, 185, 129, 0.15); border-color: #10b981; color: #047857; }
+    [data-theme="dark"] .tag-chip--popular { color: #34d399; }
+    
+    .progress-steps { display: flex; gap: 8px; align-items: center; width: 100%; }
+    .step-indicator { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; border: 2px solid var(--border-stone); color: var(--smoke); }
+    .step-indicator--completed { border-color: #10b981; background: #10b981; color: #fff; }
+    
+    .numbered-list { padding-left: 24px; margin: 0; }
+    .numbered-list__item { padding: 4px 0; font-size: 13.5px; }
+    
+    .notification-feed { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+    .notification-card { border: 1px solid var(--border-stone); border-radius: 8px; padding: 10px 14px; background: var(--surface-stone); }
+    .notification-card--unread { border-left: 4px solid var(--accent-violet); background: rgba(99, 102, 241, 0.05); }
+    .notification-card__title { margin: 0 0 4px 0; font-size: 14px; font-weight: 600; }
+    .notification-card__body { margin: 0; font-size: 12.5px; color: var(--smoke); }
+    
+    .tabs-nav { display: flex; gap: 6px; border-bottom: 2px solid var(--border-stone); padding-bottom: 2px; width: 100%; }
+    .tab-button { padding: 8px 14px; border: none; background: transparent; font-size: 13px; font-weight: 600; color: var(--smoke); cursor: pointer; border-radius: 6px 6px 0 0; }
+    .tab-button--active { color: var(--accent-violet); background: rgba(99, 102, 241, 0.1); border-bottom: 2px solid var(--accent-violet); }
+    
+    .accordion-list { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+    .accordion-item { border: 1px solid var(--border-stone); border-radius: 8px; overflow: hidden; background: var(--surface-stone); }
+    .accordion-header { padding: 10px 14px; font-weight: 600; font-size: 13.5px; cursor: pointer; background: rgba(0, 0, 0, 0.02); }
+    .accordion-content { padding: 10px 14px; font-size: 13px; border-top: 1px solid var(--border-stone); }
+    
+    .avatar-stack { display: flex; align-items: center; }
+    .avatar-img { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #ffffff; margin-left: -10px; object-fit: cover; }
+    .avatar-stack .avatar-img:first-child { margin-left: 0; }
+    .avatar-more { width: 36px; height: 36px; border-radius: 50%; background: var(--border-stone); border: 2px solid #ffffff; margin-left: -10px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
+
+    /* Module 9 Component Styles */
+    .calendar-month { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 420px; padding: 16px; background: var(--surface-stone); border: 1px solid var(--border-stone); border-radius: 12px; }
+    .month-title { margin: 0; font-size: 16px; font-weight: 700; color: var(--ink); text-align: center; }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; width: 100%; }
+    .day-cell { display: flex; align-items: center; justify-content: center; height: 38px; border-radius: 8px; background: #ffffff; border: 1px solid var(--border-stone); font-size: 13px; font-weight: 600; color: #0f172a; transition: all 0.15s ease; }
+    [data-theme="dark"] .day-cell { background: #1e293b; color: #f8fafc; border-color: #334155; }
+    .day-cell:hover { border-color: var(--accent-violet); transform: scale(1.05); }
+
+    .chess-board { display: inline-flex; flex-direction: column; border: 2px solid #334155; border-radius: 6px; overflow: hidden; }
+    .chess-row { display: flex; }
+    .chess-cell { width: 32px; height: 32px; }
+    .cell--white { background: #f8fafc; }
+    .cell--black { background: #334155; }
+
+    .heatmap-grid { display: flex; gap: 4px; padding: 12px; background: var(--surface-stone); border-radius: 8px; border: 1px solid var(--border-stone); width: fit-content; }
+    .heatmap-col { display: flex; flex-direction: column; gap: 4px; }
+    .heatmap-cell { width: 14px; height: 14px; border-radius: 3px; background: #e2e8f0; }
+    [data-theme="dark"] .heatmap-cell { background: #1e293b; }
+    .heatmap-cell[data-level="1"] { background: #a7f3d0; }
+    .heatmap-cell[data-level="2"] { background: #34d399; }
+    .heatmap-cell[data-level="3"] { background: #059669; }
+    .heatmap-cell[data-level="4"] { background: #047857; }
+
+    .pixel-art-grid { display: inline-flex; flex-direction: column; border: 1px solid var(--border-stone); border-radius: 6px; overflow: hidden; }
+    .pixel-row { display: flex; }
+    .pixel-cell { width: 20px; height: 20px; }
+
+    .mult-table { border-collapse: collapse; font-size: 12px; }
+    .mult-table td { width: 34px; height: 34px; text-align: center; border: 1px solid var(--border-stone); font-weight: 500; }
+    .cell--diagonal { background: rgba(99, 102, 241, 0.25) !important; font-weight: 700; color: var(--accent-violet); }
+
+    .tree-menu { list-style: none; padding-left: 0; margin: 0; }
+    .tree-menu li { padding: 4px 0; font-size: 13.5px; }
+    .tree-submenu { list-style: none; padding-left: 20px; margin: 4px 0; }
+
+    .seat-map { display: flex; flex-direction: column; gap: 6px; }
+    .seat-row { display: flex; gap: 6px; align-items: center; }
+    .seat { width: 32px; height: 32px; border-radius: 6px; border: 1px solid #10b981; background: rgba(16, 185, 129, 0.15); color: #10b981; font-size: 10px; font-weight: 700; cursor: pointer; }
+    .seat--reserved { border-color: #ef4444; background: rgba(239, 68, 68, 0.15); color: #ef4444; cursor: not-allowed; opacity: 0.6; }
+
+    .palette-matrix { display: flex; flex-direction: column; gap: 14px; width: 100%; }
+    .palette-group { display: flex; flex-direction: column; gap: 6px; }
+    .palette-group__title { margin: 0; font-size: 13.5px; font-weight: 700; }
+    .palette-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+    .color-chip { width: 44px; height: 44px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .compare-table th, .compare-table td { padding: 8px 12px; border: 1px solid var(--border-stone); text-align: left; }
+    .compare-table th { background: var(--surface-stone); font-weight: 700; }
+    .feat-name { font-weight: 600; }
+    .feat-yes { color: #10b981; font-weight: 700; text-align: center; }
+    .feat-no { color: var(--smoke); text-align: center; }
+
+    .word-grid { display: inline-grid; grid-template-columns: repeat(4, 34px); gap: 4px; padding: 10px; background: var(--surface-stone); border: 1px solid var(--border-stone); border-radius: 8px; }
+    .word-cell { display: flex; align-items: center; justify-content: center; height: 34px; background: #ffffff; border: 1px solid var(--border-stone); border-radius: 6px; font-weight: 700; font-family: var(--font-mono); }
+    [data-theme="dark"] .word-cell { background: #1e293b; border-color: #334155; }
+
+    .grouped-chart { display: flex; gap: 16px; align-items: flex-end; height: 160px; padding: 16px; background: var(--surface-stone); border: 1px solid var(--border-stone); border-radius: 8px; }
+    .chart-group { display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end; }
+    .chart-bars-box { display: flex; gap: 4px; align-items: flex-end; height: 120px; }
+    .chart-bar { width: 16px; border-radius: 4px 4px 0 0; min-height: 4px; transition: height 0.3s ease; }
+    .group-label { font-size: 11px; font-weight: 600; color: var(--smoke); }
+
+    .kw-highlight { background: #fef08a; color: #854d0e; padding: 1px 4px; border-radius: 3px; font-weight: 600; }
+    [data-theme="dark"] .kw-highlight { background: #854d0e; color: #fef08a; }
+    .kw-highlight { background: #fef08a; color: #854d0e; padding: 1px 4px; border-radius: 3px; font-weight: 600; }
+    .table-row--striped { opacity: 0.95; }
+    .calendar-card { width: 100%; border: 1px solid var(--border-stone); border-radius: 8px; padding: 12px; background: var(--surface-stone); }
+    .calendar-header { font-weight: 700; font-size: 14px; margin-bottom: 8px; color: var(--accent-violet); }
+    .calendar-table { width: 100%; border-collapse: collapse; text-align: center; }
+    .calendar-table th { padding: 6px; font-size: 12px; color: var(--smoke); }
+    .calendar-table td { padding: 6px; font-size: 12px; }
+    .cell--weekend { color: #ef4444 !important; font-weight: 600; }
+    .cell--empty { opacity: 0.2; }
+    .heatmap-container { display: flex; gap: 4px; overflow-x: auto; padding: 6px; }
+    .heatmap-week { display: flex; flex-direction: column; gap: 4px; }
+    .grouped-chart { display: flex; gap: 16px; align-items: flex-end; min-height: 140px; padding: 12px; border-bottom: 2px solid var(--border-stone); width: 100%; }
+    .chart-group { display: flex; gap: 6px; align-items: flex-end; }
+    .chart-bar { width: 22px; border-radius: 4px 4px 0 0; transition: height 0.3s ease; }
+    .animate-stagger { animation: fadeInStagger 0.4s ease forwards; }
+    @keyframes fadeInStagger { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .accordion-list { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+    .accordion-item { border: 1px solid var(--border-stone); border-radius: 8px; padding: 10px 14px; background: var(--surface-stone); }
+    .avatar-stack { display: flex; align-items: center; }
+    .avatar-stack img { width: 34px; height: 34px; border-radius: 50%; border: 2px solid #ffffff; margin-left: -8px; }
+    .avatar-stack img:first-child { margin-left: 0; }
+    .avatar-more { width: 34px; height: 34px; border-radius: 50%; background: var(--surface-taupe); border: 2px solid #ffffff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; margin-left: -8px; }
+    .comparison-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .comparison-table th, .comparison-table td { padding: 8px 12px; border: 1px solid var(--border-stone); text-align: left; }
+    .feature--yes { color: #10b981; font-weight: 700; }
+    .feature--no { color: #ef4444; font-weight: 700; }
+    .nested-tree, .nested-tree ul { list-style: none; padding-left: 18px; margin: 4px 0; }
+    .seat-map { display: flex; flex-direction: column; gap: 6px; }
+
     .console-header {
       display: flex;
       justify-content: space-between;
@@ -664,6 +951,12 @@
       border-radius: var(--radius-card);
       padding: 32px;
       margin-bottom: 24px;
+    }
+    .theory-header-banner {
+      background: linear-gradient(135deg, #ffffff 0%, var(--surface-taupe) 100%);
+    }
+    [data-theme="dark"] .theory-header-banner {
+      background: linear-gradient(135deg, #161e31 0%, #0f1523 100%) !important;
     }
 
     .theory-title {
@@ -1351,6 +1644,520 @@
       background: var(--accent-violet);
       color: #ffffff;
     }
+
+    /* Dark Mode Buttons & Controls */
+    [data-theme="dark"] .btn-pill {
+      background: #161e31 !important;
+      color: #cbd5e1 !important;
+      border: 1px solid #243048 !important;
+    }
+    [data-theme="dark"] .btn-pill:hover {
+      background: #1e293b !important;
+      color: #ffffff !important;
+      border-color: #6366f1 !important;
+    }
+    [data-theme="dark"] .btn-pill-primary,
+    [data-theme="dark"] .task-pill.active,
+    [data-theme="dark"] .btn-pill.task-pill.btn-pill-primary,
+    [data-theme="dark"] #nextTaskBtn,
+    [data-theme="dark"] #runTestBtn,
+    [data-theme="dark"] #startMassRunnerBtn,
+    [data-theme="dark"] #certRunTestBtn {
+      background: #6366f1 !important;
+      color: #ffffff !important;
+      border: 1px solid #6366f1 !important;
+      box-shadow: 0 1px 6px rgba(99, 102, 241, 0.4) !important;
+    }
+    [data-theme="dark"] .btn-pill-primary:hover,
+    [data-theme="dark"] #nextTaskBtn:hover,
+    [data-theme="dark"] #runTestBtn:hover,
+    [data-theme="dark"] #startMassRunnerBtn:hover,
+    [data-theme="dark"] #certRunTestBtn:hover {
+      background: #4f46e5 !important;
+      border-color: #4f46e5 !important;
+      color: #ffffff !important;
+    }
+    [data-theme="dark"] .btn-pill-outline {
+      background: #161e31 !important;
+      color: #cbd5e1 !important;
+      border: 1px solid #243048 !important;
+    }
+    [data-theme="dark"] .btn-pill-outline:hover {
+      background: #1e293b !important;
+      color: #ffffff !important;
+      border-color: #6366f1 !important;
+    }
+    [data-theme="dark"] .format-btn,
+    [data-theme="dark"] #formatCodeBtn,
+    [data-theme="dark"] #certFormatBtn {
+      background: #161e31 !important;
+      color: #f8fafc !important;
+      border: 1px solid #243048 !important;
+    }
+    [data-theme="dark"] .format-btn:hover,
+    [data-theme="dark"] #formatCodeBtn:hover,
+    [data-theme="dark"] #certFormatBtn:hover {
+      background: #1e293b !important;
+      color: #ffffff !important;
+      border-color: #6366f1 !important;
+    }
+    [data-theme="dark"] .format-btn span,
+    [data-theme="dark"] #formatCodeBtn span {
+      color: #94a3b8 !important;
+    }
+    [data-theme="dark"] .editor-card {
+      background: #0f1523 !important;
+      border-color: #243048 !important;
+    }
+    [data-theme="dark"] .editor-topbar {
+      background: #121829 !important;
+      border-bottom: 1px solid #243048 !important;
+    }
+    [data-theme="dark"] .editor-bottombar {
+      background: #121829 !important;
+      border-top: 1px solid #243048 !important;
+    }
+    [data-theme="dark"] .shortcut-hints {
+      color: #94a3b8 !important;
+    }
+    [data-theme="dark"] .shortcut-hints kbd {
+      background: #1a233a !important;
+      border-color: #2b3954 !important;
+      color: #e2e8f0 !important;
+    }
+    [data-theme="dark"] .task-number {
+      background: #161e31 !important;
+      color: #a78bfa !important;
+      border-color: #243048 !important;
+    }
+    [data-theme="dark"] .task-badge-level {
+      background: #161e31 !important;
+      color: #94a3b8 !important;
+      border-color: #243048 !important;
+    }
+
+    /* Dark Mode: Theory Tab */
+    [data-theme="dark"] .theory-section {
+      background: #0f1523 !important;
+      border-color: #243048 !important;
+      color: #cbd5e1 !important;
+    }
+    [data-theme="dark"] .theory-title {
+      color: #f8fafc !important;
+    }
+    [data-theme="dark"] .theory-subtitle {
+      color: #f1f5f9 !important;
+    }
+    [data-theme="dark"] .theory-p {
+      color: #cbd5e1 !important;
+    }
+    [data-theme="dark"] .theory-p b,
+    [data-theme="dark"] .theory-p strong {
+      color: #f8fafc !important;
+    }
+    [data-theme="dark"] #tab-theory ul,
+    [data-theme="dark"] #tab-theory ol,
+    [data-theme="dark"] #tab-theory li {
+      color: #cbd5e1 !important;
+    }
+    [data-theme="dark"] #tab-theory li b,
+    [data-theme="dark"] #tab-theory li strong {
+      color: #f8fafc !important;
+    }
+    [data-theme="dark"] .flowchart-svg-container {
+      background: #161e31 !important;
+      border-color: #243048 !important;
+    }
+    [data-theme="dark"] .flowchart-svg-container h4 {
+      color: #f8fafc !important;
+    }
+    [data-theme="dark"] .flowchart-svg-container svg rect {
+      fill: #1e293b !important;
+      stroke: #475569 !important;
+    }
+    [data-theme="dark"] .flowchart-svg-container svg polygon {
+      fill: #1e293b !important;
+      stroke: #6366f1 !important;
+    }
+    [data-theme="dark"] .flowchart-svg-container svg text {
+      fill: #f8fafc !important;
+    }
+    [data-theme="dark"] .flowchart-svg-container svg line {
+      stroke: #64748b !important;
+    }
+    [data-theme="dark"] .flowchart-svg-container svg defs marker path {
+      fill: #64748b !important;
+    }
+    [data-theme="dark"] .theory-card {
+      background: #161e31 !important;
+      border-color: #243048 !important;
+      color: #cbd5e1 !important;
+    }
+    [data-theme="dark"] .theory-card h4,
+    [data-theme="dark"] .theory-card-title {
+      color: #f8fafc !important;
+    }
+    [data-theme="dark"] .theory-card p {
+      color: #cbd5e1 !important;
+    }
+    [data-theme="dark"] .theory-card b,
+    [data-theme="dark"] .theory-card strong {
+      color: #f8fafc !important;
+    }
+    [data-theme="dark"] .theory-callout {
+      background: rgba(59, 130, 246, 0.12) !important;
+      border-left: 4px solid #3b82f6 !important;
+      color: #bfdbfe !important;
+    }
+    [data-theme="dark"] .theory-callout b,
+    [data-theme="dark"] .theory-callout strong {
+      color: #ffffff !important;
+    }
+    [data-theme="dark"] .theory-callout-warn {
+      background: rgba(245, 158, 11, 0.12) !important;
+      border-left-color: #f59e0b !important;
+      color: #fde68a !important;
+    }
+    [data-theme="dark"] .theory-callout-warn b,
+    [data-theme="dark"] .theory-callout-warn strong {
+      color: #ffffff !important;
+    }
+    [data-theme="dark"] .theory-callout-danger {
+      background: rgba(239, 68, 68, 0.12) !important;
+      border-left-color: #ef4444 !important;
+      color: #fca5a5 !important;
+    }
+    [data-theme="dark"] .theory-callout-danger b,
+    [data-theme="dark"] .theory-callout-danger strong {
+      color: #ffffff !important;
+    }
+    [data-theme="dark"] .theory-callout-success {
+      background: rgba(16, 185, 129, 0.12) !important;
+      border-left-color: #10b981 !important;
+      color: #a7f3d0 !important;
+    }
+    [data-theme="dark"] .theory-callout-success b,
+    [data-theme="dark"] .theory-callout-success strong {
+      color: #ffffff !important;
+    }
+    [data-theme="dark"] .theory-table-wrap {
+      border-color: #243048 !important;
+    }
+    [data-theme="dark"] .theory-table {
+      background: #0f1523 !important;
+      color: #cbd5e1 !important;
+    }
+    [data-theme="dark"] .theory-table th {
+      background: #161e31 !important;
+      color: #f8fafc !important;
+      border-bottom: 1px solid #243048 !important;
+    }
+    [data-theme="dark"] .theory-table td {
+      border-bottom: 1px solid #243048 !important;
+      color: #cbd5e1 !important;
+    }
+    [data-theme="dark"] .theory-table td b,
+    [data-theme="dark"] .theory-table td strong {
+      color: #f8fafc !important;
+    }
+    [data-theme="dark"] .theory-table kbd,
+    [data-theme="dark"] #tab-theory kbd {
+      background: #1a233a !important;
+      border-color: #2b3954 !important;
+      color: #e2e8f0 !important;
+    }
+    [data-theme="dark"] .theory-exercise-card {
+      background: #161e31 !important;
+      border-color: #243048 !important;
+      color: #cbd5e1 !important;
+    }
+    [data-theme="dark"] .theory-exercise-title {
+      color: #f8fafc !important;
+    }
+    [data-theme="dark"] .theory-exercise-btn {
+      background: #243048 !important;
+      border-color: #334155 !important;
+      color: #f8fafc !important;
+    }
+    [data-theme="dark"] .theory-exercise-btn:hover {
+      background: #6366f1 !important;
+      border-color: #6366f1 !important;
+      color: #ffffff !important;
+    }
+
+    /* Dark Mode: Mass Runner & Final Cert */
+    [data-theme="dark"] .mass-runner-box {
+      background: #0f1523 !important;
+      border-color: #243048 !important;
+      color: #f8fafc !important;
+    }
+    [data-theme="dark"] .mass-runner-box h2 {
+      color: #f8fafc !important;
+    }
+    [data-theme="dark"] .mass-runner-box p {
+      color: #cbd5e1 !important;
+    }
+    [data-theme="dark"] .progress-bar-wrap {
+      background: #161e31 !important;
+    }
+    [data-theme="dark"] #certDocContainer {
+      background: #161824 !important;
+      border-color: #d97706 !important;
+      color: #f8fafc !important;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+    }
+    [data-theme="dark"] #certDocContainer h3 {
+      color: #ffffff !important;
+    }
+    [data-theme="dark"] #certDocContainer p {
+      color: #cbd5e1 !important;
+    }
+    [data-theme="dark"] #certDocContainer p b {
+      color: #f8fafc !important;
+    }
+    [data-theme="dark"] #certDocContainer table {
+      color: #cbd5e1 !important;
+    }
+    [data-theme="dark"] #certDocContainer th {
+      color: #f8fafc !important;
+      border-bottom-color: #243048 !important;
+    }
+    [data-theme="dark"] #certDocContainer td {
+      color: #cbd5e1 !important;
+      border-bottom-color: #1e293b !important;
+    }
+    [data-theme="dark"] #certNameInputSection label {
+      color: #cbd5e1 !important;
+    }
+    [data-theme="dark"] #certStudentTableContainer {
+      background: rgba(255, 255, 255, 0.02) !important;
+      border-color: #243048 !important;
+    }
+    [data-theme="dark"] #certStudentTableContainer th {
+      color: #cbd5e1 !important;
+    }
+    [data-theme="dark"] #certStudentTableContainer td {
+      color: #f8fafc !important;
+    }
+    [data-theme="dark"] #certTimerDisplay {
+      background: #2e1a06 !important;
+      color: #fbbf24 !important;
+      border: 1px solid #78350f !important;
+    }
+    [data-theme="dark"] #certStudentNameInput,
+    [data-theme="dark"] #teacherPasswordInput {
+      background: #161e31 !important;
+      border-color: #243048 !important;
+      color: #f8fafc !important;
+    }
+
+    /* Dark Mode: Modals & Theory Handbook */
+    [data-theme="dark"] .modal-card {
+      background: #0f1523 !important;
+      border-color: #243048 !important;
+      color: #f8fafc !important;
+    }
+    [data-theme="dark"] .modal-header {
+      border-bottom-color: #243048 !important;
+      color: #f8fafc !important;
+    }
+    [data-theme="dark"] .modal-header h3 {
+      color: #f8fafc !important;
+    }
+    [data-theme="dark"] .modal-close {
+      color: #94a3b8 !important;
+    }
+    [data-theme="dark"] .modal-close:hover {
+      color: #f8fafc !important;
+    }
+    [data-theme="dark"] .toast-box {
+      background: #0f1523 !important;
+      border-color: #243048 !important;
+      color: #f8fafc !important;
+    }
+    /* Anti-Copy Protection for Task Conditions */
+    .task-card,
+    .theory-hint-box,
+    .req-list,
+    #taskGoal,
+    #taskReqs,
+    #taskHintContent,
+    #certActiveBox {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+
+    /* Theory Handbook Modal Component */
+    .th-toolbar {
+      padding: 12px 20px;
+      border-bottom: 1px solid var(--border-stone);
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface-taupe);
+    }
+    .th-tab-btn {
+      padding: 6px 16px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-stone);
+      background: #ffffff;
+      color: #334155;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .th-tab-btn:hover {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+    .th-tab-btn.active {
+      background: #6366f1 !important;
+      color: #ffffff !important;
+      border-color: #6366f1 !important;
+      font-weight: 700;
+      box-shadow: 0 1px 4px rgba(99, 102, 241, 0.25);
+    }
+    .th-search-input {
+      padding: 7px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border-stone);
+      background: #ffffff;
+      color: #0f172a;
+      font-size: 13px;
+      min-width: 220px;
+      outline: none;
+      font-family: inherit;
+      transition: border-color 0.15s ease;
+    }
+    .th-search-input:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
+    }
+    .th-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px 18px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .th-card:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+    .th-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2px;
+    }
+    .th-card-title {
+      margin: 0;
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .th-card-desc {
+      font-size: 13px;
+      line-height: 1.55;
+      color: #475569;
+      margin: 0;
+    }
+    .th-card-desc code {
+      background: #f1f5f9;
+      color: #4338ca;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+    .th-card-code {
+      background: #0f172a;
+      border: 1px solid #1e293b;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-family: var(--font-mono);
+      color: #f1f5f9;
+      margin: 4px 0 0 0;
+      overflow-x: auto;
+      line-height: 1.5;
+    }
+    .th-mdn-link {
+      color: #6366f1;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .th-mdn-link:hover {
+      text-decoration: underline;
+    }
+
+    [data-theme="dark"] .th-toolbar {
+      background: #121829 !important;
+      border-bottom-color: #243048 !important;
+    }
+    [data-theme="dark"] .th-tab-btn {
+      background: #161e31 !important;
+      color: #cbd5e1 !important;
+      border-color: #243048 !important;
+    }
+    [data-theme="dark"] .th-tab-btn:hover {
+      background: #1e293b !important;
+      color: #ffffff !important;
+      border-color: #6366f1 !important;
+    }
+    [data-theme="dark"] .th-tab-btn.active {
+      background: #6366f1 !important;
+      color: #ffffff !important;
+      border-color: #6366f1 !important;
+    }
+    [data-theme="dark"] .th-search-input {
+      background: #161e31 !important;
+      border-color: #243048 !important;
+      color: #f8fafc !important;
+    }
+    [data-theme="dark"] .th-search-input:focus {
+      border-color: #6366f1 !important;
+    }
+    [data-theme="dark"] .th-card {
+      background: #161e31 !important;
+      border-color: #243048 !important;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
+    }
+    [data-theme="dark"] .th-card:hover {
+      border-color: rgba(99, 102, 241, 0.4) !important;
+    }
+    [data-theme="dark"] .th-card-title {
+      color: #f8fafc !important;
+    }
+    [data-theme="dark"] .th-card-desc {
+      color: #94a3b8 !important;
+    }
+    [data-theme="dark"] .th-card-desc code {
+      background: #090d16 !important;
+      color: #a78bfa !important;
+      border: 1px solid #243048 !important;
+    }
+    [data-theme="dark"] .th-card-code {
+      background: #090d16 !important;
+      border-color: #243048 !important;
+      color: #e2e8f0 !important;
+    }
+    [data-theme="dark"] .th-mdn-link {
+      color: #38bdf8 !important;
+    }
   
 </style>
 </head>
@@ -1379,7 +2186,7 @@
         </div>
 
         <div class="pill-badge" id="progressPill">
-          🏆 <span id="progressCount">0</span> / 165 виконано
+          🏆 <span id="progressCount">0</span> / <span id="totalTaskCount">201</span> виконано
         </div>
 
         <button class="btn-pill btn-pill-outline" id="resetAllBtn" title="Скинути весь збережений код до початкового стану">
@@ -1390,7 +2197,7 @@
 
     <!-- Navigation Tabs -->
     <div class="tabs-bar">
-      <button class="tab-btn active" data-tab="trainer">⚡ Тренажер (165 завдань)</button>
+      <button class="tab-btn active" data-tab="trainer">⚡ Тренажер (201 завдання)</button>
       <button class="tab-btn" data-tab="theory">📖 Повна теорія (Цикли, Блок-схеми, Debugger)</button>
       <button class="tab-btn" data-tab="mass-runner">🧪 Масовий запуск (Mass Runner)</button>
       <button class="tab-btn" data-tab="final-cert">🚀 Підсумковий тест</button>
@@ -1471,9 +2278,17 @@
         <div>
           <div class="editor-card">
             <div class="editor-topbar">
-              <div class="editor-filename">
-                <span>📄</span>
-                <span id="editorFilename">src/01-while-basics.js</span>
+              <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                <div class="editor-filename">
+                  <span id="editorFileIcon">📄</span>
+                  <span id="editorFilename">src/01-while-basics.js</span>
+                </div>
+                <!-- File switcher tabs for DOM modules (8, 9, 10) -->
+                <div class="editor-file-tabs" id="editorFileTabs" style="display:none;">
+                  <button type="button" class="editor-tab active" data-file-tab="js">📄 script.js</button>
+                  <button type="button" class="editor-tab" data-file-tab="html">🌐 index.html</button>
+                  <button type="button" class="editor-tab" data-file-tab="css">🎨 style.css</button>
+                </div>
               </div>
 
               <div class="editor-actions">
@@ -1503,6 +2318,22 @@
             </div>
           </div>
 
+          <!-- Live DOM Component Preview Sandbox (Modules 8, 9, 10) -->
+          <div class="live-preview-card" id="livePreviewCard" style="display:none; margin-top:18px;">
+            <div class="live-preview-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; font-size:13px; font-weight:700; color:var(--accent-violet);">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span>🎨</span>
+                <span>Живе прев'ю DOM-компонента (Модулі 8–10)</span>
+              </div>
+              <span style="font-size:11px; padding:3px 10px; border-radius:9999px; background:rgba(99,102,241,0.15); border:1px solid rgba(99,102,241,0.3); color:#818cf8; font-weight:600;">
+                Live DOM Sandbox
+              </span>
+            </div>
+            <div class="live-preview-container" id="domPreviewContainer">
+              <div style="color:var(--smoke); font-size:12.5px;" id="domPreviewPlaceholder">Запустіть тест, щоб переглянути створений DOM-компонент наживо...</div>
+            </div>
+          </div>
+
           <!-- Test Results Console -->
           <div class="console-card">
             <div class="console-header">
@@ -1521,10 +2352,10 @@
     <div id="tab-theory" class="tab-content" style="display:none;">
       
       <!-- HEADER BANNER -->
-      <div class="theory-section" style="border-left:5px solid var(--accent-orange); background:linear-gradient(135deg, #ffffff 0%, var(--surface-taupe) 100%);">
+      <div class="theory-section theory-header-banner" style="border-left:5px solid var(--accent-orange);">
         <span class="theory-badge theory-badge-orange">Навчальний посібник · JS Loops &amp; Debugger</span>
         <h1 class="theory-title" style="font-size:32px; font-weight:700; margin-bottom:8px;">Модуль 4. Цикли, використання відлагоджувача</h1>
-        <p class="theory-p" style="font-size:16px; color:#4b5563; margin-bottom:0;">
+        <p class="theory-p" style="font-size:16px; margin-bottom:0;">
           Повний фундаментальний конспект: від модальних вікон взаємодії з користувачем (<code>alert</code>, <code>prompt</code>, <code>confirm</code>) до всіх різновидів циклів, блок-схем за стандартом та професійного володіння Chrome DevTools Debugger.
         </p>
       </div>
@@ -2115,7 +2946,7 @@ for (let i = 1; i &lt;= 3; i++) {
 
         <div class="theory-callout theory-callout-success" style="margin-top:20px;">
           🚀 <b>Підсумок модуля:</b><br>
-          Опанувавши взаємодію через <code>alert/prompt/confirm</code>, цикли <code>while</code>, <code>do...while</code>, <code>for</code> та роботу з <code>Debugger</code>, ви володієте повним набором інструментів для написання та відлагодження будь-яких алгоритмічних завдань у JavaScript! Переходьте до вкладки <b>«Тренажер завдань»</b> і закріпіть знання на 165 практичних вправах!
+          Опанувавши взаємодію через <code>alert/prompt/confirm</code>, цикли <code>while</code>, <code>do...while</code>, <code>for</code>, роботу з <code>Debugger</code> та генерацію DOM/UI-структур, ви володієте повним набором інструментів для написання та відлагодження будь-яких алгоритмічних завдань у JavaScript! Переходьте до вкладки <b>«Тренажер завдань»</b> і закріпіть знання на 201 практичній вправі!
         </div>
       </div>
 
@@ -2126,11 +2957,11 @@ for (let i = 1; i &lt;= 3; i++) {
       <div class="mass-runner-box">
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
           <div>
-            <h2 style="font-size:24px; font-weight:600; letter-spacing:-0.02em;">Масове тестування всіх 165 завдань</h2>
-            <p style="font-size:14px; color:var(--smoke); margin-top:4px;">Автоматичний прогін тестів по всіх 7 модулях тренажера з детальним логом.</p>
+            <h2 style="font-size:24px; font-weight:600; letter-spacing:-0.02em;">Масове тестування всіх 201 завдань</h2>
+            <p style="font-size:14px; color:var(--smoke); margin-top:4px;">Автоматичний прогін тестів по всіх 10 модулях тренажера з детальним логом.</p>
           </div>
           <button class="btn-pill btn-pill-primary" id="startMassRunnerBtn" style="padding:12px 24px; font-size:14px;">
-            ⚡ Запустити всі 165 тестів
+            ⚡ Запустити всі 201 тест
           </button>
         </div>
 
@@ -2143,7 +2974,7 @@ for (let i = 1; i &lt;= 3; i++) {
           <span id="massRunnerPercentText">0%</span>
         </div>
 
-        <div id="massConsoleLog">Очікування натискання кнопки "Запустити всі 165 тестів"...</div>
+        <div id="massConsoleLog">Очікування натискання кнопки "Запустити всі 201 тест"...</div>
       </div>
     </div>
 
@@ -2456,6 +3287,280 @@ for (let i = 1; i &lt;= 3; i++) {
     let currentTask = ALL_TASKS[0];
     const completedTasks = new Set(JSON.parse(localStorage.getItem('js_loops_completed') || '[]'));
     const userCodes = JSON.parse(localStorage.getItem('js_loops_codes') || '{}');
+    const userHtmlCodes = JSON.parse(localStorage.getItem('js_loops_html_codes') || '{}');
+    const userCssCodes = JSON.parse(localStorage.getItem('js_loops_css_codes') || '{}');
+    let currentEditorTab = 'js';
+
+    function getStarterHtml(task) {
+      return `<!-- index.html: Підготуйте базову розмітку для завдання ${task.id} (${task.name}) -->
+<div class="task-sandbox" id="taskSandbox">
+  <!-- TODO: додайте сюди необхідні HTML-елементи: div, p, ul, table тощо -->
+</div>
+`;
+    }
+
+    function getStarterCss(task) {
+      return `/* styles.css: Стилізуйте елементи для завдання ${task.id} (${task.name}) */
+.task-sandbox {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Приклад додаткових стилів: */
+/* .badge { padding: 4px 8px; border-radius: 4px; } */
+/* .card { border: 1px solid rgba(255, 255, 255, 0.1); } */
+`;
+    }
+
+    // Reference HTML & CSS templates for DOM tasks in Mentor Mode
+    function getTaskReferenceTemplates(task) {
+      const templates = {
+        '8.1': {
+          html: `<!-- index.html: Контейнер для вітрини товарів -->
+<div class="products-catalog-wrapper">
+  <h3 class="catalog-heading">🛍️ Каталог товарів</h3>
+  <div id="productsCatalog"></div>
+</div>`,
+          css: `/* style.css: Стилі сітки та карток товарів */
+.product-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  padding: 12px;
+}
+.product-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+.product-card__title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #f8fafc;
+}
+.product-card__price {
+  font-size: 14px;
+  font-weight: 700;
+  color: #10b981;
+}`
+        },
+        '8.2': {
+          html: `<!-- index.html: Віджет рейтингу товару -->
+<div class="rating-widget-box">
+  <div class="rating-title">Оцінка покупців:</div>
+  <div id="starRatingMount"></div>
+</div>`,
+          css: `/* style.css: Стилізація зірочок рейтингу */
+.star-rating {
+  display: inline-flex;
+  gap: 4px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+}
+.star {
+  font-size: 20px;
+  line-height: 1;
+}
+.star--filled {
+  color: #f59e0b;
+  filter: drop-shadow(0 0 3px rgba(245, 158, 11, 0.5));
+}
+.star--empty {
+  color: #64748b;
+}`
+        },
+        '8.4': {
+          html: `<!-- index.html: Панель статусів замовлень -->
+<div class="orders-status-board">
+  <h4>Статуси замовлень:</h4>
+  <div id="statusBadgesMount"></div>
+</div>`,
+          css: `/* style.css: Бейджі статусів */
+.badge-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 0;
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.badge--success { background: #10b981; color: #fff; }
+.badge--warning { background: #f59e0b; color: #fff; }
+.badge--danger { background: #ef4444; color: #fff; }
+.badge--neutral { background: #6b7280; color: #fff; }`
+        },
+        '9.1': {
+          html: `<!-- index.html: Таблиця аналітики -->
+<div class="data-table-section">
+  <h3>📊 Звіт з продажів</h3>
+  <div id="dataTableMount"></div>
+</div>`,
+          css: `/* style.css: Стилі таблиці даних */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.data-table th {
+  background: rgba(99, 102, 241, 0.2);
+  color: #e0e7ff;
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.data-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}`
+        },
+        '9.3': {
+          html: `<!-- index.html: Шахівниця -->
+<div class="chess-game-container">
+  <h3>♟️ Шахова дошка</h3>
+  <div id="chessBoardMount"></div>
+</div>`,
+          css: `/* style.css: Стилі шахівниці */
+.chess-board {
+  display: grid;
+  grid-template-columns: repeat(8, 40px);
+  grid-template-rows: repeat(8, 40px);
+  border: 3px solid #6366f1;
+  border-radius: 4px;
+  width: fit-content;
+}
+.chess-cell {
+  width: 40px;
+  height: 40px;
+}
+.chess-cell--white { background-color: #f0d9b5; }
+.chess-cell--black { background-color: #b58863; }`
+        },
+        '10.1': {
+          html: `<!-- index.html: Зебра-таблиця замовлень -->
+<div class="table-card">
+  <table class="striped-table" id="ordersTable">
+    <thead>
+      <tr>
+        <th>№</th>
+        <th>Клієнт</th>
+        <th>Статус</th>
+        <th>Сума</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>Олександр</td><td>Оплачено</td><td>1 200 ₴</td></tr>
+      <tr><td>2</td><td>Марія</td><td>В дорозі</td><td>850 ₴</td></tr>
+      <tr><td>3</td><td>Богдан</td><td>Очікує</td><td>2 400 ₴</td></tr>
+      <tr><td>4</td><td>Олена</td><td>Доставлено</td><td>620 ₴</td></tr>
+    </tbody>
+  </table>
+</div>`,
+          css: `/* style.css: Стилі зебра-таблиці */
+.striped-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.striped-table th {
+  background: rgba(99, 102, 241, 0.2);
+  color: #e0e7ff;
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 12px;
+}
+.striped-table td {
+  padding: 10px 14px;
+  font-size: 13px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.table-row--striped {
+  background-color: rgba(255, 255, 255, 0.04);
+}`
+        },
+        '10.9': {
+          html: `<!-- index.html: Елементи для масового оновлення стилів -->
+<div class="batch-demo-wrapper">
+  <div class="batch-target-card">Картка №1</div>
+  <div class="batch-target-card">Картка №2</div>
+  <div class="batch-target-card">Картка №3</div>
+</div>`,
+          css: `/* style.css: Стилі пакетно оновлюваних карток */
+.batch-demo-wrapper {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+}
+.batch-target-card {
+  padding: 12px 20px;
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid #6366f1;
+  border-radius: 8px;
+  color: #ffffff;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}`
+        }
+      };
+
+      if (templates[task.id]) {
+        return templates[task.id];
+      }
+
+      // Default contextual reference template
+      return {
+        html: `<!-- index.html: Еталонна розмітка для завдання ${task.id} (${task.name}) -->
+<div class="component-sandbox" id="componentSandbox">
+  <!-- Контейнер для візуалізації результатів функції ${task.name} -->
+  <div class="sandbox-header">
+    <h4>Компонент: ${task.title}</h4>
+  </div>
+  <div class="sandbox-content"></div>
+</div>`,
+        css: `/* style.css: Еталонні стилі для завдання ${task.id} (${task.name}) */
+.component-sandbox {
+  padding: 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.sandbox-header h4 {
+  margin: 0;
+  font-size: 14px;
+  color: #818cf8;
+}
+.sandbox-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}`
+      };
+    }
 
     // DOM Elements
     const tabs = document.querySelectorAll('.tab-btn');
@@ -2488,25 +3593,35 @@ for (let i = 1; i &lt;= 3; i++) {
 
     // Prettier Formatting
     async function formatCurrentCode() {
-      if (!window.prettier || !window.prettierPlugins || !window.prettierPlugins.babel) {
+      if (!window.prettier || !window.prettierPlugins) {
         showToast('Prettier ще завантажується...');
         return;
       }
       try {
-        const plugins = [window.prettierPlugins.babel];
+        let parser = 'babel';
+        let plugins = [window.prettierPlugins.babel];
         if (window.prettierPlugins.estree) plugins.push(window.prettierPlugins.estree);
+
+        if (currentEditorTab === 'html' && window.prettierPlugins.html) {
+          parser = 'html';
+          plugins = [window.prettierPlugins.html];
+        } else if (currentEditorTab === 'css' && window.prettierPlugins.postcss) {
+          parser = 'css';
+          plugins = [window.prettierPlugins.postcss];
+        }
+
         const formatted = await window.prettier.format(codeEditor.value, {
-          parser: 'babel',
-          plugins: plugins,
+          parser,
+          plugins,
           semi: true,
           singleQuote: true,
           tabWidth: 2
         });
         codeEditor.value = formatted;
         saveCurrentCode();
-        showToast('✨ Код успішно відформатовано!');
+        showToast(`✨ ${currentEditorTab.toUpperCase()} успішно відформатовано!`);
       } catch (err) {
-        showToast('Помилка синтаксису: ' + err.message);
+        showToast('Помилка форматування: ' + err.message);
       }
     }
 
@@ -2553,11 +3668,73 @@ for (let i = 1; i &lt;= 3; i++) {
     });
 
     function saveCurrentCode() {
-      userCodes[currentTask.id] = codeEditor.value;
-      localStorage.setItem('js_loops_codes', JSON.stringify(userCodes));
+      if (currentEditorTab === 'js') {
+        userCodes[currentTask.id] = codeEditor.value;
+        localStorage.setItem('js_loops_codes', JSON.stringify(userCodes));
+      } else if (currentEditorTab === 'html') {
+        userHtmlCodes[currentTask.id] = codeEditor.value;
+        localStorage.setItem('js_loops_html_codes', JSON.stringify(userHtmlCodes));
+      } else if (currentEditorTab === 'css') {
+        userCssCodes[currentTask.id] = codeEditor.value;
+        localStorage.setItem('js_loops_css_codes', JSON.stringify(userCssCodes));
+      }
       saveNotice.classList.add('visible');
       setTimeout(() => saveNotice.classList.remove('visible'), 1200);
+
+      if (currentTask && currentTask.moduleIdx >= 8 && (currentEditorTab === 'html' || currentEditorTab === 'css')) {
+        renderFullLivePreview(currentTask);
+      }
     }
+
+    function switchEditorTab(targetTab) {
+      if (currentEditorTab === targetTab) return;
+      // Save current tab before switching
+      if (currentEditorTab === 'js') {
+        userCodes[currentTask.id] = codeEditor.value;
+        localStorage.setItem('js_loops_codes', JSON.stringify(userCodes));
+      } else if (currentEditorTab === 'html') {
+        userHtmlCodes[currentTask.id] = codeEditor.value;
+        localStorage.setItem('js_loops_html_codes', JSON.stringify(userHtmlCodes));
+      } else if (currentEditorTab === 'css') {
+        userCssCodes[currentTask.id] = codeEditor.value;
+        localStorage.setItem('js_loops_css_codes', JSON.stringify(userCssCodes));
+      }
+
+      currentEditorTab = targetTab;
+      document.querySelectorAll('.editor-tab').forEach(b => {
+        b.classList.toggle('active', b.dataset.fileTab === targetTab);
+      });
+
+      const mod = MODULES.find(m => m.idx === currentTask.moduleIdx);
+      const editorFileIcon = document.getElementById('editorFileIcon');
+
+      if (targetTab === 'js') {
+        editorFilename.textContent = `src/${mod ? mod.filename : 'task.js'}`;
+        if (editorFileIcon) editorFileIcon.textContent = '📄';
+        codeEditor.value = userCodes[currentTask.id] !== undefined
+          ? userCodes[currentTask.id]
+          : `export function ${currentTask.name}(${currentTask.starterParams}) {\n  // TODO: напишіть вашу реалізацію тут\n  ${currentTask.starterBody}\n}`;
+      } else if (targetTab === 'html') {
+        editorFilename.textContent = 'index.html';
+        if (editorFileIcon) editorFileIcon.textContent = '🌐';
+        codeEditor.value = userHtmlCodes[currentTask.id] !== undefined
+          ? userHtmlCodes[currentTask.id]
+          : getStarterHtml(currentTask);
+      } else if (targetTab === 'css') {
+        editorFilename.textContent = 'style.css';
+        if (editorFileIcon) editorFileIcon.textContent = '🎨';
+        codeEditor.value = userCssCodes[currentTask.id] !== undefined
+          ? userCssCodes[currentTask.id]
+          : getStarterCss(currentTask);
+      }
+      codeEditor.focus();
+    }
+
+    document.querySelectorAll('.editor-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        switchEditorTab(btn.dataset.fileTab);
+      });
+    });
 
     function showToast(msg) {
       toastMsg.textContent = msg;
@@ -2605,13 +3782,14 @@ for (let i = 1; i &lt;= 3; i++) {
         const btn = document.createElement('button');
         const isDone = completedTasks.has(t.id);
         const isCur = t.id === currentTask.id;
-        btn.className = 'btn-pill ' + (isCur ? 'btn-pill-primary' : 'btn-pill-outline');
+        btn.className = 'btn-pill task-pill ' + (isCur ? 'btn-pill-primary active' : 'btn-pill-outline');
         btn.style.padding = '4px 12px';
         btn.style.fontSize = '12px';
         btn.innerHTML = (isDone ? '✓ ' : '') + t.id;
         if (isDone && !isCur) {
           btn.style.borderColor = '#10b981';
-          btn.style.color = '#059669';
+          btn.style.color = '#10b981';
+          btn.style.background = 'rgba(16, 185, 129, 0.12)';
         }
         btn.addEventListener('click', () => selectTask(t));
         quickTaskPills.appendChild(btn);
@@ -2627,18 +3805,73 @@ for (let i = 1; i &lt;= 3; i++) {
       taskIdBadge.textContent = task.id;
       taskTitle.textContent = task.name + ' — ' + task.title;
       taskLevelBadge.textContent = task.level;
-      taskGoal.textContent = task.goal;
 
-      taskReqs.innerHTML = task.reqs.map(r => `<li>${r}</li>`).join('');
-      taskHintContent.innerHTML = task.hint;
+      function formatTaskTextForUI(text) {
+        if (!text) return '';
+        // Convert ```blocks```
+        let res = text.replace(/```([a-z0-9_-]*)\n([\s\S]*?)```/g, (_, lang, code) => {
+          const escaped = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          return `<pre class="task-pre"><code class="task-code-block">${escaped}</code></pre>`;
+        });
+        // Convert inline `...`
+        res = res.replace(/`([^`]+)`/g, (_, inline) => {
+          const escaped = inline.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          return `<code class="task-code-inline">${escaped}</code>`;
+        });
+        return res;
+      }
 
-      editorFilename.textContent = `src/${mod.filename}`;
+      taskGoal.innerHTML = formatTaskTextForUI(task.goal);
+      taskReqs.innerHTML = (task.reqs || []).map(r => `<li>${formatTaskTextForUI(r)}</li>`).join('');
+      taskHintContent.innerHTML = formatTaskTextForUI(task.hint);
 
-      // Set code
-      if (userCodes[task.id]) {
-        codeEditor.value = userCodes[task.id];
+      // Handle Editor File Tabs for DOM modules 8, 9, 10
+      const editorFileTabs = document.getElementById('editorFileTabs');
+      const editorFileIcon = document.getElementById('editorFileIcon');
+
+      if (task.moduleIdx >= 8) {
+        if (editorFileTabs) editorFileTabs.style.display = 'inline-flex';
       } else {
-        codeEditor.value = `export function ${task.name}(${task.starterParams}) {\n  // TODO: напишіть вашу реалізацію тут\n  ${task.starterBody}\n}`;
+        if (editorFileTabs) editorFileTabs.style.display = 'none';
+        currentEditorTab = 'js';
+      }
+
+      document.querySelectorAll('.editor-tab').forEach(b => {
+        b.classList.toggle('active', b.dataset.fileTab === currentEditorTab);
+      });
+
+      // Load code buffer for currentEditorTab
+      if (currentEditorTab === 'js') {
+        editorFilename.textContent = `src/${mod ? mod.filename : 'task.js'}`;
+        if (editorFileIcon) editorFileIcon.textContent = '📄';
+        if (userCodes[task.id]) {
+          codeEditor.value = userCodes[task.id];
+        } else {
+          codeEditor.value = `export function ${task.name}(${task.starterParams}) {\n  // TODO: напишіть вашу реалізацію тут\n  ${task.starterBody}\n}`;
+        }
+      } else if (currentEditorTab === 'html') {
+        editorFilename.textContent = 'index.html';
+        if (editorFileIcon) editorFileIcon.textContent = '🌐';
+        codeEditor.value = userHtmlCodes[task.id] !== undefined
+          ? userHtmlCodes[task.id]
+          : getStarterHtml(task);
+      } else if (currentEditorTab === 'css') {
+        editorFilename.textContent = 'style.css';
+        if (editorFileIcon) editorFileIcon.textContent = '🎨';
+        codeEditor.value = userCssCodes[task.id] !== undefined
+          ? userCssCodes[task.id]
+          : getStarterCss(task);
+      }
+
+      // Live DOM Component Preview for Modules 8, 9, 10
+      const pvCard = document.getElementById('livePreviewCard');
+      if (pvCard) {
+        if (task.moduleIdx >= 8) {
+          pvCard.style.display = 'block';
+          renderFullLivePreview(task);
+        } else {
+          pvCard.style.display = 'none';
+        }
       }
 
       consoleBody.innerHTML = '<div style="color:#6e7687;">Натисніть "Запустити тест" або комбінацію Ctrl + Enter для перевірки коду.</div>';
@@ -2655,13 +3888,408 @@ for (let i = 1; i &lt;= 3; i++) {
 
     function updateProgress() {
       progressCount.textContent = completedTasks.size;
+      const totalEl = document.getElementById('totalTaskCount');
+      if (totalEl) totalEl.textContent = ALL_TASKS.length;
     }
 
     // Run Single Task Test
+    
+    // Live DOM Component Preview Generator for Modules 8, 9, 10
+    function generateDomPreview(task, userFn) {
+      if (typeof userFn !== 'function') return null;
+      try {
+        switch (task.name) {
+          // --- MODULE 8 ---
+          case 'renderProductCards':
+            return userFn([
+              { id: 1, title: 'MacBook Pro M3', price: 1999, inStock: true },
+              { id: 2, title: 'AirPods Max', price: 549, inStock: false },
+              { id: 3, title: 'iPad Pro OLED', price: 999, inStock: true }
+            ]);
+          case 'renderStarRating':
+            return userFn(4, 5);
+          case 'renderBreadcrumbs':
+            return userFn([
+              { label: 'Головна', url: '/' },
+              { label: 'Курси', url: '/courses' },
+              { label: 'JavaScript Loops & DOM', url: null }
+            ]);
+          case 'renderStatusBadges':
+            return userFn([
+              { label: 'Успішно', status: 'success' },
+              { label: 'В черзі', status: 'warning' },
+              { label: 'Помилка', status: 'danger' },
+              { label: 'Інфо', status: 'neutral' }
+            ]);
+          case 'renderMessageList':
+            return userFn([
+              { author: 'Ментор', text: 'Чудова робота з циклами та DOM!', timestamp: '14:20', isMine: false },
+              { author: 'Студент', text: 'Дякую, тепер інтерфейс генерується наживо!', timestamp: '14:22', isMine: true }
+            ]);
+          case 'renderTagCloud':
+            return userFn([
+              { name: 'javascript', count: 42 },
+              { name: 'while', count: 35 },
+              { name: 'dom', count: 28 },
+              { name: 'algorithms', count: 18 },
+              { name: 'css', count: 8 }
+            ]);
+          case 'renderProgressBarSteps':
+            return userFn(3, 4);
+          case 'renderNumberedList':
+            return userFn(['Ініціалізація лічильника', 'Перевірка умови циклу', 'Тіло ітерації (маніпуляція DOM)', 'Зміна кроку (i++)']);
+          case 'renderNotificationFeed':
+            return userFn([
+              { title: 'Тестування', message: 'Всі 201 тест успішно пройдено!', unread: true },
+              { title: 'Система', message: 'Резервна копія збережена', unread: false }
+            ]);
+          case 'renderTabsNavigation':
+            return userFn(['Огляд курсу', 'Практичні завдання', 'Довідник теорії'], 1);
+          case 'renderAccordionList':
+            return userFn([
+              { title: 'Чому цикли важливі для DOM?', content: 'Вони дозволяють масово створювати та оновлювати елементи на основі масивів даних.', open: true },
+              { title: 'Як уникнути підвисання браузера?', content: 'Завжди контролюйте умову виходу та не допускайте нескінченних ітерацій.', open: false }
+            ]);
+          case 'renderAvatarStack':
+            return userFn(['https://i.pravatar.cc/100?img=11', 'https://i.pravatar.cc/100?img=12', 'https://i.pravatar.cc/100?img=13', 'https://i.pravatar.cc/100?img=14'], 3);
+
+          // --- MODULE 9 ---
+          case 'renderDataTable':
+            return userFn(['ID', 'Студент', 'Модуль', 'Статус'], [
+              { ID: 1, 'Студент': 'Олексій Коваленко', 'Модуль': 'Модуль 10', 'Статус': '✓ Складено' },
+              { ID: 2, 'Студент': 'Марія Шевченко', 'Модуль': 'Модуль 9', 'Статус': '✓ Складено' },
+              { ID: 3, 'Студент': 'Тарас Бондар', 'Модуль': 'Модуль 8', 'Статус': '⏳ В процесі' }
+            ]);
+          case 'renderCalendarMonth':
+            return userFn(31, 'Березень 2026');
+          case 'renderChessBoard':
+            return userFn(8);
+          case 'renderActivityHeatmap':
+            return userFn(8, [
+              [1, 4, 0, 8, 3, 2, 6],
+              [0, 2, 5, 7, 1, 0, 3],
+              [4, 8, 2, 0, 5, 6, 1],
+              [0, 0, 3, 2, 6, 1, 0],
+              [7, 5, 2, 4, 0, 1, 8],
+              [2, 3, 6, 0, 1, 4, 2],
+              [0, 1, 4, 8, 3, 2, 5],
+              [6, 2, 0, 1, 4, 5, 7]
+            ]);
+          case 'renderPixelArtGrid':
+            return userFn(6, 6, [
+              ['#6366f1', '#6366f1', '#6366f1', '#6366f1', '#6366f1', '#6366f1'],
+              ['#6366f1', '#ffffff', '#6366f1', '#6366f1', '#ffffff', '#6366f1'],
+              ['#6366f1', '#6366f1', '#6366f1', '#6366f1', '#6366f1', '#6366f1'],
+              ['#6366f1', '#10b981', '#10b981', '#10b981', '#10b981', '#6366f1'],
+              ['#6366f1', '#ffffff', '#ffffff', '#ffffff', '#ffffff', '#6366f1'],
+              ['#6366f1', '#6366f1', '#6366f1', '#6366f1', '#6366f1', '#6366f1']
+            ]);
+          case 'renderMultiplicationTableDOM':
+            return userFn(5);
+          case 'renderNestedTreeMenu':
+            return userFn([
+              { label: '📁 Документи', children: [{ label: '📄 Звіти 2026' }, { label: '📄 Рахунки' }] },
+              { label: '📁 Проєкти', children: [{ label: '🚀 Frontend Camp' }, { label: '⚡ Loops Workout' }] }
+            ]);
+          case 'renderSeatMap':
+            return userFn(4, 6, ['1-2', '2-4', '3-1', '4-5']);
+          case 'renderColorPaletteMatrix':
+            return userFn([
+              { groupName: 'Emerald (Успіх)', shades: ['#a7f3d0', '#34d399', '#059669', '#064e3b'] },
+              { groupName: 'Indigo (Акцент)', shades: ['#c7d2fe', '#818cf8', '#6366f1', '#3730a3'] }
+            ]);
+          case 'renderProductComparisonGrid':
+            return userFn(['Wi-Fi 6', 'Type-C', 'Вологозахист'], [
+              { name: 'Базова модель', features: { 'Wi-Fi 6': true, 'Type-C': true, 'Вологозахист': false } },
+              { name: 'Pro версія', features: { 'Wi-Fi 6': true, 'Type-C': true, 'Вологозахист': true } }
+            ]);
+          case 'renderWordSearchGrid':
+            return userFn([
+              ['J', 'A', 'V', 'A'],
+              ['L', 'O', 'O', 'P'],
+              ['C', 'O', 'D', 'E'],
+              ['T', 'E', 'S', 'T']
+            ]);
+          case 'renderBarChartGrouped':
+            return userFn(['Січ', 'Лют', 'Бер', 'Кві'], [
+              { name: 'План', color: '#6366f1', data: [40, 60, 75, 90] },
+              { name: 'Факт', color: '#10b981', data: [35, 65, 80, 95] }
+            ]);
+
+          // --- MODULE 10 (DOM Manipulation) ---
+          case 'applyZebraStriping': {
+            const isDark = document.body.getAttribute('data-theme') === 'dark';
+            const evenBg = isDark ? '#1e293b' : '#ffffff';
+            const oddBg = isDark ? '#0f172a' : '#f8fafc';
+            const textCol = isDark ? '#f8fafc' : '#0f172a';
+            const borderCol = isDark ? '#334155' : '#e2e8f0';
+
+            const tbl = document.createElement('table');
+            tbl.className = 'data-table';
+            tbl.style.cssText = `width:100%; border-collapse:collapse; border:1px solid ${borderCol}; border-radius:8px; overflow:hidden; font-size:13px; color:${textCol};`;
+            const thead = document.createElement('thead');
+            thead.innerHTML = `<tr style="background:${isDark ? '#090d16' : '#f1f5f9'}; border-bottom:1px solid ${borderCol}; text-align:left;"><th style="padding:10px 14px; font-weight:700;">#</th><th style="padding:10px 14px; font-weight:700;">Студент</th><th style="padding:10px 14px; font-weight:700;">Статус</th></tr>`;
+            tbl.appendChild(thead);
+            const tbody = document.createElement('tbody');
+            const rowsData = [
+              ['1', 'Олексій Коваленко', '✓ Зараховано'],
+              ['2', 'Марія Шевченко', '✓ Зараховано'],
+              ['3', 'Тарас Бондар', '✓ Зараховано'],
+              ['4', 'Олена Мельник', '✓ Зараховано']
+            ];
+            rowsData.forEach(r => {
+              const tr = document.createElement('tr');
+              tr.style.borderBottom = `1px solid ${borderCol}`;
+              tr.innerHTML = `<td style="padding:10px 14px; font-weight:600; color:${textCol};">${r[0]}</td><td style="padding:10px 14px; color:${textCol};">${r[1]}</td><td style="padding:10px 14px; color:#10b981; font-weight:600;">${r[2]}</td>`;
+              tbody.appendChild(tr);
+            });
+            tbl.appendChild(tbody);
+            userFn(tbl, evenBg, oddBg);
+            return tbl;
+          }
+          case 'clearContainerFast': {
+            const wrap = document.createElement('div');
+            wrap.style.cssText = 'padding:14px; text-align:center; border:1px dashed #10b981; border-radius:8px; width:100%;';
+            const dummy = document.createElement('div');
+            for (let i = 0; i < 4; i++) {
+              const item = document.createElement('div');
+              item.textContent = `Застарілий вузол #${i + 1}`;
+              dummy.appendChild(item);
+            }
+            const removed = userFn(dummy);
+            wrap.innerHTML = `<span style="color:#10b981; font-weight:700;">✓ Контейнер миттєво очищено через цикл while</span><div style="font-size:12px; color:var(--smoke); margin-top:4px;">Видалено вузлів: ${removed || 4}</div>`;
+            return wrap;
+          }
+          case 'buildNestedListTree':
+            return userFn([
+              { title: '📁 Розділ 1: Вступ до DOM', children: [{ title: '📄 1.1 Що таке дерево вузлів' }, { title: '📄 1.2 Селектори' }] },
+              { title: '📁 Розділ 2: Цикли та ітерація', children: [{ title: '📄 2.1 Генерація списків' }, { title: '📄 2.2 Таблиці та сітки' }] }
+            ]);
+          case 'renderStepWizard':
+            return userFn(['Реєстрація', 'Верифікація', 'Оплата', 'Завершення'], 2);
+          case 'highlightKeywordsInElements': {
+            const wrap = document.createElement('div');
+            wrap.style.cssText = 'display:flex; flex-direction:column; gap:8px; width:100%;';
+            const p1 = document.createElement('p');
+            p1.textContent = 'Цикл for та цикл while є фундаментальними конструкціями JavaScript.';
+            p1.style.margin = '0';
+            const p2 = document.createElement('p');
+            p2.textContent = 'Маніпуляція DOM через цикл дозволяє динамічно підсвічувати важливі ключові слова.';
+            p2.style.margin = '0';
+            wrap.appendChild(p1);
+            wrap.appendChild(p2);
+            userFn([p1, p2], ['цикл', 'DOM', 'JavaScript']);
+            return wrap;
+          }
+          case 'toggleElementsVisibility': {
+            const wrap = document.createElement('div');
+            wrap.style.cssText = 'display:flex; gap:8px; flex-wrap:wrap; width:100%;';
+            const items = [
+              { name: 'Активний модуль 8', active: true },
+              { name: 'Активний модуль 9', active: true },
+              { name: 'Прихований чернетковий блок', active: false }
+            ];
+            const domEls = items.map(it => {
+              const el = document.createElement('div');
+              el.className = 'pill-badge';
+              el.textContent = it.name;
+              el.setAttribute('data-active', String(it.active));
+              wrap.appendChild(el);
+              return el;
+            });
+            userFn(domEls, el => el.getAttribute('data-active') === 'true');
+            return wrap;
+          }
+          case 'reorderListByAttribute': {
+            const ul = document.createElement('ul');
+            ul.style.cssText = 'list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:6px; width:100%;';
+            const sample = [
+              { name: 'Крок 3: Тестування', order: 3 },
+              { name: 'Крок 1: Планування', order: 1 },
+              { name: 'Крок 4: Деплой', order: 4 },
+              { name: 'Крок 2: Розробка', order: 2 }
+            ];
+            sample.forEach(s => {
+              const li = document.createElement('li');
+              li.className = 'pill-badge';
+              li.style.justifyContent = 'space-between';
+              li.setAttribute('data-order', String(s.order));
+              li.innerHTML = `<span>${s.name}</span><span style="font-family:var(--font-mono); color:var(--accent-violet);">#${s.order}</span>`;
+              ul.appendChild(li);
+            });
+            userFn(ul, 'data-order');
+            return ul;
+          }
+          case 'paginateChildren': {
+            const wrap = document.createElement('div');
+            wrap.style.cssText = 'display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; width:100%;';
+            for (let i = 1; i <= 6; i++) {
+              const card = document.createElement('div');
+              card.className = 'product-card';
+              card.innerHTML = `<span style="font-weight:700;">Картка #${i}</span><span style="font-size:11px; color:var(--smoke);">Сторінка 1</span>`;
+              wrap.appendChild(card);
+            }
+            userFn(wrap, 3, 1);
+            return wrap;
+          }
+          case 'batchUpdateStyles': {
+            const wrap = document.createElement('div');
+            wrap.style.cssText = 'display:flex; gap:10px; width:100%;';
+            const b1 = document.createElement('div');
+            b1.textContent = 'Карточка A';
+            const b2 = document.createElement('div');
+            b2.textContent = 'Карточка B';
+            wrap.appendChild(b1);
+            wrap.appendChild(b2);
+            userFn([b1, b2], [
+              ['padding', '10px 18px'],
+              ['borderRadius', '8px'],
+              ['background', 'rgba(99, 102, 241, 0.2)'],
+              ['border', '1px solid #6366f1'],
+              ['color', '#ffffff'],
+              ['fontWeight', '700']
+            ]);
+            return wrap;
+          }
+          case 'extractTableData': {
+            const wrap = document.createElement('div');
+            wrap.style.cssText = 'display:flex; flex-direction:column; gap:10px; width:100%;';
+            const tbl = document.createElement('table');
+            tbl.className = 'data-table';
+            tbl.innerHTML = `
+              <thead><tr><th style="padding:6px 10px;">name</th><th style="padding:6px 10px;">level</th><th style="padding:6px 10px;">tasks</th></tr></thead>
+              <tbody>
+                <tr><td style="padding:6px 10px;">Loops Basics</td><td style="padding:6px 10px;">Easy</td><td style="padding:6px 10px;">25</td></tr>
+                <tr><td style="padding:6px 10px;">DOM Manipulation</td><td style="padding:6px 10px;">Medium</td><td style="padding:6px 10px;">36</td></tr>
+              </tbody>
+            `;
+            wrap.appendChild(tbl);
+            const data = userFn(tbl);
+            const pre = document.createElement('pre');
+            pre.className = 'th-card-code';
+            pre.textContent = '// Зчитані дані:\n' + JSON.stringify(data, null, 2);
+            wrap.appendChild(pre);
+            return wrap;
+          }
+          case 'wrapConsecutiveElements': {
+            const container = document.createElement('div');
+            container.style.cssText = 'display:flex; flex-direction:column; gap:8px; width:100%;';
+            for (let i = 1; i <= 4; i++) {
+              const item = document.createElement('span');
+              item.className = 'badge';
+              item.style.background = '#6366f1';
+              item.textContent = `Елемент ${i}`;
+              container.appendChild(item);
+            }
+            userFn(container, 2, 'wizard-container');
+            return container;
+          }
+          case 'animateElementsStagger': {
+            const wrap = document.createElement('div');
+            wrap.style.cssText = 'display:flex; gap:8px; width:100%; overflow-x:auto; padding:8px 0;';
+            for (let i = 1; i <= 5; i++) {
+              const box = document.createElement('div');
+              box.className = 'product-card animate-stagger';
+              box.style.cssText = 'min-width:90px; text-align:center; padding:12px 8px; background:rgba(99,102,241,0.15); border:1px solid #6366f1; border-radius:8px;';
+              box.innerHTML = `<span style="font-weight:700;">Блок #${i}</span><div style="font-size:10px; color:var(--smoke);">Stagger</div>`;
+              wrap.appendChild(box);
+            }
+            userFn(Array.from(wrap.children), 100);
+            return wrap;
+          }
+          default:
+            return null;
+        }
+      } catch (err) {
+        console.warn('Live preview error:', err);
+        return null;
+      }
+    }
+
+    function renderFullLivePreview(task, userFn = null, fallbackNode = null) {
+      const pvMount = document.getElementById('domPreviewContainer');
+      if (!pvMount) return;
+      pvMount.innerHTML = '';
+
+      // 1. Inject custom CSS from style.css
+      const customCss = userCssCodes[task.id] || '';
+      const styleEl = document.createElement('style');
+      styleEl.id = 'studentCustomStyles';
+      styleEl.textContent = customCss;
+      pvMount.appendChild(styleEl);
+
+      // 2. Inject custom HTML from index.html if user provided markup
+      const rawHtml = userHtmlCodes[task.id] || '';
+      const cleanedHtml = rawHtml.replace(/<!--[\s\S]*?-->/g, '').trim();
+      if (cleanedHtml) {
+        const htmlWrapper = document.createElement('div');
+        htmlWrapper.className = 'student-custom-html-wrapper';
+        htmlWrapper.style.cssText = 'margin-bottom:12px; padding:10px 14px; border:1px dashed var(--border-stone); border-radius:8px; background:rgba(0,0,0,0.02);';
+        htmlWrapper.innerHTML = `
+          <div style="font-size:11px; text-transform:uppercase; font-weight:700; color:var(--smoke); margin-bottom:8px;">🌐 Розмітка index.html:</div>
+          <div class="student-custom-html-mount">${cleanedHtml}</div>
+        `;
+        pvMount.appendChild(htmlWrapper);
+      }
+
+      // 3. Resolve user function if not provided
+      let fn = userFn;
+      if (!fn) {
+        const jsCode = (currentEditorTab === 'js')
+          ? codeEditor.value
+          : (userCodes[task.id] || '');
+        if (jsCode) {
+          try {
+            const cleanCode = jsCode.replace(/export\s+default\s+/g, '').replace(/export\s+/g, '');
+            const fnRunner = new Function(cleanCode + '\nreturn ' + task.name + ';');
+            fn = fnRunner();
+          } catch (_) {}
+        }
+      }
+
+      // 4. Generate component preview from JS
+      if (typeof fn === 'function') {
+        try {
+          const pv = generateDomPreview(task, fn);
+          if (pv instanceof Node) {
+            const jsWrapper = document.createElement('div');
+            jsWrapper.className = 'student-js-component-wrapper';
+            jsWrapper.appendChild(pv);
+            pvMount.appendChild(jsWrapper);
+            return;
+          } else if (typeof pv === 'string' && pv.trim()) {
+            const jsWrapper = document.createElement('div');
+            jsWrapper.className = 'student-js-component-wrapper';
+            jsWrapper.innerHTML = pv;
+            pvMount.appendChild(jsWrapper);
+            return;
+          }
+        } catch (_) {}
+      }
+
+      if (fallbackNode instanceof Node) {
+        const jsWrapper = document.createElement('div');
+        jsWrapper.className = 'student-js-component-wrapper';
+        jsWrapper.appendChild(fallbackNode.cloneNode(true));
+        pvMount.appendChild(jsWrapper);
+        return;
+      }
+
+      if (!cleanedHtml) {
+        const placeholder = document.createElement('div');
+        placeholder.style.cssText = 'color:var(--smoke); font-size:12.5px;';
+        placeholder.textContent = 'Натисніть "Запустити тест", щоб згенерувати DOM-компонент наживо...';
+        pvMount.appendChild(placeholder);
+      }
+    }
+
     function runSingleTaskTest() {
-      const code = codeEditor.value;
+      const code = (currentEditorTab === 'js')
+        ? codeEditor.value
+        : (userCodes[currentTask.id] || `export function ${currentTask.name}(${currentTask.starterParams}) {\n  ${currentTask.starterBody}\n}`);
       consoleBody.innerHTML = '';
       let passedAll = true;
+      let lastActualResult = null;
 
       try {
         // Clean export
@@ -2677,6 +4305,7 @@ for (let i = 1; i &lt;= 3; i++) {
           try {
             const runner = new Function(currentTask.name, 'return ' + testCase.expr);
             const actual = runner(userFn);
+            lastActualResult = actual;
             const isMatch = JSON.stringify(actual) === JSON.stringify(testCase.expected);
 
             if (isMatch) {
@@ -2710,6 +4339,11 @@ for (let i = 1; i &lt;= 3; i++) {
           }
           consoleBody.appendChild(row);
         });
+
+        // Mount Live DOM Component Preview for Modules 8, 9, 10
+        if (currentTask.moduleIdx >= 8) {
+          renderFullLivePreview(currentTask, userFn, lastActualResult);
+        }
 
     const DEV_INSPIRATIONS = [
       { type: "quote", text: "Не важливо, як повільно ти йдеш, якщо не зупиняєшся.", author: "Конфуцій" },
@@ -2971,10 +4605,45 @@ for (let i = 1; i &lt;= 3; i++) {
       }
       const data = decryptedSolutionsCache[currentTask.id];
       const code = typeof data === 'object' && data.code ? data.code : data;
-      if (confirm('Підставити еталонне рішення? Це замінить ваш поточний код.')) {
-        codeEditor.value = `export function ${currentTask.name}(${currentTask.starterParams}) {\n  ${code}\n}`;
-        saveCurrentCode();
-        showToast('💡 Еталонне рішення вставлено (Режим ментора).');
+      const isDomTask = currentTask.moduleIdx >= 8;
+
+      const confirmMsg = isDomTask
+        ? 'Підставити повне еталонне рішення (JavaScript, HTML та CSS)?'
+        : 'Підставити еталонне рішення? Це замінить ваш поточний код.';
+
+      if (confirm(confirmMsg)) {
+        // 1. Set JS solution
+        userCodes[currentTask.id] = `export function ${currentTask.name}(${currentTask.starterParams}) {\n  ${code}\n}`;
+        localStorage.setItem('js_loops_codes', JSON.stringify(userCodes));
+
+        // 2. If DOM task, also set tailored reference HTML and CSS!
+        if (isDomTask) {
+          const ref = getTaskReferenceTemplates(currentTask);
+          userHtmlCodes[currentTask.id] = ref.html;
+          userCssCodes[currentTask.id] = ref.css;
+          localStorage.setItem('js_loops_html_codes', JSON.stringify(userHtmlCodes));
+          localStorage.setItem('js_loops_css_codes', JSON.stringify(userCssCodes));
+        }
+
+        // 3. Update the editor to show the code of CURRENT active tab!
+        if (currentEditorTab === 'js') {
+          codeEditor.value = userCodes[currentTask.id];
+        } else if (currentEditorTab === 'html') {
+          codeEditor.value = userHtmlCodes[currentTask.id];
+        } else if (currentEditorTab === 'css') {
+          codeEditor.value = userCssCodes[currentTask.id];
+        }
+
+        saveNotice.classList.add('visible');
+        setTimeout(() => saveNotice.classList.remove('visible'), 1200);
+
+        showToast(isDomTask
+          ? '💡 Еталонні файли (JS, HTML, CSS) успішно підставлено!'
+          : '💡 Еталонне рішення вставлено (Режим ментора).');
+
+        if (isDomTask) {
+          renderFullLivePreview(currentTask);
+        }
       }
     }
 
@@ -3001,18 +4670,39 @@ for (let i = 1; i &lt;= 3; i++) {
 
     // Reset current task
     document.getElementById('resetCurrentTaskBtn').addEventListener('click', () => {
-      if (confirm('Скинути код цього завдання до початкового шаблону?')) {
-        delete userCodes[currentTask.id];
-        localStorage.setItem('js_loops_codes', JSON.stringify(userCodes));
-        selectTask(currentTask);
-        showToast('Код завдання скинуто.');
+      if (currentEditorTab === 'js') {
+        if (confirm('Скинути JavaScript-код цього завдання до початкового шаблону?')) {
+          delete userCodes[currentTask.id];
+          localStorage.setItem('js_loops_codes', JSON.stringify(userCodes));
+          codeEditor.value = `export function ${currentTask.name}(${currentTask.starterParams}) {\n  // TODO: напишіть вашу реалізацію тут\n  ${currentTask.starterBody}\n}`;
+          showToast('JS-код завдання скинуто.');
+          if (currentTask.moduleIdx >= 8) renderFullLivePreview(currentTask);
+        }
+      } else if (currentEditorTab === 'html') {
+        if (confirm('Скинути HTML-розмітку цього завдання до початкового шаблону?')) {
+          delete userHtmlCodes[currentTask.id];
+          localStorage.setItem('js_loops_html_codes', JSON.stringify(userHtmlCodes));
+          codeEditor.value = getStarterHtml(currentTask);
+          showToast('HTML-розмітку завдання скинуто.');
+          if (currentTask.moduleIdx >= 8) renderFullLivePreview(currentTask);
+        }
+      } else if (currentEditorTab === 'css') {
+        if (confirm('Скинути CSS-стилі цього завдання до початкового шаблону?')) {
+          delete userCssCodes[currentTask.id];
+          localStorage.setItem('js_loops_css_codes', JSON.stringify(userCssCodes));
+          codeEditor.value = getStarterCss(currentTask);
+          showToast('CSS-стилі завдання скинуто.');
+          if (currentTask.moduleIdx >= 8) renderFullLivePreview(currentTask);
+        }
       }
     });
 
     // Reset all tasks
     document.getElementById('resetAllBtn').addEventListener('click', () => {
-      if (confirm('Скинути весь прогрес і всі збережені розвʼязки?')) {
+      if (confirm('Скинути весь прогрес і всі збережені розвʼязки, HTML та CSS?')) {
         localStorage.removeItem('js_loops_codes');
+        localStorage.removeItem('js_loops_html_codes');
+        localStorage.removeItem('js_loops_css_codes');
         localStorage.removeItem('js_loops_completed');
         location.reload();
       }
@@ -3483,7 +5173,7 @@ for (let i = 1; i &lt;= 3; i++) {
         const isPassed = certPassedMap[i] === true;
         const isFailed = certPassedMap[i] === false;
 
-        btn.className = 'btn-pill ' + (isCur ? 'btn-pill-primary' : 'btn-pill-outline');
+        btn.className = 'btn-pill task-pill ' + (isCur ? 'btn-pill-primary active' : 'btn-pill-outline');
         btn.style.padding = '3px 10px';
         btn.style.fontSize = '12px';
         btn.textContent = (isPassed ? '✓ ' : '') + (i + 1);
@@ -3836,26 +5526,26 @@ for (let i = 1; i &lt;= 3; i++) {
      THEORY HANDBOOK MODAL (HTML, CSS, DOM)
      ========================================== -->
 <div class="modal-overlay" id="theoryHandbookModal" style="display:none; z-index:10001;">
-  <div class="modal-card" style="max-width:880px; width:94%; max-height:88vh; display:flex; flex-direction:column; overflow:hidden;">
-    <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,0.1); padding:16px 20px;">
+  <div class="modal-card" style="max-width:920px; width:94%; max-height:88vh; display:flex; flex-direction:column; overflow:hidden;">
+    <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px;">
       <div style="display:flex; align-items:center; gap:10px;">
         <span style="font-size:22px;">📖</span>
         <div>
           <h3 style="margin:0; font-size:17px; font-weight:700;">Базова теорія: HTML, CSS та DOM API</h3>
-          <span style="font-size:12px; color:var(--text-muted, #94a3b8);">Швидкий довідник концепцій та офіційна документація MDN</span>
+          <span style="font-size:12px; color:var(--smoke);">Швидкий довідник концепцій та офіційна документація MDN</span>
         </div>
       </div>
-      <button class="modal-close" id="closeTheoryHandbookBtn" style="background:none; border:none; font-size:24px; color:#94a3b8; cursor:pointer;">&times;</button>
+      <button class="modal-close" id="closeTheoryHandbookBtn" style="background:none; border:none; font-size:24px; cursor:pointer;">&times;</button>
     </div>
 
-    <!-- Search & Tabs -->
-    <div style="padding:14px 20px; border-bottom:1px solid rgba(255,255,255,0.08); display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:space-between; background:rgba(0,0,0,0.15);">
+    <!-- Search & Tabs Toolbar -->
+    <div class="th-toolbar">
       <div style="display:flex; gap:8px;">
-        <button class="th-tab-btn active" data-th-tab="dom" style="padding:7px 16px; border-radius:20px; border:1px solid rgba(255,255,255,0.15); background:var(--color-primary, #3ecf8e); color:#000; font-weight:700; font-size:13px; cursor:pointer;">⚡ DOM API</button>
-        <button class="th-tab-btn" data-th-tab="html" style="padding:7px 16px; border-radius:20px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.06); color:var(--text-main, #fff); font-weight:600; font-size:13px; cursor:pointer;">🌐 HTML5</button>
-        <button class="th-tab-btn" data-th-tab="css" style="padding:7px 16px; border-radius:20px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.06); color:var(--text-main, #fff); font-weight:600; font-size:13px; cursor:pointer;">🎨 CSS3</button>
+        <button class="th-tab-btn active" data-th-tab="dom">⚡ DOM API</button>
+        <button class="th-tab-btn" data-th-tab="html">🌐 HTML5</button>
+        <button class="th-tab-btn" data-th-tab="css">🎨 CSS3</button>
       </div>
-      <input type="text" id="thSearchInput" placeholder="🔍 Пошук по темах..." style="padding:7px 14px; border-radius:8px; border:1px solid rgba(255,255,255,0.15); background:rgba(0,0,0,0.3); color:#fff; font-size:13px; min-width:200px;">
+      <input type="text" id="thSearchInput" class="th-search-input" placeholder="🔍 Пошук по темах...">
     </div>
 
     <!-- Scrollable Content -->
@@ -3863,116 +5553,253 @@ for (let i = 1; i &lt;= 3; i++) {
       <!-- DOM TAB -->
       <div class="th-pane active" id="th-pane-dom">
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(360px, 1fr)); gap:16px;">
-          <div class="th-card" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <h4 style="margin:0; font-size:14.5px; color:var(--color-primary, #3ecf8e);">Створення та додавання вузлів</h4>
-              <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement" target="_blank" rel="noopener" style="color:#38bdf8; font-size:12px; text-decoration:none;">MDN ↗</a>
+          
+          <div class="th-card">
+            <div class="th-card-header">
+              <h4 class="th-card-title">Створення та додавання вузлів</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement" target="_blank" rel="noopener" class="th-mdn-link">MDN ↗</a>
             </div>
-            <p style="font-size:12.5px; color:var(--text-muted, #94a3b8); margin-bottom:10px;">
+            <p class="th-card-desc">
               <code>document.createElement(tag)</code> створює новий елемент. Додавання в дерево: <code>parent.appendChild(el)</code>, <code>parent.prepend(el)</code>. Видалення: <code>el.remove()</code>.
             </p>
-            <pre style="background:#111; padding:10px; border-radius:6px; font-size:12px; font-family:monospace; color:#ededed; margin:0; overflow-x:auto;">const btn = document.createElement('button');
+            <pre class="th-card-code">const btn = document.createElement('button');
 btn.textContent = 'Натисни мене';
 document.body.appendChild(btn);</pre>
           </div>
 
-          <div class="th-card" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <h4 style="margin:0; font-size:14.5px; color:var(--color-primary, #3ecf8e);">Пошук елементів у дереві</h4>
-              <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector" target="_blank" rel="noopener" style="color:#38bdf8; font-size:12px; text-decoration:none;">MDN ↗</a>
+          <div class="th-card">
+            <div class="th-card-header">
+              <h4 class="th-card-title">Пошук елементів у дереві</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector" target="_blank" rel="noopener" class="th-mdn-link">MDN ↗</a>
             </div>
-            <p style="font-size:12.5px; color:var(--text-muted, #94a3b8); margin-bottom:10px;">
+            <p class="th-card-desc">
               <code>querySelector(selector)</code> повертає перший знайдений елемент або null. <code>querySelectorAll(selector)</code> повертає NodeList (перебирається forEach або Array.from).
             </p>
-            <pre style="background:#111; padding:10px; border-radius:6px; font-size:12px; font-family:monospace; color:#ededed; margin:0; overflow-x:auto;">const active = document.querySelector('.card.active');
+            <pre class="th-card-code">const active = document.querySelector('.card.active');
 const allBtns = document.querySelectorAll('button.tab');
 allBtns.forEach(b => console.log(b.textContent));</pre>
           </div>
 
-          <div class="th-card" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <h4 style="margin:0; font-size:14.5px; color:var(--color-primary, #3ecf8e);">Обробка подій (Event Listeners)</h4>
-              <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener" target="_blank" rel="noopener" style="color:#38bdf8; font-size:12px; text-decoration:none;">MDN ↗</a>
+          <div class="th-card">
+            <div class="th-card-header">
+              <h4 class="th-card-title">Обробка подій (Event Listeners)</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener" target="_blank" rel="noopener" class="th-mdn-link">MDN ↗</a>
             </div>
-            <p style="font-size:12.5px; color:var(--text-muted, #94a3b8); margin-bottom:10px;">
+            <p class="th-card-desc">
               <code>el.addEventListener(event, callback)</code> додає слухач. Популярні події: <code>'click'</code>, <code>'input'</code>, <code>'change'</code>, <code>'keydown'</code>, <code>'submit'</code>.
             </p>
-            <pre style="background:#111; padding:10px; border-radius:6px; font-size:12px; font-family:monospace; color:#ededed; margin:0; overflow-x:auto;">inp.addEventListener('input', (e) => {
+            <pre class="th-card-code">inp.addEventListener('input', (e) => {
   console.log('Поточне значення:', e.target.value);
 });</pre>
           </div>
 
-          <div class="th-card" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <h4 style="margin:0; font-size:14.5px; color:var(--color-primary, #3ecf8e);">Керування класами та стилями</h4>
-              <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/classList" target="_blank" rel="noopener" style="color:#38bdf8; font-size:12px; text-decoration:none;">MDN ↗</a>
+          <div class="th-card">
+            <div class="th-card-header">
+              <h4 class="th-card-title">Керування класами та стилями</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/classList" target="_blank" rel="noopener" class="th-mdn-link">MDN ↗</a>
             </div>
-            <p style="font-size:12.5px; color:var(--text-muted, #94a3b8); margin-bottom:10px;">
+            <p class="th-card-desc">
               <code>classList.add('cls')</code>, <code>remove('cls')</code>, <code>toggle('cls')</code>, <code>contains('cls')</code>. Inline стилі: <code>el.style.display = 'none'</code>.
             </p>
-            <pre style="background:#111; padding:10px; border-radius:6px; font-size:12px; font-family:monospace; color:#ededed; margin:0; overflow-x:auto;">item.classList.toggle('selected');
-item.style.backgroundColor = '#3ecf8e';</pre>
+            <pre class="th-card-code">item.classList.toggle('selected');
+item.style.backgroundColor = '#6366f1';</pre>
           </div>
+
+          <div class="th-card">
+            <div class="th-card-header">
+              <h4 class="th-card-title">Делегування подій (Event Delegation)</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events#event_delegation" target="_blank" rel="noopener" class="th-mdn-link">MDN ↗</a>
+            </div>
+            <p class="th-card-desc">
+              Замість навішування десятків слухачів на кожну кнопку, вішаємо один слухач на батьківський контейнер та шукаємо ціль через <code>e.target.closest(selector)</code>.
+            </p>
+            <pre class="th-card-code">parentList.addEventListener('click', (e) => {
+  const btn = e.target.closest('.action-btn');
+  if (btn) handleAction(btn.dataset.id);
+});</pre>
+          </div>
+
+          <div class="th-card">
+            <div class="th-card-header">
+              <h4 class="th-card-title">Ітерація по колекціях DOM</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/API/NodeList" target="_blank" rel="noopener" class="th-mdn-link">MDN ↗</a>
+            </div>
+            <p class="th-card-desc">
+              Колекції <code>NodeList</code> підтримують цикл <code>for...of</code> та метод <code>.forEach()</code>. Для перетворення на справжній масив використовуйте <code>Array.from()</code>.
+            </p>
+            <pre class="th-card-code">const pills = document.querySelectorAll('.task-pill');
+for (const pill of pills) {
+  pill.classList.remove('active');
+}
+const names = Array.from(pills).map(p => p.textContent);</pre>
+          </div>
+
+          <div class="th-card">
+            <div class="th-card-header">
+              <h4 class="th-card-title">Клієнтське сховище (LocalStorage API)</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank" rel="noopener" class="th-mdn-link">MDN ↗</a>
+            </div>
+            <p class="th-card-desc">
+              Синхронне збереження даних між перезавантаженнями вкладки. Зберігає рядки ключ/значення. Для об'єктів обов'язкові <code>JSON.stringify</code> та <code>JSON.parse</code>.
+            </p>
+            <pre class="th-card-code">localStorage.setItem('theme', 'dark');
+const saved = JSON.parse(localStorage.getItem('progress') || '{}');
+localStorage.removeItem('token');</pre>
+          </div>
+
+          <div class="th-card">
+            <div class="th-card-header">
+              <h4 class="th-card-title">Data-атрибути (Dataset API)</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dataset" target="_blank" rel="noopener" class="th-mdn-link">MDN ↗</a>
+            </div>
+            <p class="th-card-desc">
+              Атрибути <code>data-*</code> у HTML автоматично транслюються у властивості об'єкта <code>el.dataset</code> (у формат camelCase).
+            </p>
+            <pre class="th-card-code">// HTML: &lt;div data-task-id="4.1"&gt;
+const id = el.dataset.taskId; // "4.1"
+el.dataset.status = 'passed'; // data-status="passed"</pre>
+          </div>
+
+          <div class="th-card">
+            <div class="th-card-header">
+              <h4 class="th-card-title">Очищення та видалення (removeChild & while)</h4>
+              <a href="https://developer.mozilla.org/uk/docs/Web/API/Node/removeChild" target="_blank" rel="noopener" class="th-mdn-link">MDN ↗</a>
+            </div>
+            <p class="th-card-desc">
+              Найшвидший та найбезпечніший спосіб очистити контейнер від усіх дочірніх вузлів — цикл <code>while (parent.firstChild)</code> з викликом <code>parent.removeChild(parent.firstChild)</code>.
+            </p>
+            <pre class="th-card-code">while (container.firstChild) {
+  container.removeChild(container.firstChild);
+}</pre>
+          </div>
+
+          <div class="th-card">
+            <div class="th-card-header">
+              <h4 class="th-card-title">Вставка та навігація (insertBefore & children)</h4>
+              <a href="https://developer.mozilla.org/uk/docs/Web/API/Node/insertBefore" target="_blank" rel="noopener" class="th-mdn-link">MDN ↗</a>
+            </div>
+            <p class="th-card-desc">
+              <code>parent.insertBefore(newEl, refEl)</code> вставляє новий вузол перед опорним. Властивість <code>parent.children</code> повертає колекцію живих дочірніх елементів.
+            </p>
+            <pre class="th-card-code">parent.insertBefore(wrapper, current);
+const count = parent.children.length;</pre>
+          </div>
+
+          <div class="th-card">
+            <div class="th-card-header">
+              <h4 class="th-card-title">Атрибути елементів (setAttribute & getAttribute)</h4>
+              <a href="https://developer.mozilla.org/uk/docs/Web/API/Element/setAttribute" target="_blank" rel="noopener" class="th-mdn-link">MDN ↗</a>
+            </div>
+            <p class="th-card-desc">
+              <code>el.setAttribute('name', 'val')</code> встановлює атрибут (наприклад, <code>role</code>, <code>aria-selected</code>, <code>data-row</code>). Читання: <code>el.getAttribute('name')</code>.
+            </p>
+            <pre class="th-card-code">btn.setAttribute('role', 'tab');
+btn.setAttribute('aria-selected', 'true');
+btn.disabled = true;</pre>
+          </div>
+
         </div>
       </div>
 
       <!-- HTML TAB -->
       <div class="th-pane" id="th-pane-html" style="display:none;">
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(360px, 1fr)); gap:16px;">
-          <div class="th-card" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <h4 style="margin:0; font-size:14.5px; color:#38bdf8;">Семантичні теги розмітки</h4>
-              <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element" target="_blank" rel="noopener" style="color:#38bdf8; font-size:12px; text-decoration:none;">MDN ↗</a>
+          
+          <div class="th-card">
+            <div class="th-card-header">
+              <h4 class="th-card-title">Семантичні теги розмітки</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element" target="_blank" rel="noopener" class="th-mdn-link">MDN ↗</a>
             </div>
-            <p style="font-size:12.5px; color:var(--text-muted, #94a3b8); margin-bottom:10px;">
+            <p class="th-card-desc">
               Використовуйте <code>&lt;header&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;footer&gt;</code> замість безконтрольних <code>&lt;div&gt;</code>.
             </p>
-            <pre style="background:#111; padding:10px; border-radius:6px; font-size:12px; font-family:monospace; color:#ededed; margin:0; overflow-x:auto;">&lt;nav class="navbar"&gt;
+            <pre class="th-card-code">&lt;nav class="navbar"&gt;
   &lt;a href="/"&gt;Головна&lt;/a&gt;
+  &lt;a href="/tasks"&gt;Завдання&lt;/a&gt;
 &lt;/nav&gt;</pre>
           </div>
 
-          <div class="th-card" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <h4 style="margin:0; font-size:14.5px; color:#38bdf8;">HTML Таблиці (&lt;table&gt;)</h4>
-              <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/table" target="_blank" rel="noopener" style="color:#38bdf8; font-size:12px; text-decoration:none;">MDN ↗</a>
+          <div class="th-card">
+            <div class="th-card-header">
+              <h4 class="th-card-title">HTML Таблиці (&lt;table&gt;)</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/table" target="_blank" rel="noopener" class="th-mdn-link">MDN ↗</a>
             </div>
-            <p style="font-size:12.5px; color:var(--text-muted, #94a3b8); margin-bottom:10px;">
+            <p class="th-card-desc">
               Таблична структура: <code>&lt;table&gt;</code>, <code>&lt;thead&gt;&lt;tr&gt;&lt;th&gt;</code> для заголовків, <code>&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;</code> для даних, <code>&lt;tfoot&gt;</code> для підсумків.
             </p>
-            <pre style="background:#111; padding:10px; border-radius:6px; font-size:12px; font-family:monospace; color:#ededed; margin:0; overflow-x:auto;">&lt;table&gt;
+            <pre class="th-card-code">&lt;table&gt;
   &lt;thead&gt;&lt;tr&gt;&lt;th&gt;Колонка&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
   &lt;tbody&gt;&lt;tr&gt;&lt;td&gt;Значення&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;
 &lt;/table&gt;</pre>
           </div>
 
-          <div class="th-card" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <h4 style="margin:0; font-size:14.5px; color:#38bdf8;">Елементи форм та вводу</h4>
-              <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form" target="_blank" rel="noopener" style="color:#38bdf8; font-size:12px; text-decoration:none;">MDN ↗</a>
+          <div class="th-card">
+            <div class="th-card-header">
+              <h4 class="th-card-title">Елементи форм та вводу</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form" target="_blank" rel="noopener" class="th-mdn-link">MDN ↗</a>
             </div>
-            <p style="font-size:12.5px; color:var(--text-muted, #94a3b8); margin-bottom:10px;">
+            <p class="th-card-desc">
               <code>&lt;input type="text|checkbox|radio|number"&gt;</code>, <code>&lt;textarea&gt;</code>, <code>&lt;select&gt;</code>, <code>&lt;button&gt;</code>. Завжди пов'язуйте з <code>&lt;label for="..."&gt;</code>.
             </p>
-            <pre style="background:#111; padding:10px; border-radius:6px; font-size:12px; font-family:monospace; color:#ededed; margin:0; overflow-x:auto;">&lt;label&gt;
-  &lt;input type="checkbox" id="agree" /&gt; Погоджуюсь
-&lt;/label&gt;</pre>
+            <pre class="th-card-code">&lt;label for="agree"&gt;Погоджуюсь&lt;/label&gt;
+&lt;input type="checkbox" id="agree" /&gt;</pre>
           </div>
+
+          <div class="th-card">
+            <div class="th-card-header">
+              <h4 class="th-card-title">Доступність (a11y &amp; ARIA)</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA" target="_blank" rel="noopener" class="th-mdn-link">MDN ↗</a>
+            </div>
+            <p class="th-card-desc">
+              Забезпечує розуміння інтерфейсу користувачами скрінрідерів. Використовуйте <code>aria-label</code>, <code>aria-hidden="true"</code> для іконок та семантичні кнопки.
+            </p>
+            <pre class="th-card-code">&lt;button aria-label="Закрити модальне вікно"&gt;
+  &lt;span aria-hidden="true"&gt;&amp;times;&lt;/span&gt;
+&lt;/button&gt;</pre>
+          </div>
+
+          <div class="th-card">
+            <div class="th-card-header">
+              <h4 class="th-card-title">Векторна графіка SVG</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/SVG" target="_blank" rel="noopener" class="th-mdn-link">MDN ↗</a>
+            </div>
+            <p class="th-card-desc">
+              Векторна графіка у форматі XML. Ідеально масштабується на Retina без пікселізації. Складається з <code>&lt;rect&gt;</code>, <code>&lt;circle&gt;</code>, <code>&lt;path&gt;</code>, <code>&lt;polygon&gt;</code>.
+            </p>
+            <pre class="th-card-code">&lt;svg viewBox="0 0 100 100" width="80" height="80"&gt;
+  &lt;circle cx="50" cy="50" r="40" stroke="#6366f1" fill="none"/&gt;
+  &lt;text x="50" y="55" text-anchor="middle"&gt;JS&lt;/text&gt;
+&lt;/svg&gt;</pre>
+          </div>
+
+          <div class="th-card">
+            <div class="th-card-header">
+              <h4 class="th-card-title">Метатеги та ES-модулі</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script" target="_blank" rel="noopener" class="th-mdn-link">MDN ↗</a>
+            </div>
+            <p class="th-card-desc">
+              Тег <code>viewport</code> критичний для мобільних екранів. Підключення <code>&lt;script type="module"&gt;</code> виконується відкладено (deferred) з ізольованим контекстом.
+            </p>
+            <pre class="th-card-code">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+&lt;script type="module" src="./src/app.js"&gt;&lt;/script&gt;</pre>
+          </div>
+
         </div>
       </div>
 
       <!-- CSS TAB -->
       <div class="th-pane" id="th-pane-css" style="display:none;">
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(360px, 1fr)); gap:16px;">
-          <div class="th-card" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <h4 style="margin:0; font-size:14.5px; color:#f59e0b;">Flexbox Layout</h4>
-              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout" target="_blank" rel="noopener" style="color:#38bdf8; font-size:12px; text-decoration:none;">MDN ↗</a>
+          
+          <div class="th-card">
+            <div class="th-card-header">
+              <h4 class="th-card-title">Flexbox Layout</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_flexible_box_layout" target="_blank" rel="noopener" class="th-mdn-link">MDN ↗</a>
             </div>
-            <p style="font-size:12.5px; color:var(--text-muted, #94a3b8); margin-bottom:10px;">
+            <p class="th-card-desc">
               <code>display: flex</code>, <code>justify-content: space-between|center</code>, <code>align-items: center</code>, <code>gap: 12px</code>, <code>flex-wrap: wrap</code>.
             </p>
-            <pre style="background:#111; padding:10px; border-radius:6px; font-size:12px; font-family:monospace; color:#ededed; margin:0; overflow-x:auto;">.row {
+            <pre class="th-card-code">.row {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -3980,44 +5807,105 @@ item.style.backgroundColor = '#3ecf8e';</pre>
 }</pre>
           </div>
 
-          <div class="th-card" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <h4 style="margin:0; font-size:14.5px; color:#f59e0b;">CSS Grid Layout</h4>
-              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout" target="_blank" rel="noopener" style="color:#38bdf8; font-size:12px; text-decoration:none;">MDN ↗</a>
+          <div class="th-card">
+            <div class="th-card-header">
+              <h4 class="th-card-title">CSS Grid Layout</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_grid_layout" target="_blank" rel="noopener" class="th-mdn-link">MDN ↗</a>
             </div>
-            <p style="font-size:12.5px; color:var(--text-muted, #94a3b8); margin-bottom:10px;">
-              <code>display: grid</code>, <code>grid-template-columns: repeat(auto-fit, minmax(280px, 1fr))</code>, <code>gap: 16px</code>. Ідеально для 2D сіток карток та матриць.
+            <p class="th-card-desc">
+              <code>display: grid</code>, <code>grid-template-columns: repeat(7, 1fr)</code>, <code>gap: 6px</code>. Незамінно для календарів (7 днів тижня), шахівниць, сіток карток та матриць.
             </p>
-            <pre style="background:#111; padding:10px; border-radius:6px; font-size:12px; font-family:monospace; color:#ededed; margin:0; overflow-x:auto;">.matrix-grid {
+            <pre class="th-card-code">/* Сітка календаря на 7 колонок */
+.calendar-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+.day-cell {
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }</pre>
           </div>
 
-          <div class="th-card" style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:16px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <h4 style="margin:0; font-size:14.5px; color:#f59e0b;">CSS Змінні (Custom Properties)</h4>
-              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties" target="_blank" rel="noopener" style="color:#38bdf8; font-size:12px; text-decoration:none;">MDN ↗</a>
+          <div class="th-card">
+            <div class="th-card-header">
+              <h4 class="th-card-title">CSS Змінні (Custom Properties)</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties" target="_blank" rel="noopener" class="th-mdn-link">MDN ↗</a>
             </div>
-            <p style="font-size:12.5px; color:var(--text-muted, #94a3b8); margin-bottom:10px;">
+            <p class="th-card-desc">
               Оголошуються через <code>--ім'я: значення;</code> у <code>:root</code> або селекторі теми. Використовуються через <code>var(--ім'я)</code>.
             </p>
-            <pre style="background:#111; padding:10px; border-radius:6px; font-size:12px; font-family:monospace; color:#ededed; margin:0; overflow-x:auto;">:root { --primary: #3ecf8e; }
-[data-theme="dark"] { --bg: #121212; }
+            <pre class="th-card-code">:root { --primary: #6366f1; }
+[data-theme="dark"] { --bg: #090d16; }
 body { background: var(--bg); }</pre>
           </div>
+
+          <div class="th-card">
+            <div class="th-card-header">
+              <h4 class="th-card-title">Адаптивність та Media Queries</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_media_queries" target="_blank" rel="noopener" class="th-mdn-link">MDN ↗</a>
+            </div>
+            <p class="th-card-desc">
+              Керування виглядом інтерфейсу для різних розмірів екранів та режимів друку через <code>@media</code> правила.
+            </p>
+            <pre class="th-card-code">@media (max-width: 768px) {
+  .trainer-grid { grid-template-columns: 1fr; }
+}
+@media print {
+  header, .tabs-bar { display: none !important; }
+}</pre>
+          </div>
+
+          <div class="th-card">
+            <div class="th-card-header">
+              <h4 class="th-card-title">Псевдокласи станів (:hover, :focus)</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes" target="_blank" rel="noopener" class="th-mdn-link">MDN ↗</a>
+            </div>
+            <p class="th-card-desc">
+              Стилізують елементи в залежності від дій користувача: наведення (<code>:hover</code>), доступність фокусу з клавіатури (<code>:focus-visible</code>) чи стан <code>:disabled</code>.
+            </p>
+            <pre class="th-card-code">.btn-pill:hover { transform: translateY(-1px); }
+.btn-pill:focus-visible { outline: 2px solid #6366f1; }
+.btn-pill:disabled { opacity: 0.5; cursor: not-allowed; }</pre>
+          </div>
+
+          <div class="th-card">
+            <div class="th-card-header">
+              <h4 class="th-card-title">CSS Transitions &amp; Анімації</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_transitions" target="_blank" rel="noopener" class="th-mdn-link">MDN ↗</a>
+            </div>
+            <p class="th-card-desc">
+              Плавні переходи між станами. Властивості <code>transform</code> та <code>opacity</code> апаратно прискорюються графічним процесором (GPU) без перемальовування всієї сторінки.
+            </p>
+            <pre class="th-card-code">.task-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.task-card:hover {
+  transform: translateY(-2px);
+}</pre>
+          </div>
+
+          <div class="th-card">
+            <div class="th-card-header">
+              <h4 class="th-card-title">Сучасні математичні функції</h4>
+              <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/clamp" target="_blank" rel="noopener" class="th-mdn-link">MDN ↗</a>
+            </div>
+            <p class="th-card-desc">
+              <code>clamp(min, preferred, max)</code> забезпечує чутливу типографіку без медіа-запитів. Функції <code>min()</code>, <code>max()</code> та <code>calc()</code> динамічно обраховують розміри.
+            </p>
+            <pre class="th-card-code">.title {
+  font-size: clamp(16px, 3vw, 28px);
+  width: min(100% - 32px, 1200px);
+}</pre>
+          </div>
+
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<script>
-
-  
-
-</script>
 
 <!-- ==========================================
      STANDALONE THEME & THEORY CONTROLLER
@@ -4071,13 +5959,7 @@ body { background: var(--bg); }</pre>
   // Theory Tab Switching
   document.querySelectorAll('.th-tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.th-tab-btn').forEach(b => {
-        b.style.background = 'rgba(255,255,255,0.06)';
-        b.style.color = 'var(--text-main, #fff)';
-        b.classList.remove('active');
-      });
-      btn.style.background = 'var(--color-primary, #3ecf8e)';
-      btn.style.color = '#000';
+      document.querySelectorAll('.th-tab-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
 
       const targetTab = btn.dataset.thTab;
@@ -4085,6 +5967,25 @@ body { background: var(--bg); }</pre>
       const activePane = document.getElementById('th-pane-' + targetTab);
       if (activePane) activePane.style.display = 'block';
     });
+  });
+
+  // Anti-Copy & Context Menu Protection for Task Conditions
+  document.addEventListener('contextmenu', (e) => {
+    if (e.target.closest('#codeEditor, #certCodeEditor, input, textarea')) {
+      return;
+    }
+    e.preventDefault();
+  });
+
+  document.addEventListener('copy', (e) => {
+    if (e.target.closest('#codeEditor, #certCodeEditor, input, textarea')) {
+      return;
+    }
+    const selection = window.getSelection().toString();
+    if (selection) {
+      e.preventDefault();
+      showToast('🔒 Копіювання умов завдань захищено платформою.');
+    }
   });
 
   // Theory Search Filter

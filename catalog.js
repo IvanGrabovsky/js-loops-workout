@@ -1,5 +1,6 @@
-// Каталог завдань та метаданих курсу "Цикли та Робота з відлагоджувачем"
-// УВАГА: Еталонні рішення та менторські розбори зашифровані AES-256-GCM (Zero-Leakage Architecture).
+// Каталог навчальних модулів та практичних завдань для платформи js-loops-workout
+// Дані AES-256-GCM шифруються викладацьким ключем camp-admin-2026
+
 export const MODULES = [
   {
     "idx": 1,
@@ -63,6 +64,33 @@ export const MODULES = [
     "filename": "07-debugger-hunting.js",
     "testFilename": "07-debugger-hunting.test.js",
     "desc": "Що таке відлагоджувач, debugger;, точки зупинки (breakpoints), покрокове виконання, Scope, Watch і виправлення багів."
+  },
+  {
+    "idx": 8,
+    "id": "08-dom-lists-cards",
+    "title": "Модуль 8: Створення DOM-елементів: списки, картки та UI-компоненти",
+    "shortTitle": "8. Створення списків та карток",
+    "filename": "08-dom-lists-cards.js",
+    "testFilename": "08-dom-lists-cards.test.js",
+    "desc": "Створення нативних DOM-вузлів у циклах: картки товарів, зіркові рейтинги, хлібні крихти, бейджі та хмари тегів."
+  },
+  {
+    "idx": 9,
+    "id": "09-dom-grids-tables",
+    "title": "Модуль 9: Створення складних сіток та таблиць через вкладені цикли та DOM API",
+    "shortTitle": "9. DOM Таблиці та Сітки",
+    "filename": "09-dom-grids-tables.js",
+    "testFilename": "09-dom-grids-tables.test.js",
+    "desc": "Побудова складних DOM-дерев через вкладені цикли: інтерактивні таблиці, сітки календарів, шахові дошки та теплові карти."
+  },
+  {
+    "idx": 10,
+    "id": "10-dom-manipulation",
+    "title": "Модуль 10: Маніпуляція DOM, стилізація та очищення через цикли",
+    "shortTitle": "10. DOM Маніпуляція та Стилі",
+    "filename": "10-dom-manipulation.js",
+    "testFilename": "10-dom-manipulation.test.js",
+    "desc": "Маніпуляція наявними DOM-вузлами: зебра-стилізація таблиць, швидке очищення через while, пагінація та фільтрація елементів."
   }
 ];
 
@@ -5246,6 +5274,1030 @@ export const ALL_TASKS = [
         ]
       }
     ]
+  },
+  {
+    "moduleIdx": 8,
+    "id": "8.1",
+    "name": "renderProductCards",
+    "title": "Створення вітрини карток товарів через DOM API",
+    "level": "Базовий рівень",
+    "goal": "Створити та повернути DOM-контейнер `<div class=\"product-cards-container\">`, що містить картки `<div class=\"product-card\">` для кожного товару з масиву `products` (`{ title, price }`). У кожній картці створити заголовок `<h4 class=\"product-card__title\">` та ціну `<p class=\"product-card__price\">price ₴`. Якщо масив порожній або не є масивом — повернути `null`.",
+    "reqs": [
+      "Створити кореневий контейнер через `document.createElement('div')` з класом `product-cards-container`.",
+      "Обійти масив `products` циклом `for`.",
+      "Для кожного товару створити картку, заповнити текст через `textContent` та змонтувати через `appendChild()`.",
+      "Повернути створений DOM-елемент контейнера."
+    ],
+    "hint": "Створіть `container = document.createElement('div')`, у циклі для кожного товару створюйте `card = document.createElement('div')`, заповнюйте `textContent` і додавайте `container.appendChild(card)`.",
+    "starterParams": "products",
+    "starterBody": "// Створення карток товарів через DOM API\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const res = renderProductCards([{ title: 'Ноутбук', price: 25000 }, { title: 'Мишка', price: 800 }]);\n          return [res.className, res.children.length, res.children[0].querySelector('.product-card__title').textContent];\n        })()",
+        "expected": [
+          "product-cards-container",
+          2,
+          "Ноутбук"
+        ]
+      },
+      {
+        "expr": "renderProductCards([])",
+        "expected": null
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Динамічно створити нативні DOM-вузли для карток товарів у циклі <code>for</code> та змонтувати їх у спільний контейнер без небезпечної конкатенації HTML-рядків.</p>\n  <p><b>🔄 Покроковий алгоритм:</b></p>\n  <ol>\n    <li>Перевірити параметр: якщо <code>!Array.isArray(products) || products.length === 0</code>, повернути <code>null</code>.</li>\n    <li>Створити кореневий елемент: <code>const container = document.createElement('div'); container.className = 'product-cards-container';</code>.</li>\n    <li>У циклі <code>for (let i = 0; i &lt; products.length; i++)</code> створити елемент картки <code>const card = document.createElement('div')</code>.</li>\n    <li>Створити заголовок <code>&lt;h4&gt;</code> та параграф <code>&lt;p&gt;</code>, безпечно записати дані через властивість <code>textContent</code>.</li>\n    <li>Вкласти заголовок та ціну в картку через <code>card.appendChild()</code>, а саму картку — в контейнер: <code>container.appendChild(card)</code>.</li>\n    <li>Повернути змонтований контейнер.</li>\n  </ol>\n  <p><b>💡 Порада ментора:</b> Властивість <code>textContent</code> автоматично екранує спецсимволи та захищає додаток від XSS-атак. Детальніше на <a href=\"https://developer.mozilla.org/uk/docs/Web/API/Node/textContent\" target=\"_blank\" rel=\"noopener\">MDN: Node.textContent</a> та <a href=\"https://developer.mozilla.org/uk/docs/Web/API/Document/createElement\" target=\"_blank\" rel=\"noopener\">MDN: Document.createElement</a>.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 8,
+    "id": "8.2",
+    "name": "renderStarRating",
+    "title": "Створення зіркового рейтингу через DOM API",
+    "level": "Базовий рівень",
+    "goal": "Створити та повернути DOM-контейнер `<div class=\"star-rating\" role=\"img\" aria-label=\"Рейтинг: X з Y\">`. У циклі від 1 до `maxStars` згенерувати зірочки через `document.createElement('span')`: якщо індекс `<= rating` — призначити клас `star star--filled` та символ `★`, інакше — клас `star star--empty` та символ `☆`. Якщо `maxStars <= 0` — повернути `null`.",
+    "reqs": [
+      "Створити контейнер та додати атрибути доступності через `setAttribute()`.",
+      "Цикл `for (let i = 1; i <= maxStars; i++)`.",
+      "Створення зірочок через `document.createElement('span')` та монтування через `appendChild()`.",
+      "Повернути підсумковий DOM-елемент."
+    ],
+    "hint": "Використовуйте `document.createElement('span')`, встановлюйте `span.className = (i <= rating) ? 'star star--filled' : 'star star--empty'` та додавайте до контейнера.",
+    "starterParams": "rating, maxStars",
+    "starterBody": "// Створення зіркового рейтингу через DOM API\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const el = renderStarRating(3, 5);\n          return [el.className, el.children.length, el.querySelectorAll('.star--filled').length];\n        })()",
+        "expected": [
+          "star-rating",
+          5,
+          3
+        ]
+      },
+      {
+        "expr": "renderStarRating(0, 0)",
+        "expected": null
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Змонтувати доступний компонент рейтингу за допомогою DOM API та циклу <code>for</code> від 1 до <code>maxStars</code>.</p>\n  <p><b>🔄 Покроковий алгоритм:</b></p>\n  <ol>\n    <li>Створити контейнер <code>document.createElement('div')</code> та задати атрибути <code>role=\"img\"</code> і <code>aria-label</code> через <code>setAttribute()</code>.</li>\n    <li>Запустити цикл <code>for (let i = 1; i &lt;= maxStars; i++)</code>.</li>\n    <li>На кожній ітерації створювати <code>document.createElement('span')</code>.</li>\n    <li>Якщо <code>i &lt;= rating</code> — клас <code>star star--filled</code> і символ <code>★</code>, інакше — <code>star star--empty</code> і <code>☆</code>.</li>\n    <li>Додати зірочку до контейнера через <code>appendChild()</code>.</li>\n  </ol>\n  <p><b>💡 Порада ментора:</b> Метод <code>setAttribute()</code> дозволяє призначити будь-який HTML або ARIA атрибут на створений вузол. Докладніше на <a href=\"https://developer.mozilla.org/uk/docs/Web/API/Element/setAttribute\" target=\"_blank\" rel=\"noopener\">MDN: Element.setAttribute</a>.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 8,
+    "id": "8.3",
+    "name": "renderBreadcrumbs",
+    "title": "Створення навігаційних хлібних крихт",
+    "level": "Базовий рівень",
+    "goal": "Створити та повернути DOM-елемент `<nav class=\"breadcrumbs\">`. Для кожного елемента з масиву `links` (`{ label, url }`): якщо це останній елемент або `url === null` — створити `<span class=\"breadcrumbs__current\">label</span>`, інакше — посилання `<a class=\"breadcrumbs__link\" href=\"url\">label</a>` та текстовий роздільник `<span class=\"breadcrumbs__sep\">/</span>`. Якщо масив порожній — повернути `null`.",
+    "reqs": [
+      "Створити навігаційний вузол `document.createElement('nav')`.",
+      "Обійти масив `links` через цикл `for`.",
+      "Перевірити останній елемент: `i === links.length - 1`.",
+      "Повернути створений елемент навігації."
+    ],
+    "hint": "Для звичайних елементів створюйте `<a>` з атрибутом `href`, після нього роздільник `<span>/</span>`, а для останнього — `<span class=\"breadcrumbs__current\">`.",
+    "starterParams": "links",
+    "starterBody": "// Створення хлібних крихт\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const nav = renderBreadcrumbs([{ label: 'Головна', url: '/' }, { label: 'Курс', url: null }]);\n          return [nav.children.length, nav.children[0].tagName, nav.children[1].className, nav.children[2].className];\n        })()",
+        "expected": [
+          3,
+          "A",
+          "breadcrumbs__sep",
+          "breadcrumbs__current"
+        ]
+      },
+      {
+        "expr": "renderBreadcrumbs([])",
+        "expected": null
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Побудувати навігаційний ланцюжок через DOM API, обробляючи останній пункт списку як активний поточний розділ без посилання.</p>\n  <p><b>🔄 Покроковий алгоритм:</b></p>\n  <ol>\n    <li>Створити елемент <code>&lt;nav class=\"breadcrumbs\"&gt;</code>.</li>\n    <li>У циклі <code>for</code> перевіряти <code>const isLast = (i === links.length - 1) || !item.url;</code>.</li>\n    <li>Для проміжних кроків створювати <code>&lt;a&gt;</code> та роздільник <code>&lt;span&gt;/&lt;/span&gt;</code>.</li>\n    <li>Для останнього пункту створювати неклікабельний <code>&lt;span class=\"breadcrumbs__current\"&gt;</code>.</li>\n    <li>Монтувати всі вузли через <code>appendChild()</code>.</li>\n  </ol>\n</div>"
+  },
+  {
+    "moduleIdx": 8,
+    "id": "8.4",
+    "name": "renderStatusBadges",
+    "title": "Створення бейджів статусів через цикл",
+    "level": "Базовий рівень",
+    "goal": "Створити та повернути DOM-контейнер `<div class=\"badge-container\">`. Для кожного елемента з `items` (`{ label, status }`) у циклі створити `<span class=\"badge badge--{status}\">` з текстом `label`. Валідні статуси: `['success', 'warning', 'danger']`. Якщо статус інший або відсутній — призначити `badge--neutral`. Якщо масив порожній — повернути `null`.",
+    "reqs": [
+      "Створити контейнер `document.createElement('div')` з класом `badge-container`.",
+      "У циклі перевіряти статус через білий список валідних статусів.",
+      "Створювати елементи `span`, додавати класи та текст.",
+      "Повернути підсумковий DOM-контейнер."
+    ],
+    "hint": "Використовуйте `valid.includes(it.status) ? it.status : 'neutral'` для вибору правильного класу.",
+    "starterParams": "items",
+    "starterBody": "// Створення статусних бейджів\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const wrap = renderStatusBadges([{ label: 'OK', status: 'success' }, { label: '???', status: 'unknown' }]);\n          return [wrap.children.length, wrap.children[0].className, wrap.children[1].className];\n        })()",
+        "expected": [
+          2,
+          "badge badge--success",
+          "badge badge--neutral"
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Динамічно створити кольорові бейджі через перевірку валідності статусу в циклі.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 8,
+    "id": "8.5",
+    "name": "renderMessageList",
+    "title": "Створення списку повідомлень чату",
+    "level": "Базовий рівень",
+    "goal": "Створити та повернути список `<ul class=\"message-list\">`. Для кожного повідомлення з `messages` (`{ author, text, isMine }`) у циклі створити `<li class=\"message-item\">` (з додатковим класом `message-item--mine` якщо `isMine: true`, або `message-item--other` якщо `false`). Всередині розмістити автора `<span class=\"message-item__author\">author: </span>` та текст `<span class=\"message-item__text\">text</span>`. Якщо масив порожній — повернути `null`.",
+    "reqs": [
+      "Створити список через `document.createElement('ul')`.",
+      "У циклі `for` створювати елементи списку `li` та текстові `span`.",
+      "Призначати класи модифікаторів залежно від `isMine`.",
+      "Повернути підсумковий `ul`."
+    ],
+    "hint": "Створюйте `li = document.createElement('li')`, додавайте клас `m.isMine ? 'message-item--mine' : 'message-item--other'`.",
+    "starterParams": "messages",
+    "starterBody": "// Створення списку повідомлень\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const list = renderMessageList([{ author: 'Анна', text: 'Привіт!', isMine: false }, { author: 'Я', text: 'Привіт', isMine: true }]);\n          return [list.children.length, list.children[0].className, list.children[1].className];\n        })()",
+        "expected": [
+          2,
+          "message-item message-item--other",
+          "message-item message-item--mine"
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Змонтувати DOM-структуру стрічки чату з вирівнюванням власних та чужих повідомлень.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 8,
+    "id": "8.6",
+    "name": "renderTagCloud",
+    "title": "Створення хмари тегів з data-атрибутами",
+    "level": "Базовий рівень",
+    "goal": "Створити та повернути DOM-контейнер `<div class=\"tag-cloud\">`. Для кожного тега з `tags` (`{ name, count }`) у циклі створити `<span class=\"tag-chip\">`. Якщо `count > 10` — додати клас `tag-chip--popular`. Встановити атрибут `data-count` через `setAttribute('data-count', String(count))`. Текст чіпа — `name`. Якщо масив порожній — повернути `null`.",
+    "reqs": [
+      "Створити контейнер `div.tag-cloud`.",
+      "У циклі створити чіпи `span`.",
+      "Встановити `data-count` через `setAttribute()`.",
+      "Повернути підсумковий контейнер."
+    ],
+    "hint": "chip.setAttribute('data-count', String(t.count)); chip.textContent = t.name;",
+    "starterParams": "tags",
+    "starterBody": "// Створення хмари тегів\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const wrap = renderTagCloud([{ name: 'js', count: 15 }, { name: 'css', count: 5 }]);\n          return [wrap.children.length, wrap.children[0].className, wrap.children[0].getAttribute('data-count')];\n        })()",
+        "expected": [
+          2,
+          "tag-chip tag-chip--popular",
+          "15"
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Згенерувати чіпи тегів та зберегти їхні числові показники в <code>data-count</code>.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 8,
+    "id": "8.7",
+    "name": "renderProgressBarSteps",
+    "title": "Створення покрокового прогрес-бару",
+    "level": "Базовий рівень",
+    "goal": "Створити та повернути `<div class=\"progress-steps\" data-total=\"{stepsCount}\">`. У циклі `for` від 0 до `stepsCount - 1` створити `<div class=\"step-indicator\">` з номером кроку `String(i + 1)`. Якщо `i <= activeIndex` — додати клас `step-indicator--completed`. Якщо `stepsCount <= 0` — повернути `null`.",
+    "reqs": [
+      "Створити контейнер з атрибутом `data-total`.",
+      "У циклі від 0 до stepsCount - 1 генерувати індикатори кроків.",
+      "Повернути створений контейнер."
+    ],
+    "hint": "Встановіть step.textContent = String(i + 1) та перевірте i <= activeIndex.",
+    "starterParams": "stepsCount, activeIndex",
+    "starterBody": "// Створення прогрес-бару\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const bar = renderProgressBarSteps(4, 1);\n          return [bar.children.length, bar.children[0].className, bar.children[2].className];\n        })()",
+        "expected": [
+          4,
+          "step-indicator step-indicator--completed",
+          "step-indicator"
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Створити покроковий майстер процесу з нумерацією кроків від 1.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 8,
+    "id": "8.8",
+    "name": "renderNumberedList",
+    "title": "Створення нумерованого списку зі зсувом індексів",
+    "level": "Базовий рівень",
+    "goal": "Створити та повернути `<ol class=\"numbered-list\" start=\"{startNumber}\">`. У циклі для кожного рядка з масиву `items` створити `<li class=\"numbered-list__item\" data-index=\"{startNumber + i}\">item</li>`. Якщо масив порожній — повернути `null`.",
+    "reqs": [
+      "Створити `ol` з атрибутом `start`.",
+      "У циклі створювати `li` та задавати атрибут `data-index`.",
+      "Повернути створений `ol`."
+    ],
+    "hint": "li.setAttribute('data-index', String(startNumber + i)); li.textContent = items[i];",
+    "starterParams": "items, startNumber",
+    "starterBody": "// Створення нумерованого списку\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const ol = renderNumberedList(['Вступ', 'Основи'], 10);\n          return [ol.getAttribute('start'), ol.children[0].getAttribute('data-index'), ol.children[0].textContent];\n        })()",
+        "expected": [
+          "10",
+          "10",
+          "Вступ"
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Створити список із кастомною нумерацією з використанням DOM API.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 8,
+    "id": "8.9",
+    "name": "renderNotificationFeed",
+    "title": "Створення стрічки карток сповіщень",
+    "level": "Базовий рівень",
+    "goal": "Створити та повернути `<div class=\"notification-feed\">`. У циклі для кожного сповіщення з `notifications` (`{ title, message, unread }`) створити `<div class=\"notification-card\">` (з додатковим класом `notification-card--unread`, якщо `unread: true`). Всередині додати заголовок `<h5 class=\"notification-card__title\">` та текст `<p class=\"notification-card__body\">`. Якщо масив порожній — повернути `null`.",
+    "reqs": [
+      "Створити контейнер `div.notification-feed`.",
+      "У циклі створювати картки та перевіряти статус прочитаності.",
+      "Повернути створений контейнер."
+    ],
+    "hint": "card.className = n.unread ? 'notification-card notification-card--unread' : 'notification-card';",
+    "starterParams": "notifications",
+    "starterBody": "// Створення стрічки сповіщень\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const feed = renderNotificationFeed([{ title: 'Оновлення', message: 'Готово', unread: true }]);\n          return [feed.children.length, feed.children[0].className, feed.children[0].querySelector('h5').textContent];\n        })()",
+        "expected": [
+          1,
+          "notification-card notification-card--unread",
+          "Оновлення"
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Згенерувати картки сповіщень та акцентувати непрочитані повідомлення.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 8,
+    "id": "8.10",
+    "name": "renderTabsNavigation",
+    "title": "Створення навігаційної панелі вкладок (Tabs)",
+    "level": "Базовий рівень",
+    "goal": "Створити та повернути `<div class=\"tabs-nav\" role=\"tablist\">`. У циклі для кожного заголовка з `tabTitles` створити кнопку `<button class=\"tab-button\" role=\"tab\">` з текстом заголовка. Якщо `i === activeIndex` — додати клас `tab-button--active` та атрибут `aria-selected=\"true\"`, інакше `aria-selected=\"false\"`. Якщо масив порожній — повернути `null`.",
+    "reqs": [
+      "Створити навігаційний блок з `role=\"tablist\"`.",
+      "У циклі створювати кнопки з `role=\"tab\"` та відповідним `aria-selected`.",
+      "Повернути створену панель вкладок."
+    ],
+    "hint": "btn.setAttribute('aria-selected', isCur ? 'true' : 'false');",
+    "starterParams": "tabTitles, activeIndex",
+    "starterBody": "// Створення панелі вкладок\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const nav = renderTabsNavigation(['Таб 1', 'Таб 2'], 0);\n          return [nav.children.length, nav.children[0].className, nav.children[0].getAttribute('aria-selected'), nav.children[1].getAttribute('aria-selected')];\n        })()",
+        "expected": [
+          2,
+          "tab-button tab-button--active",
+          "true",
+          "false"
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Побудувати доступну систему табів із дотриманням стандартів WAI-ARIA.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 8,
+    "id": "8.11",
+    "name": "renderAccordionList",
+    "title": "Створення акордеона через семантичні теги HTML5",
+    "level": "Базовий рівень",
+    "goal": "Створити та повернути `<div class=\"accordion-list\">`. Для кожного елемента з `items` (`{ title, content, open }`) у циклі створити `<details class=\"accordion-item\">`. Якщо `open: true` — встановити `details.open = true`. Всередині розмістити `<summary class=\"accordion-header\">title</summary>` та `<div class=\"accordion-content\">content</div>`. Якщо масив порожній — повернути `null`.",
+    "reqs": [
+      "Створити контейнер `div.accordion-list`.",
+      "У циклі створювати `details`, `summary` та `div.accordion-content`.",
+      "Повернути підсумковий акордеон."
+    ],
+    "hint": "details.open = Boolean(it.open); details.appendChild(summary); details.appendChild(content);",
+    "starterParams": "items",
+    "starterBody": "// Створення акордеона\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const acc = renderAccordionList([{ title: 'Питання', content: 'Відповідь', open: true }]);\n          return [acc.children.length, acc.children[0].tagName, acc.children[0].open];\n        })()",
+        "expected": [
+          1,
+          "DETAILS",
+          true
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Змонтувати акордеон за допомогою нативних семантичних вузлів <code>&lt;details&gt;</code> та <code>&lt;summary&gt;</code>.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 8,
+    "id": "8.12",
+    "name": "renderAvatarStack",
+    "title": "Створення стека аватарок користувачів",
+    "level": "Базовий рівень",
+    "goal": "Створити та повернути `<div class=\"avatar-stack\">`. Відобразити перші `maxVisible` елементів масиву `avatars` як `<img class=\"avatar-img\" src=\"url\" alt=\"avatar\" />`. Якщо всього аватарок більше ніж `maxVisible`, в кінці додати бейдж `<span class=\"avatar-more\">+N</span>`, де `N = avatars.length - maxVisible`. Якщо масив порожній — повернути `null`.",
+    "reqs": [
+      "Створити контейнер `div.avatar-stack`.",
+      "У циклі відображати зображення до `Math.min(avatars.length, maxVisible)`.",
+      "Якщо є залишок — додати бейдж `+N`.",
+      "Повернути підсумковий стек."
+    ],
+    "hint": "img.setAttribute('src', avatars[i]); img.setAttribute('alt', 'avatar');",
+    "starterParams": "avatars, maxVisible",
+    "starterBody": "// Створення стека аватарок\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const s = renderAvatarStack(['u1.png', 'u2.png', 'u3.png'], 2);\n          return [s.children.length, s.children[0].tagName, s.children[2].className, s.children[2].textContent];\n        })()",
+        "expected": [
+          3,
+          "IMG",
+          "avatar-more",
+          "+1"
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Змонтувати компактний стек аватарок з бейджем переповнення ліміту.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 9,
+    "id": "9.1",
+    "name": "renderDataTable",
+    "title": "Створення інтерактивної таблиці через DOM API",
+    "level": "Середній рівень",
+    "goal": "Створити та повернути елемент таблиці `<table class=\"data-table\">`. Створити `<thead>` з одним рядком заголовків `<th>` для кожної назви з `headers`. Створити `<tbody>` та у вкладених циклах пройтися по масиву об'єктів `rows`, додаючи `<tr>` та `<td>` зі значеннями `row[header]`. Якщо `headers` порожній — повернути `null`.",
+    "reqs": [
+      "Створити `table.data-table`.",
+      "Створити `thead` з комірками `th` через перший цикл.",
+      "Створити `tbody` із вкладеним циклом по рядках `rows` та стовпцях `headers`.",
+      "Повернути підсумковий `HTMLTableElement`."
+    ],
+    "hint": "Створіть `thead` і `tbody`, у зовнішньому циклі по рядках створюйте `tr = document.createElement('tr')`, у внутрішньому — `td = document.createElement('td')`.",
+    "starterParams": "headers, rows",
+    "starterBody": "// Створення таблиці даних через DOM API\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const t = renderDataTable(['id', 'name'], [{ id: 1, name: 'Alice' }, { id: 2, name: 'Bob' }]);\n          return [t.tagName, t.querySelectorAll('th').length, t.querySelectorAll('tbody tr').length, t.querySelectorAll('td')[1].textContent];\n        })()",
+        "expected": [
+          "TABLE",
+          2,
+          2,
+          "Alice"
+        ]
+      },
+      {
+        "expr": "renderDataTable([], [])",
+        "expected": null
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Побудувати повноцінну HTML-таблицю за допомогою вкладених циклів та нативного DOM API.</p>\n  <p><b>🔄 Покроковий алгоритм:</b></p>\n  <ol>\n    <li>Створити елемент <code>table.data-table</code>.</li>\n    <li>Побудувати шапку <code>thead</code> з рядком <code>tr</code> та клітинками <code>th</code> для кожного заголовка.</li>\n    <li>Створити тіло таблиці <code>tbody</code>.</li>\n    <li>Зовнішній цикл проходить по кожному рядку з <code>rows</code> і створює <code>tr</code>.</li>\n    <li>Внутрішній цикл проходить по ключах <code>headers</code>, дістає значення та поміщає його в <code>td.textContent</code>.</li>\n    <li>Повернути підсумкову таблицю.</li>\n  </ol>\n</div>"
+  },
+  {
+    "moduleIdx": 9,
+    "id": "9.2",
+    "name": "renderCalendarMonth",
+    "title": "Створення календарної сітки місяця через DOM API",
+    "level": "Середній рівень",
+    "goal": "Створити та повернути DOM-контейнер `<div class=\"calendar-month\">`. Додати заголовок `<h3 class=\"month-title\">monthName</h3>` та контейнер сітки `<div class=\"calendar-grid\">`. У циклі `for (let d = 1; d <= daysInMonth; d++)` створити для кожного дня `<span class=\"day-cell\">String(d)</span>` та додати до сітки. Якщо `daysInMonth <= 0` — повернути `null`.",
+    "reqs": [
+      "Створити контейнер `calendar-month`.",
+      "Створити заголовок `h3.month-title` з текстом `monthName`.",
+      "Створити сітку `div.calendar-grid`.",
+      "У циклі створити клітинки `span.day-cell` для днів від 1 до `daysInMonth`.",
+      "Повернути підсумковий DOM-контейнер."
+    ],
+    "hint": "Створіть `grid = document.createElement('div'); grid.className = 'calendar-grid';` і у циклі додавайте `cell = document.createElement('span'); cell.className = 'day-cell'; cell.textContent = String(d); grid.appendChild(cell);`.",
+    "starterParams": "daysInMonth, monthName",
+    "starterBody": "// Створення календарної сітки через DOM API\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const cal = renderCalendarMonth(31, 'Березень 2026');\n          return [cal.className, cal.querySelector('h3').textContent, cal.querySelectorAll('.day-cell').length, cal.querySelectorAll('.day-cell')[0].textContent];\n        })()",
+        "expected": [
+          "calendar-month",
+          "Березень 2026",
+          31,
+          "1"
+        ]
+      },
+      {
+        "expr": "renderCalendarMonth(0, 'Тест')",
+        "expected": null
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Змонтувати повноцінний календарний віджет на базі CSS Grid та нативного DOM API.</p>\n  <p><b>🔄 Покроковий алгоритм:</b></p>\n  <ol>\n    <li>Створити контейнер <code>&lt;div class=\"calendar-month\"&gt;</code>.</li>\n    <li>Створити заголовок <code>&lt;h3 class=\"month-title\"&gt;</code> та записати назву місяця через <code>textContent</code>.</li>\n    <li>Створити блок сітки <code>&lt;div class=\"calendar-grid\"&gt;</code>.</li>\n    <li>У циклі від 1 до <code>daysInMonth</code> для кожного дня створити <code>document.createElement('span')</code> з класом <code>day-cell</code> та номером дня.</li>\n    <li>Вкласти всі клітинки в сітку через <code>grid.appendChild(cell)</code>.</li>\n    <li>Повернути змонтований контейнер.</li>\n  </ol>\n  <p><b>💡 Порада ментора:</b> Поєднання CSS Grid (<code>grid-template-columns: repeat(7, 1fr)</code>) та нативного DOM API дозволяє автоматично вибудувати 7-денний календарний тиждень без ручного вирахування переносів рядків.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 9,
+    "id": "9.3",
+    "name": "renderChessBoard",
+    "title": "Створення шахівниці N×N через вкладені цикли та DOM API",
+    "level": "Середній рівень",
+    "goal": "Створити та повернути DOM-елемент `<div class=\"chess-board\">`. У зовнішньому циклі `for (let r = 0; r < size; r++)` створити рядок `<div class=\"chess-row\">`. У внутрішньому циклі `for (let c = 0; c < size; c++)` створити клітинку `<div class=\"chess-cell cell--white\">` (якщо `(r + c) % 2 === 0`) або `cell--black`. Якщо `size <= 0` — повернути `null`.",
+    "reqs": [
+      "Створити дошку `div.chess-board`.",
+      "Вкладені цикли для рядків `r` та клітинок `c`.",
+      "Чергування класів `cell--white` та `cell--black` за формулою `(r + c) % 2 === 0`.",
+      "Повернути створений DOM-елемент."
+    ],
+    "hint": "cell.className = (r + c) % 2 === 0 ? 'chess-cell cell--white' : 'chess-cell cell--black';",
+    "starterParams": "size",
+    "starterBody": "// Створення шахівниці через DOM API\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const b = renderChessBoard(4);\n          return [b.children.length, b.children[0].children.length, b.children[0].children[0].className, b.children[0].children[1].className];\n        })()",
+        "expected": [
+          4,
+          4,
+          "chess-cell cell--white",
+          "chess-cell cell--black"
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Згенерувати 2D-шахівницю за допомогою вкладених циклів та формули парності <code>(r + c) % 2 === 0</code>.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 9,
+    "id": "9.4",
+    "name": "renderActivityHeatmap",
+    "title": "Створення теплової карти активності (Heatmap)",
+    "level": "Середній рівень",
+    "goal": "Створити та повернути DOM-контейнер `<div class=\"heatmap-grid\">`. У зовнішньому циклі по тижнях `w` від 0 до `weeksCount - 1` створити колонку `<div class=\"heatmap-col\">`. У внутрішньому циклі по днях тижня `d` (від 0 до 6) дістати значення з матриці `dataMatrix[w][d]`, створити клітинку `<div class=\"heatmap-cell\">`, встановити `data-level` (`0` для 0, `1` для 1-3, `2` для 4-6, `3` для > 6) та `title = \"{val} дій\"`. Якщо `weeksCount <= 0` — повернути `null`.",
+    "reqs": [
+      "Створити `div.heatmap-grid`.",
+      "Зовнішній цикл по тижнях створює колонки `heatmap-col`.",
+      "Внутрішній цикл створює клітинки з розрахованим `data-level`.",
+      "Повернути підсумковий DOM-контейнер."
+    ],
+    "hint": "cell.setAttribute('data-level', String(level)); cell.setAttribute('title', `${val} дій`);",
+    "starterParams": "weeksCount, dataMatrix",
+    "starterBody": "// Створення теплової карти через DOM API\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const hm = renderActivityHeatmap(2, [[0, 5, 2, 0, 8, 1, 0], [1, 2, 0, 4, 0, 0, 0]]);\n          return [hm.children.length, hm.children[0].children.length, hm.children[0].children[1].getAttribute('data-level')];\n        })()",
+        "expected": [
+          2,
+          7,
+          "2"
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Згенерувати 2D-теплову карту (як на GitHub) з рівнями інтенсивності активності.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 9,
+    "id": "9.5",
+    "name": "renderPixelArtGrid",
+    "title": "Створення сітки піксель-арту з інлайн-стилями кольорів",
+    "level": "Середній рівень",
+    "goal": "Створити та повернути `<div class=\"pixel-art-grid\">`. Зовнішній цикл по висоті `height` створює рядок `<div class=\"pixel-row\">`. Внутрішній цикл по ширині `width` створює піксель `<div class=\"pixel-cell\">` і призначає інлайн-стиль `style.backgroundColor = colorMatrix[r][c]`. Якщо розміри `<= 0` — повернути `null`.",
+    "reqs": [
+      "Створити `div.pixel-art-grid`.",
+      "Вкладені цикли створюють рядки та пікселі.",
+      "Встановлення `pixel.style.backgroundColor`.",
+      "Повернути створений DOM-елемент."
+    ],
+    "hint": "pixel.style.backgroundColor = colorMatrix[r][c]; row.appendChild(pixel);",
+    "starterParams": "width, height, colorMatrix",
+    "starterBody": "// Створення піксель-арт сітки через DOM API\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const g = renderPixelArtGrid(2, 2, [['#ff0000', '#00ff00'], ['#0000ff', '#ffffff']]);\n          return [g.children.length, g.children[0].children[0].style.backgroundColor];\n        })()",
+        "expected": [
+          2,
+          "#ff0000"
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Побудувати полотно для піксель-арту за допомогою інлайн-стилів фонового кольору.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 9,
+    "id": "9.6",
+    "name": "renderMultiplicationTableDOM",
+    "title": "Створення таблиці множення з виділенням діагоналі",
+    "level": "Середній рівень",
+    "goal": "Створити та повернути `<table class=\"mult-table\">`. У вкладених циклах від 1 до `size` сформувати рядки `<tr>` та клітинки `<td>`. Встановити `textContent = String(r * c)`. Якщо `r === c` (квадрат числа) — додати клас `cell--diagonal`. Якщо `size <= 0` — повернути `null`.",
+    "reqs": [
+      "Створити `table.mult-table`.",
+      "Вкладені цикли від 1 до `size`.",
+      "Виділити діагональ класом `cell--diagonal` при `r === c`.",
+      "Повернути підсумкову таблицю."
+    ],
+    "hint": "if (r === c) cell.className = 'cell--diagonal'; cell.textContent = String(r * c);",
+    "starterParams": "size",
+    "starterBody": "// Створення таблиці множення через DOM API\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const t = renderMultiplicationTableDOM(3);\n          return [t.querySelectorAll('tr').length, t.querySelectorAll('.cell--diagonal').length, t.querySelectorAll('td')[8].textContent];\n        })()",
+        "expected": [
+          3,
+          3,
+          "9"
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Згенерувати таблицю множення з акцентом на квадратах чисел (головній діагоналі).</p>\n</div>"
+  },
+  {
+    "moduleIdx": 9,
+    "id": "9.7",
+    "name": "renderNestedTreeMenu",
+    "title": "Створення деревоподібного меню категорій",
+    "level": "Середній рівень",
+    "goal": "Створити та повернути `<ul class=\"tree-menu\">`. Зовнішній цикл по `nodes` створює `<li>` з текстом `node.label`. Якщо у вузла є непорожній масив `children`, створити вкладений підсписок `<ul class=\"tree-submenu\">`, наповнити його внутрішнім циклом і вкласти у батьківський `li`. Якщо масив порожній — повернути `null`.",
+    "reqs": [
+      "Створити список першого рівня `ul.tree-menu`.",
+      "У зовнішньому циклі створювати елементи `li`.",
+      "Якщо є `children` — внутрішній цикл створює `ul.tree-submenu`.",
+      "Повернути створене меню."
+    ],
+    "hint": "Для вузлів з дітьми створюйте subUl = document.createElement('ul'); subUl.className = 'tree-submenu';",
+    "starterParams": "nodes",
+    "starterBody": "// Створення деревоподібного меню\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const m = renderNestedTreeMenu([{ label: 'Каталог', children: [{ label: 'Взуття' }] }]);\n          return [m.children.length, m.querySelector('.tree-submenu').children.length];\n        })()",
+        "expected": [
+          1,
+          1
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Побудувати багаторівневе меню з вкладеними підсписками за допомогою циклів.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 9,
+    "id": "9.8",
+    "name": "renderSeatMap",
+    "title": "Створення схеми глядацького залу з бронею",
+    "level": "Середній рівень",
+    "goal": "Створити та повернути `<div class=\"seat-map\">`. Зовнішній цикл по рядах `r` (від 1 до `rowsCount`) створює `<div class=\"seat-row\" data-row=\"{r}\">`. Внутрішній цикл по місцях `s` (від 1 до `seatsPerRow`) створює кнопку `<button class=\"seat\">`. Якщо рядок `\"{r}-{s}\"` присутній у масиві `reservedSeats` — призначити клас `seat--reserved` та `btn.disabled = true`, інакше `seat--available`. Повернути контейнер залу.",
+    "reqs": [
+      "Створити `div.seat-map`.",
+      "Зовнішній цикл по рядах, внутрішній — по місцях.",
+      "Перевіряти заброньованість місця та встановлювати `disabled`.",
+      "Повернути створений зал."
+    ],
+    "hint": "const id = `${r}-${s}`; if (reservedSeats.includes(id)) { btn.className = 'seat seat--reserved'; btn.disabled = true; }",
+    "starterParams": "rowsCount, seatsPerRow, reservedSeats",
+    "starterBody": "// Створення схеми залу через DOM API\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const sm = renderSeatMap(2, 2, ['1-2']);\n          return [sm.children.length, sm.querySelectorAll('.seat--reserved').length, sm.querySelectorAll('.seat--reserved')[0].disabled];\n        })()",
+        "expected": [
+          2,
+          1,
+          true
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Згенерувати інтерактивну карту місць із блокуванням зайнятих квитків.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 9,
+    "id": "9.9",
+    "name": "renderColorPaletteMatrix",
+    "title": "Створення палітри відтінків за групами",
+    "level": "Середній рівень",
+    "goal": "Створити та повернути `<div class=\"palette-matrix\">`. Зовнішній цикл по `paletteGroups` (`{ groupName, shades }`) створює блок групи `<div class=\"palette-group\">` із заголовком `<h4 class=\"palette-group__title\">groupName</h4>` та контейнером чіпів `<div class=\"palette-chips\">`. Внутрішній цикл створює для кожного відтінку `<div class=\"color-chip\">` зі стилем `style.backgroundColor = shade`. Повернути контейнер матриці.",
+    "reqs": [
+      "Створити `div.palette-matrix`.",
+      "Вкладені цикли створюють групи та чіпи відтінків.",
+      "Призначити колір через `style.backgroundColor`.",
+      "Повернути підсумкову палітру."
+    ],
+    "hint": "chip.style.backgroundColor = shade; chip.setAttribute('title', shade);",
+    "starterParams": "paletteGroups",
+    "starterBody": "// Створення матриці палітри кольорів\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const pm = renderColorPaletteMatrix([{ groupName: 'Greens', shades: ['#10b981', '#059669'] }]);\n          return [pm.children.length, pm.querySelectorAll('.color-chip').length];\n        })()",
+        "expected": [
+          1,
+          2
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Згенерувати матрицю колірних зразків для UI-дизайн системи.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 9,
+    "id": "9.10",
+    "name": "renderProductComparisonGrid",
+    "title": "Створення таблиці порівняння характеристик товарів",
+    "level": "Середній рівень",
+    "goal": "Створити та повернути `<table class=\"compare-table\">`. У шапці `thead` створити `th` для «Характеристика» та для назви кожного товару з `productsList` (`item.name`). У `tbody` для кожної характеристики з `featuresList` створити рядок `<tr>`: перша комірка `td` — назва характеристики, наступні комірки — значення `item.features[feat] ? '✓' : '—'`. Повернути таблицю порівняння.",
+    "reqs": [
+      "Створити `table.compare-table` з шапкою та тілом.",
+      "Зовнішній цикл по характеристиках, внутрішній — по товарах.",
+      "Виводити ✓ або — залежно від наявності опції.",
+      "Повернути підсумкову таблицю."
+    ],
+    "hint": "td.textContent = prod.features && prod.features[feat] ? '✓' : '—';",
+    "starterParams": "featuresList, productsList",
+    "starterBody": "// Створення таблиці порівняння\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const ct = renderProductComparisonGrid(['Wi-Fi', 'Bluetooth'], [{ name: 'A', features: { 'Wi-Fi': true } }, { name: 'B', features: {} }]);\n          return [ct.querySelectorAll('thead th').length, ct.querySelectorAll('tbody tr').length, ct.querySelectorAll('.feat-yes').length];\n        })()",
+        "expected": [
+          3,
+          2,
+          1
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Змонтувати таблицю порівняння параметрів різних модифікацій продукту.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 9,
+    "id": "9.11",
+    "name": "renderWordSearchGrid",
+    "title": "Створення сітки гри пошуку слів (Word Search)",
+    "level": "Середній рівень",
+    "goal": "Створити та повернути `<div class=\"word-grid\">`. У зовнішньому циклі по рядках `r` та внутрішньому по стовпцях `c` для кожної літери з 2D-масиву `lettersMatrix[r][c]` створити `<span class=\"word-cell\" data-row=\"{r}\" data-col=\"{c}\">L</span>`. Повернути DOM-контейнер сітки.",
+    "reqs": [
+      "Створити `div.word-grid`.",
+      "Вкладені цикли по матриці літер.",
+      "Встановлення `data-row` та `data-col`.",
+      "Повернути створену сітку."
+    ],
+    "hint": "cell.setAttribute('data-row', String(r)); cell.setAttribute('data-col', String(c)); cell.textContent = lettersMatrix[r][c];",
+    "starterParams": "lettersMatrix",
+    "starterBody": "// Створення сітки слів через DOM API\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const wg = renderWordSearchGrid([['C', 'A', 'T'], ['D', 'O', 'G']]);\n          return [wg.children.length, wg.children[0].textContent, wg.children[0].getAttribute('data-row')];\n        })()",
+        "expected": [
+          6,
+          "C",
+          "0"
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Згенерувати 2D-ігрове поле пошуку літер із прив'язкою координат до data-атрибутів.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 9,
+    "id": "9.12",
+    "name": "renderBarChartGrouped",
+    "title": "Створення групованої стовпчикової діаграми (Bar Chart)",
+    "level": "Середній рівень",
+    "goal": "Створити та повернути `<div class=\"grouped-chart\">`. Для кожної категорії з `categories` (наприклад, місяця) створити блок `<div class=\"chart-group\">` із міткою `<span class=\"group-label\">cat</span>`. Всередині групи для кожної серії з `seriesList` (`{ name, color, data }`) створити стовпчик `<div class=\"chart-bar\">`, встановити інлайн-стилі `style.height = \"{val}%\"` та `style.backgroundColor = color`. Повернути підсумкову діаграму.",
+    "reqs": [
+      "Створити `div.grouped-chart`.",
+      "Вкладені цикли по категоріях та серіях.",
+      "Встановлення `style.height` та `style.backgroundColor`.",
+      "Повернути створену діаграму."
+    ],
+    "hint": "bar.style.height = `${val}%`; bar.style.backgroundColor = s.color;",
+    "starterParams": "categories, seriesList",
+    "starterBody": "// Створення діаграми через DOM API\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const ch = renderBarChartGrouped(['Січ', 'Лют'], [{ name: 'План', color: '#ff0000', data: [80, 50] }]);\n          return [ch.children.length, ch.querySelectorAll('.chart-bar').length, ch.querySelectorAll('.chart-bar')[0].style.height];\n        })()",
+        "expected": [
+          2,
+          2,
+          "80%"
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Змонтувати візуальний віджет стовпчикової діаграми за допомогою обчислення висоти у відсотках.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 10,
+    "id": "10.1",
+    "name": "applyZebraStriping",
+    "title": "Зебра-стилізація рядків таблиці через цикл",
+    "level": "Базовий рівень",
+    "goal": "Написати функцію applyZebraStriping(tableElement, evenBg = '#ffffff', oddBg = '#f8fafc'). Знайти всі рядки таблиці в tbody. У циклі: парним рядкам (i % 2 === 0) встановити style.backgroundColor = evenBg і видалити клас 'table-row--striped', непарним — style.backgroundColor = oddBg і додати клас 'table-row--striped'. Повернути кількість оброблених рядків.",
+    "reqs": [
+      "Знайти рядки через tableElement.querySelectorAll('tbody tr').",
+      "Чергувати стилі фону та наявність класу table-row--striped.",
+      "Повернути загальну кількість рядків."
+    ],
+    "hint": "Знайдіть рядки через <a href=\"https://developer.mozilla.org/uk/docs/Web/API/Element/querySelectorAll\" target=\"_blank\">tableElement.querySelectorAll</a>. Застосуйте цикл for (let i = 0; i < rows.length; i++) з перевіркою парності i % 2 === 0.",
+    "starterParams": "tableElement, evenBg = '#ffffff', oddBg = '#f8fafc'",
+    "starterBody": "// Зебра-стилізація рядків таблиці\n  return 0;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const tbl = document.createElement('table');\n          const tbody = document.createElement('tbody');\n          for (let i = 0; i < 3; i++) tbody.appendChild(document.createElement('tr'));\n          tbl.appendChild(tbody);\n          const count = applyZebraStriping(tbl, '#ffffff', '#f0f0f0');\n          const rows = tbl.querySelectorAll('tbody tr');\n          const isEvenMatch = rows[0].style.backgroundColor === '#ffffff' || rows[0].style.backgroundColor === 'rgb(255, 255, 255)';\n          const isOddMatch = rows[1].style.backgroundColor === '#f0f0f0' || rows[1].style.backgroundColor === 'rgb(240, 240, 240)';\n          return [count, isEvenMatch, isOddMatch, rows[1].classList.contains('table-row--striped')];\n        })()",
+        "expected": [
+          3,
+          true,
+          true,
+          true
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Реалізувати динамічне чергування кольорів («зебра») для рядків таблиці за допомогою циклу <code>for</code> та DOM API.</p>\n  <p><b>🔄 Покроковий алгоритм:</b></p>\n  <ol>\n    <li>Знайти всі рядки тіла таблиці: <code>const rows = tableElement.querySelectorAll('tbody tr');</code>.</li>\n    <li>Пройтися по них циклом <code>for (let i = 0; i &lt; rows.length; i++)</code>.</li>\n    <li>Якщо індекс парний (<code>i % 2 === 0</code>) — встановити <code>rows[i].style.backgroundColor = evenBg</code> та видалити клас смугастості.</li>\n    <li>Якщо непарний — встановити колір <code>oddBg</code> та додати клас <code>table-row--striped</code> через <code>classList.add()</code>.</li>\n    <li>Повернути загальну кількість оброблених рядків <code>rows.length</code>.</li>\n  </ol>\n  <p><b>💡 Порада ментора:</b> Властивість <code>element.classList</code> надає зручні методи <code>add</code> та <code>remove</code> без ризику затерти інші існуючі класи елемента. Детальніше на <a href=\"https://developer.mozilla.org/uk/docs/Web/API/Element/classList\" target=\"_blank\" rel=\"noopener\">MDN: Element.classList</a>.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 10,
+    "id": "10.2",
+    "name": "clearContainerFast",
+    "title": "Швидке та безпечне очищення DOM-контейнера через цикл while",
+    "level": "Базовий рівень",
+    "goal": "Написати функцію clearContainerFast(containerElement). Поки у containerElement є перший нащадок (firstChild), видаляти його за допомогою removeChild(containerElement.firstChild). Повернути кількість видалених вузлів.",
+    "reqs": [
+      "Використати цикл while (containerElement.firstChild).",
+      "Видаляти вузли через removeChild().",
+      "Повернути лічильник видалених елементів."
+    ],
+    "hint": "Використовуйте цикл while (container.firstChild) та метод <a href=\"https://developer.mozilla.org/uk/docs/Web/API/Node/removeChild\" target=\"_blank\">container.removeChild(container.firstChild)</a> для безпечного та швидкого видалення всіх дітей.",
+    "starterParams": "containerElement",
+    "starterBody": "// Швидке очищення контейнера\n  return 0;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const div = document.createElement('div');\n          div.appendChild(document.createElement('p'));\n          div.appendChild(document.createElement('span'));\n          const deleted = clearContainerFast(div);\n          return [deleted, div.childNodes.length];\n        })()",
+        "expected": [
+          2,
+          0
+        ]
+      },
+      {
+        "expr": "(() => {\n          const div = document.createElement('div');\n          return clearContainerFast(div);\n        })()",
+        "expected": 0
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Видалити всі дочірні елементи контейнера найшвидшим способом за допомогою циклу <code>while</code>.</p>\n  <p><b>🔄 Покроковий алгоритм:</b></p>\n  <ol>\n    <li>Перевірити наявність контейнера: <code>if (!containerElement) return 0;</code>.</li>\n    <li>Ініціалізувати лічильник видалених елементів <code>let count = 0;</code>.</li>\n    <li>Запустити цикл <code>while (containerElement.firstChild)</code>: поки у вузла є перший дочірній елемент.</li>\n    <li>Викликати <code>containerElement.removeChild(containerElement.firstChild);</code> і збільшити лічильник.</li>\n    <li>Повернути підсумкову кількість видалених елементів.</li>\n  </ol>\n  <p><b>💡 Порада ментора:</b> Патерн <code>while (node.firstChild) node.removeChild(node.firstChild)</code> історично є одним із найшвидших та найбезпечніших способів очищення DOM-вузлів, який коректно вивільняє пам'ять. Читайте більше на <a href=\"https://developer.mozilla.org/uk/docs/Web/API/Node/removeChild\" target=\"_blank\" rel=\"noopener\">MDN: Node.removeChild</a>.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 10,
+    "id": "10.3",
+    "name": "buildNestedListTree",
+    "title": "Побудова багаторівневого дерева списків із об'єктної структури",
+    "level": "Середній рівень",
+    "goal": "Побудувати дерево списків <ul class=\"tree-root\"> із вкладеної структури treeData ({ label, children: [...] }). Для кожного вузла створити <li class=\"tree-item\">label</li>, а якщо є діти — рекурсивно або в циклі створити підсписок <ul class=\"tree-sublist\">.",
+    "reqs": [
+      "Підтримка довільної глибини вкладеності.",
+      "Класи: tree-root для головного списку, tree-sublist для дочірніх, tree-item для пунктів.",
+      "Повернути кореневий <ul>."
+    ],
+    "hint": "Створіть допоміжну функцію renderNode, яка через <a href=\"https://developer.mozilla.org/uk/docs/Web/API/Document/createElement\" target=\"_blank\">createElement('li')</a> та <a href=\"https://developer.mozilla.org/uk/docs/Web/API/Node/appendChild\" target=\"_blank\">appendChild</a> додає елементи та вкладені &lt;ul&gt;.",
+    "starterParams": "treeData",
+    "starterBody": "// Побудова дерева списків\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const data = {\n            label: 'Корінь',\n            children: [{ label: 'Дочірній 1' }, { label: 'Дочірній 2' }]\n          };\n          const tree = buildNestedListTree(data);\n          const items = tree.querySelectorAll('.tree-item');\n          return [\n            tree.tagName,\n            items.length,\n            items[0].childNodes[0].text || items[0].textContent\n          ];\n        })()",
+        "expected": [
+          "UL",
+          3,
+          "Корінь"
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Побудувати вкладене DOM-дерево списків <code>&lt;ul&gt;</code> та <code>&lt;li&gt;</code> на основі деревоподібної структури даних.</p>\n  <p><b>🔄 Покроковий алгоритм:</b></p>\n  <ol>\n    <li>Створити кореневий елемент списку <code>const ul = document.createElement('ul');</code>.</li>\n    <li>У циклі для кожного вузла створити <code>&lt;li&gt;</code> та записати текст заголовка через <code>textContent</code>.</li>\n    <li>Якщо у вузла є дочірні елементи <code>children</code> — рекурсивно або внутрішнім циклом згенерувати підсписок та додати його в <code>&lt;li&gt;</code>.</li>\n    <li>Повернути створене дерево елементів.</li>\n  </ol>\n  <p><b>💡 Порада ментора:</b> Метод <code>document.createElement()</code> створює \"живий\" об'єкт DOM-елемента у пам'яті браузера, який потім монтується в дерево методом <code>appendChild()</code>. Докладніше на <a href=\"https://developer.mozilla.org/uk/docs/Web/API/Document/createElement\" target=\"_blank\" rel=\"noopener\">MDN: Document.createElement</a>.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 10,
+    "id": "10.4",
+    "name": "renderStepWizard",
+    "title": "Покроковий майстер (Step Wizard) з індикатором активного кроку",
+    "level": "Базовий рівень",
+    "goal": "Створити <div class=\"wizard-container\">. У циклі по steps створити кроки <div class=\"wizard-step\" data-step=\"i+1\">: якщо i < currentStepIndex — клас 'wizard-step--done' та стиль borderColor: 'rgb(16, 185, 129)'; якщо i === currentStepIndex — 'wizard-step--active' та 'rgb(99, 102, 241)'; якщо i > currentStepIndex — 'wizard-step--pending' та 'rgb(203, 213, 225)'.",
+    "reqs": [
+      "Встановити data-step з номером від 1.",
+      "Встановити відповідний клас стану (done, active, pending).",
+      "Встановити відповідний колір рамки borderColor."
+    ],
+    "hint": "Порівнюйте індекс циклу i з currentStepIndex.",
+    "starterParams": "steps, currentStepIndex",
+    "starterBody": "// Покроковий майстер\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const w = renderStepWizard(['Крок 1', 'Крок 2', 'Крок 3'], 1);\n          const steps = w.querySelectorAll('.wizard-step');\n          return [\n            steps[0].classList.contains('wizard-step--done'),\n            steps[1].classList.contains('wizard-step--active'),\n            steps[2].classList.contains('wizard-step--pending')\n          ];\n        })()",
+        "expected": [
+          true,
+          true,
+          true
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Змонтувати покроковий майстер (Wizard UI) з визначенням статусів: завершений, активний або очікує.</p>\n  <p><b>🔄 Покроковий алгоритм:</b></p>\n  <ol>\n    <li>Створити контейнер <code>document.createElement('div')</code> з класом <code>step-wizard</code>.</li>\n    <li>У циклі <code>for (let i = 0; i &lt; steps.length; i++)</code> створити елемент кроку <code>.wizard-step</code>.</li>\n    <li>Якщо <code>i &lt; currentStepIndex</code> — додати клас <code>step--completed</code>.</li>\n    <li>Якщо <code>i === currentStepIndex</code> — додати клас <code>step--active</code>.</li>\n    <li>Інакше — додати клас <code>step--pending</code>.</li>\n    <li>Повернути підсумковий контейнер.</li>\n  </ol>\n</div>"
+  },
+  {
+    "moduleIdx": 10,
+    "id": "10.5",
+    "name": "highlightKeywordsInElements",
+    "title": "Масове підсвічування ключових слів тегом <mark>",
+    "level": "Середній рівень",
+    "goal": "Пройтися по елементах elementsList у циклі for і для кожного елемента перебрати список keywords. За допомогою розбиття тексту на частини (split) та об'єднання (join) замінити всі збіги на <mark class=\"kw-highlight\">слово</mark>. Повернути сумарну кількість замінених слів.",
+    "reqs": [
+      "Зовнішній цикл по elementsList та внутрішній цикл по keywords.",
+      "Використати методи рядків split та join замість складних регулярних виразів.",
+      "Обгорнути знайдені слова в <mark class=\"kw-highlight\">слово</mark>.",
+      "Повернути загальну кількість знайдених та підсвічених слів."
+    ],
+    "hint": "Для кожного елемента пройдіться по keywords. Застосуйте <a href=\"https://developer.mozilla.org/uk/docs/Web/JavaScript/Reference/Global_Objects/String/split\" target=\"_blank\">string.split(word)</a>: кількість входжень — (parts.length - 1). Потім з'єднайте частини через <a href=\"https://developer.mozilla.org/uk/docs/Web/JavaScript/Reference/Global_Objects/Array/join\" target=\"_blank\">parts.join('<mark class=\"kw-highlight\">' + word + '</mark>')</a>.",
+    "starterParams": "elementsList, keywords",
+    "starterBody": "// Підсвічування ключових слів через цикли та split/join\n  return 0;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const p1 = document.createElement('p'); p1.textContent = 'JavaScript цикли while та for';\n          const p2 = document.createElement('p'); p2.textContent = 'Тут немає збігів';\n          const count = highlightKeywordsInElements([p1, p2], ['while', 'for']);\n          return [count, p1.innerHTML.includes('<mark class=\"kw-highlight\">while</mark>')];\n        })()",
+        "expected": [
+          2,
+          true
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Знайти та підсвітити ключові слова в тексті DOM-елементів за допомогою тегу <code>&lt;mark&gt;</code>, використовуючи зрозумілі цикли без складних регулярних виразів.</p>\n  <p><b>🔄 Покроковий алгоритм:</b></p>\n  <ol>\n    <li>Перевірити наявність елементів та ключових слів. Ініціалізувати лічильник знайдених збігів.</li>\n    <li>Пройтися циклом по кожному елементу з <code>elementsList</code>.</li>\n    <li>Для кожного елемента перебрати масив <code>keywords</code> у внутрішньому циклі.</li>\n    <li>Підрахувати збіги та замінити слово на підсвічену розмітку: розбити текст методом <code>text.split(kw)</code> і з'єднати через <code>&lt;mark class=\"kw-highlight\"&gt;${kw}&lt;/mark&gt;</code>.</li>\n    <li>Оновити <code>el.innerHTML</code> та повернути загальну кількість підсвічувань.</li>\n  </ol>\n  <p><b>💡 Порада ментора:</b> Комбінація <code>text.split(sub).join(replacement)</code> — простий та елегантний спосіб масової заміни підрядків без використання регулярних виразів. Детальніше на <a href=\"https://developer.mozilla.org/uk/docs/Web/JavaScript/Reference/Global_Objects/String/split\" target=\"_blank\" rel=\"noopener\">MDN: String.prototype.split</a>.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 10,
+    "id": "10.6",
+    "name": "toggleElementsVisibility",
+    "title": "Фільтрація видимості елементів за предикатом",
+    "level": "Базовий рівень",
+    "goal": "У циклі for для кожного елемента з elementsList перевірити predicateFn(el): якщо true — встановити style.display = '' та зняти атрибут 'hidden'; якщо false — встановити style.display = 'none' та додати атрибут hidden='true'. Повернути кількість видимих елементів.",
+    "reqs": [
+      "Обхід елементів у циклі for.",
+      "Керування display та HTML-атрибутом hidden.",
+      "Повернути кількість елементів, що залишилися видимими."
+    ],
+    "hint": "Використовуйте <a href=\"https://developer.mozilla.org/uk/docs/Web/API/Element/removeAttribute\" target=\"_blank\">removeAttribute('hidden')</a> для показу та <a href=\"https://developer.mozilla.org/uk/docs/Web/API/Element/setAttribute\" target=\"_blank\">setAttribute('hidden', 'true')</a> для приховування.",
+    "starterParams": "elementsList, predicateFn",
+    "starterBody": "// Фільтрація видимості елементів\n  return 0;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const c1 = document.createElement('div'); c1.dataset.status = 'active';\n          const c2 = document.createElement('div'); c2.dataset.status = 'inactive';\n          const visible = toggleElementsVisibility([c1, c2], el => el.dataset.status === 'active');\n          return [visible, c1.style.display, c2.style.display, c2.hasAttribute('hidden')];\n        })()",
+        "expected": [
+          1,
+          "",
+          "none",
+          true
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Динамічно показувати або приховувати список DOM-елементів на основі функції-предиката в циклі.</p>\n  <p><b>🔄 Покроковий алгоритм:</b></p>\n  <ol>\n    <li>У циклі <code>for (const el of elementsList)</code> викликати <code>predicateFn(el)</code>.</li>\n    <li>Якщо функція повертає <code>true</code> — показати елемент: <code>el.style.display = '';</code> та збільшити лічильник видимих.</li>\n    <li>Якщо <code>false</code> — приховати: <code>el.style.display = 'none';</code>.</li>\n    <li>Повернути кількість видимих елементів.</li>\n  </ol>\n</div>"
+  },
+  {
+    "moduleIdx": 10,
+    "id": "10.7",
+    "name": "reorderListByAttribute",
+    "title": "Сортування вузлів у DOM за значенням data-атрибута",
+    "level": "Середній рівень",
+    "goal": "Відсортувати дочірні елементи parentListElement за зростанням значення атрибута attrName (числового або рядкового) і в циклі повторно вставити їх у parentListElement через appendChild(). Повернути parentListElement.",
+    "reqs": [
+      "Зібрати дочірні вузли в масив через цикл for або Array.from.",
+      "Відсортувати елементи за значенням getAttribute(attrName).",
+      "У циклі повторно вставити відсортовані елементи через appendChild."
+    ],
+    "hint": "Метод <a href=\"https://developer.mozilla.org/uk/docs/Web/API/Node/appendChild\" target=\"_blank\">appendChild</a> переміщує існуючий DOM-вузол у кінець. Для сортування можна використати метод <a href=\"https://developer.mozilla.org/uk/docs/Web/JavaScript/Reference/Global_Objects/Array/sort\" target=\"_blank\">Array.prototype.sort</a> або подвійний цикл (bubble sort) з Модуля 6.",
+    "starterParams": "parentListElement, attrName",
+    "starterBody": "// Сортування елементів у DOM\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const ul = document.createElement('ul');\n          const li1 = document.createElement('li'); li1.setAttribute('data-order', '3');\n          const li2 = document.createElement('li'); li2.setAttribute('data-order', '1');\n          const li3 = document.createElement('li'); li3.setAttribute('data-order', '2');\n          ul.appendChild(li1); ul.appendChild(li2); ul.appendChild(li3);\n          reorderListByAttribute(ul, 'data-order');\n          return Array.from(ul.children).map(c => c.getAttribute('data-order'));\n        })()",
+        "expected": [
+          "1",
+          "2",
+          "3"
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Відсортувати дочірні DOM-елементи списку за числовим значенням атрибута без перестворення вузлів.</p>\n  <p><b>🔄 Покроковий алгоритм:</b></p>\n  <ol>\n    <li>Отримати масив дочірніх елементів: <code>Array.from(listElement.children)</code>.</li>\n    <li>Відсортувати їх за зростанням атрибута: <code>Number(a.getAttribute(attributeName)) - Number(b.getAttribute(attributeName))</code>.</li>\n    <li>У циклі <code>for (const el of items)</code> викликати <code>listElement.appendChild(el);</code>.</li>\n    <li>Повернути відсортований контейнер.</li>\n  </ol>\n  <p><b>💡 Порада ментора:</b> Якщо елемент уже існує в DOM, виклик <code>appendChild()</code> автоматично переміщує його на нову позицію в кінець контейнера, а не створює дублікат. Детальніше на <a href=\"https://developer.mozilla.org/uk/docs/Web/API/Node/appendChild\" target=\"_blank\" rel=\"noopener\">MDN: Node.appendChild</a>.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 10,
+    "id": "10.8",
+    "name": "paginateChildren",
+    "title": "Клієнтська пагінація дочірніх елементів контейнера",
+    "level": "Базовий рівень",
+    "goal": "Маючи containerElement, у циклі for по його дітях (0..children.length-1) показати лише елементи поточної сторінки activePage розміром pageSize: якщо i в межах [(activePage - 1) * pageSize, activePage * pageSize) — style.display = '', інакше style.display = 'none'. Повернути кількість видимих елементів.",
+    "reqs": [
+      "Обчислити межі сторінки startIdx та endIdx.",
+      "Встановити style.display: '' для активної сторінки та 'none' для інших.",
+      "Повернути кількість видимих елементів."
+    ],
+    "hint": "startIdx = (activePage - 1) * pageSize; endIdx = startIdx + pageSize;",
+    "starterParams": "containerElement, pageSize, activePage",
+    "starterBody": "// Клієнтська пагінація\n  return 0;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const div = document.createElement('div');\n          for (let i = 0; i < 5; i++) div.appendChild(document.createElement('span'));\n          const page1Count = paginateChildren(div, 2, 1);\n          const visiblePage1 = Array.from(div.children).filter(c => c.style.display !== 'none').length;\n          const page3Count = paginateChildren(div, 2, 3);\n          return [page1Count, visiblePage1, page3Count];\n        })()",
+        "expected": [
+          2,
+          2,
+          1
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Реалізувати клієнтську пагінацію дочірніх елементів контейнера, показуючи лише елементи обраної сторінки.</p>\n  <p><b>🔄 Покроковий алгоритм:</b></p>\n  <ol>\n    <li>Розрахувати діапазон індексів: <code>const start = (currentPage - 1) * pageSize;</code> та <code>const end = start + pageSize;</code>.</li>\n    <li>Отримати список дочірніх елементів <code>containerElement.children</code>.</li>\n    <li>У циклі <code>for (let i = 0; i &lt; items.length; i++)</code>: якщо <code>i &gt;= start &amp;&amp; i &lt; end</code> — встановити <code>display = ''</code>, інакше — <code>display = 'none'</code>.</li>\n    <li>Повернути кількість видимих на поточній сторінці карток.</li>\n  </ol>\n</div>"
+  },
+  {
+    "moduleIdx": 10,
+    "id": "10.9",
+    "name": "batchUpdateStyles",
+    "title": "Масове оновлення CSS-стилів елементів через цикл",
+    "level": "Базовий рівень",
+    "goal": "У циклі по elementsList застосувати до кожного елемента всі властивості з stylesList (двовимірний масив пар [['property', 'value'], ...], наприклад [['color', '#ffffff'], ['opacity', '0.8']]) за допомогою внутрішнього циклу по парах властивість-значення. Повернути elementsList.",
+    "reqs": [
+      "Зовнішній цикл по елементах elementsList.",
+      "Внутрішній цикл по парах [prop, val] масиву stylesList.",
+      "Встановити el.style[prop] = val.",
+      "Повернути початковий масив elementsList."
+    ],
+    "hint": "Використовуйте вкладений цикл по масиву пар stylesList: for (let j = 0; j < stylesList.length; j++) { const [prop, val] = stylesList[j]; el.style[prop] = val; }.",
+    "starterParams": "elementsList, stylesList",
+    "starterBody": "// Масове оновлення стилів через масив пар\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const d1 = document.createElement('div');\n          const d2 = document.createElement('div');\n          batchUpdateStyles([d1, d2], [['color', '#ffffff'], ['opacity', '0.8']]);\n          const isColorSet = d1.style.color === '#ffffff' || d1.style.color === 'rgb(255, 255, 255)';\n          return [isColorSet, d2.style.opacity];\n        })()",
+        "expected": [
+          true,
+          "0.8"
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Застосувати пачку CSS-стилів до списку елементів за допомогою простих масивів пар властивість/значення.</p>\n  <p><b>🔄 Покроковий алгоритм:</b></p>\n  <ol>\n    <li>Перевірити наявність масиву елементів та масиву стилів <code>stylesEntries</code>.</li>\n    <li>Зовнішній цикл проходить по елементах з <code>elementsList</code>.</li>\n    <li>Внутрішній цикл проходить по парах <code>[prop, val]</code> з масиву <code>stylesEntries</code>.</li>\n    <li>Призначити стиль безпосередньо у DOM: <code>el.style[prop] = val;</code>.</li>\n    <li>Повернути оновлений список елементів.</li>\n  </ol>\n  <p><b>💡 Порада ментора:</b> Використання масиву пар виду <code>[['color', 'red'], ['padding', '10px']]</code> дозволяє працювати виключно з базовими масивами та циклами без залучення складних методів об'єктів.</p>\n</div>"
+  },
+  {
+    "moduleIdx": 10,
+    "id": "10.10",
+    "name": "extractTableData",
+    "title": "Зчитування даних із HTML-таблиці назад у масив об'єктів",
+    "level": "Середній рівень",
+    "goal": "Зчитати дані з <table>: перший цикл по thead th зчитує ключі колонок (наприклад, ['name', 'score']). Другий зовнішній цикл по tbody tr та внутрішній по td формує масив об'єктів [{ name: '...', score: '...' }]. Повернути масив об'єктів.",
+    "reqs": [
+      "Зчитати ключі з th заголовків через цикл for.",
+      "Пройтися по рядках і клітинках tbody за допомогою вкладених циклів for.",
+      "Повернути масив зчитаних об'єктів."
+    ],
+    "hint": "Використовуйте <a href=\"https://developer.mozilla.org/uk/docs/Web/API/Element/querySelectorAll\" target=\"_blank\">querySelectorAll</a> для пошуку елементів та <a href=\"https://developer.mozilla.org/uk/docs/Web/JavaScript/Reference/Global_Objects/String/Trim\" target=\"_blank\">textContent.trim()</a> для очищення зайвих пробілів.",
+    "starterParams": "tableElement",
+    "starterBody": "// Парсинг таблиці в масив об'єктів\n  return [];",
+    "tests": [
+      {
+        "expr": "(() => {\n          const tbl = document.createElement('table');\n          const thead = document.createElement('thead');\n          const trH = document.createElement('tr');\n          const th1 = document.createElement('th'); th1.textContent = 'name';\n          const th2 = document.createElement('th'); th2.textContent = 'score';\n          trH.appendChild(th1); trH.appendChild(th2);\n          thead.appendChild(trH);\n          tbl.appendChild(thead);\n          const tbody = document.createElement('tbody');\n          const trD = document.createElement('tr');\n          const td1 = document.createElement('td'); td1.textContent = 'Anna';\n          const td2 = document.createElement('td'); td2.textContent = '100';\n          trD.appendChild(td1); trD.appendChild(td2);\n          tbody.appendChild(trD);\n          tbl.appendChild(tbody);\n          return extractTableData(tbl);\n        })()",
+        "expected": [
+          {
+            "name": "Anna",
+            "score": "100"
+          }
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Зчитати текстові дані з таблиці та перетворити їх у структурований масив об'єктів за допомогою циклів.</p>\n  <p><b>🔄 Покроковий алгоритм:</b></p>\n  <ol>\n    <li>Знайти назви колонок: <code>tableElement.querySelectorAll('thead th')</code> та зберегти їхній текст у масив <code>headers</code>.</li>\n    <li>Знайти рядки: <code>tableElement.querySelectorAll('tbody tr')</code>.</li>\n    <li>У циклі по рядках обійти всі комірки <code>tr.querySelectorAll('td')</code>.</li>\n    <li>Сформувати для кожного рядка об'єкт: <code>rowObj[headers[c]] = td.textContent.trim();</code>.</li>\n    <li>Додати сформований об'єкт у підсумковий масив та повернути його.</li>\n  </ol>\n</div>"
+  },
+  {
+    "moduleIdx": 10,
+    "id": "10.11",
+    "name": "wrapConsecutiveElements",
+    "title": "Групування сусідніх елементів одного типу в контейнери",
+    "level": "Складний рівень",
+    "goal": "Знайти в parentElement сусідні елементи з тегом targetTagName і згрупувати їх у контейнери <div class=\"wrapperClass\"> через цикл while. Повернути parentElement.",
+    "reqs": [
+      "Обхід дочірніх вузлів через цикл while.",
+      "Сусідні елементи вкладаються в спільний div wrapperClass.",
+      "Повернути parentElement."
+    ],
+    "hint": "Створіть div-обгортку при першому знайденому елементі і додавайте наступні, доки збігається тег.",
+    "starterParams": "parentElement, targetTagName, wrapperClass = 'group-wrap'",
+    "starterBody": "// Групування елементів\n  return null;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const parent = document.createElement('div');\n          const p1 = document.createElement('p'); p1.textContent = '1';\n          const p2 = document.createElement('p'); p2.textContent = '2';\n          const span = document.createElement('span'); span.textContent = 'x';\n          parent.appendChild(p1); parent.appendChild(p2); parent.appendChild(span);\n          wrapConsecutiveElements(parent, 'p', 'group');\n          return [parent.children.length, parent.children[0].className, parent.children[0].children.length];\n        })()",
+        "expected": [
+          2,
+          "group",
+          2
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Згрупувати підряд розташовані однакові елементи у спільний контейнер-обгортку за допомогою циклу <code>while</code>.</p>\n  <p><b>🔄 Покроковий алгоритм:</b></p>\n  <ol>\n    <li>Перевірити валідність <code>parentElement</code>. Перевести цільовий тег у верхній регістр.</li>\n    <li>Почати з першого нащадка: <code>let current = parentElement.firstElementChild;</code>.</li>\n    <li>У циклі: якщо <code>current.tagName === target</code> — створити обгортку <code>wrapper = document.createElement('div')</code> з потрібним класом.</li>\n    <li>Вставити обгортку перед початковим елементом через <code>parentElement.insertBefore(wrapper, current)</code>.</li>\n    <li>У внутрішньому циклі <code>while</code> переміщувати всі послідовні однакові елементи всередину обгортки через <code>wrapper.appendChild(current)</code>.</li>\n    <li>Повернути батьківський елемент.</li>\n  </ol>\n</div>"
+  },
+  {
+    "moduleIdx": 10,
+    "id": "10.12",
+    "name": "animateElementsStagger",
+    "title": "Каскадне призначення затримки анімації (Stagger)",
+    "level": "Середній рівень",
+    "goal": "Для кожного елемента в elementsList у циклі встановити інлайн-стиль animationDelay = `${i * stepDelayMs}ms` та додати клас 'animate-stagger'. Повернути максимальну затримку (в мілісекундах) останнього елемента.",
+    "reqs": [
+      "Цикл for від 0 до elementsList.length - 1.",
+      "Встановлення animationDelay у мілісекундах (наприклад, '0ms', '100ms').",
+      "Додавання класу animate-stagger.",
+      "Повернути затримку останнього елемента (або 0 для порожнього масиву)."
+    ],
+    "hint": "el.style.animationDelay = `${i * stepDelayMs}ms`; el.classList.add('animate-stagger');",
+    "starterParams": "elementsList, stepDelayMs = 100",
+    "starterBody": "// Каскадне призначення анімації\n  return 0;",
+    "tests": [
+      {
+        "expr": "(() => {\n          const el1 = document.createElement('div');\n          const el2 = document.createElement('div');\n          const el3 = document.createElement('div');\n          const max = animateElementsStagger([el1, el2, el3], 150);\n          return [max, el1.style.animationDelay, el2.style.animationDelay, el3.style.animationDelay, el1.classList.contains('animate-stagger')];\n        })()",
+        "expected": [
+          300,
+          "0ms",
+          "150ms",
+          "300ms",
+          true
+        ]
+      }
+    ],
+    "explanation": "<div class=\"teacher-expl-section\">\n  <p><b>🎯 Мета та ідея розв'язку:</b> Реалізувати каскадну затримку анімації (Stagger Effect) для списку елементів через цикл <code>for</code>.</p>\n  <p><b>🔄 Покроковий алгоритм:</b></p>\n  <ol>\n    <li>Перевірити наявність елементів у <code>elementsList</code>.</li>\n    <li>У циклі <code>for (let i = 0; i &lt; elementsList.length; i++)</code> розрахувати затримку в мілісекундах: <code>const delay = i * stepDelayMs;</code>.</li>\n    <li>Встановити інлайн-стиль: <code>el.style.animationDelay = `${delay}ms`;</code>.</li>\n    <li>Додати клас анімації: <code>el.classList.add('animate-stagger');</code>.</li>\n    <li>Повернути максимальну затримку (затримку останнього елемента).</li>\n  </ol>\n</div>"
   }
 ];
 
@@ -5414,5 +6466,41 @@ export const ENCRYPTED_SOLUTIONS = {
   "7.12": "58f54e914a561f415f925f3f:f01e32ede5d94083b0d673893390b378:ae013e7444bc09f7e06ead7249ee2df1b47dee8240e7642df1da74e08627bd612105044a917e8d1b5185e8cb06b0f238b4ea316c52228bcd681d2445823738cd94bd4768692514a6406b51c59067a4e17efe64a67f41fb5d3380683e9d7e13c8c5c465f1db67ff3525ce864897ec9a07bf62decd8328eb51efe940ac446008cea98dd70b23897e947023202b82c3b75b44e0d8412824a7469e00823aca87df859a9192d8973d5013bd3cbeb4f288aac1bbcc3b7b702fb018733e622b21e3ff4ec8ef14a5adc9002abc71d2ea69c3c743f8c10c35c6961bfbd83460238082c0055cd1308fa70dcb943d9e436acece4a48f3c1460d7500897822ab6b69ded3901b59630f777d74288f5bc73b54abc5bffd77d3ed2f22ea8e06e163471500fe1953ae7d854a5d5afaa5d546849f860962d1e68461dde657b5add17319f3669938be06487a84316a1ccd6634b21e78abc98bec24f503f30ba3f17373f42961a2c1561105ed6d16d724d4e36d88df480c5308e30647dcbabf50cea542646280b6cac63cca956cc7d670cec8c975d14d23dd1606084df1fd22f529f8c36274f8a2d2d5e90785857fb6a442f6487dd9993a40caa5a9c029268c17513baf1c0fa54b918c95e8b25f10ea3b7b5e06aa3c25c5dacd8e2d4769c4af6288635e64ecd70c3ee6062f807c1d6e89c8e23036582e1777c33dd7f82bae89723994bb606f207b1676487699102c8dc811bbd544abc410138fe49bc4a94ff55e69de035ca00303fc0bfd2316b14b00a44e4c5b434b9de283dd9cc496849d4a61cc2e6a31fe43c24fe01d93f54400f556989e4b90bb9fb970ccf9a8f557a36ba081d4d8b07b268122e4e40b30cdb3450796aa18802bbd3ddc213050ef11e417ad7c657f672b9a84570dd84d81bf5eef3172813d8ba4f256030d700fc9a011b9672578c8f004284ef23a08b3e172f76ec9e60ec620e4c932674231ee41576f729f2e8306adb4f35249b9bfc5767b3d34b888bfa397925a9fe6ac3a120cf52c247597fc95a2bcf1fe5d37eb0cdddfdfb5e72666974fa0558f79dc6b07ac63f5434d35c603dcbb36057613df559427115a5578e7fb93589babe884f648f59b5fe685422517a33227569cb298ef3aa8dd349362519b94dfe55660998135f95f8ba498ed39877c8a97816b1c90ab21aa607067df8f3ec7223b647c25d4340e244aba3d444321463c285b0953b62c2f65ba2afbb853188d5ca2ee3296bbcbb96fca9b9a84d02d3c94d85a785adbe66ebd07c83ef38048282ecb4febe156e1ffba9a42b25cd8f80d895f9c8652bd35b79a418589b2c8d4f0e045a66d8c774831a677d7d5ef537772b4a53e987532de07918df4bfac9787ad553f94cf084455423d8ace5bbecd103a870246f8d756e39d8f872720b2388189bc9705de2f3e91ed42f30b0d825e5f6e346e77aa7fcdf14bd6190f9fffce72081e67772d5b645bc8a73c3253d1d3f7e49f23e83bf0bb621e7237c2524db9ae29baa9844fae36045f8a5bb1b442a71e130d31bb150c16e4ebd9b2b9f22c42bf1254fb1538afc4fdf8d43667a420e4a7ed5d1bb6ba7a8617924bed56db872cde60d1115e8d825063bc8063aca15defdce57b8ab187066352496f3859870538327743287eb2efdd26bafc631c9c710863a70db924cd06ec9d91bd1dc22ad9c640e5155f055998be1cb892d4d5a74f52aa2b0719381cca8b4e2dae2cdb92a380f9b7f3407262745f78270bc9f1ae8b32a1155d6b038d3bf05bae5dec742219327c0ce7c58aa3000d4ef0c7dbcc4c71a77488437111f77171e21c78de0d7223ba1d97db90c267bb841b1dde5cea7d841950c6e0eb622d30a56d2dd29b3f47ddd3c6f337b11943e9b8e0b170b7cdbfb0ecea34113e9e079504c1c588594d31abc11aec28014c216f0b753bd9656d8225cbfcef876f4e466c5404ad2a6c276bf8d27c2b403dc30250e96b694d436fce1dbde9e72709ff540beb4c9d37be119f102a19a5e5bdcf751b6f60d592ffe9ee06c8e50d35e07c6e228552bc0ed709d7c6b030f19201356aa62c5163d536e809128017bafcaeb9774db604e76423d4bdc6562bc67ef9a60c00f178e6ed5d2a50dd8f62a4281885c8b40a03f063eb66705ab0e7bed11d97ccd1ca15ae5778bdcb857ec6482b553b268b5592b75072adbcf7bff9dc44666372c4a2223a47b46add389f652ee7c5390bfcb841007dcd49307d94b1266df226e563297ab904ab2877cd0c5e77026b847c56b16eb04fee5a8dfdf01e9adfe61d059ed197166f8479a195c235a25366db3eea2926a35f2f84626191bef9d2082a537e999a06f01e7c2825365b32c445f4f0895815fa2ff4e80b5fdb25e24c896dae8f10c34efd6d13bf56363c6eb48c50e83033cb28e7e74361670e1f05ff36593a788702aee675aa6f5632cb60462e57ef7f5dce9ec6d86669147577e1d13cb4a7ac8774e6df5cb2d2df041ef9b176d15d9f78e3a084fb18bca1afcebe3b0712f350304537de68e8d1d78cb6fe87319a0ab7bb83b275085990094502a5925749ddff33d0b4d2212ca2833b40260888bf5f21fc923742a99795c954392bf1e33eecf3a33765c351e53a9ae733f2c607a350248399a543aecad3ed0ed5026ac5a46b03493d8be8d610bc2832b96f21f5a713ebda4e93c6c97af51fbc93f0c0aca53feb983d6be2bb20b62490bbf40dc3a4734c07a7a62609d620997596250d0667fdb4cc2b66896344187380b6321832c3c6b8d6efd7026dff4c86cc95b9f35781a4f96c7ec017cd78872fcf14be6b509090deb8544211f1902ba006e7fc0b386158c88d4d36d59f7c79370359c4a68b50ae6bdd5f79a1441c7e8e3c71671e6ca6e41c9a3a0f383107389ce0327b8ee7c15c609091688e564223f121524b248e1a15059229d921b50eaf8f0b05c9d97ef145844dadb277035bdb27a7f31e2d2199bd3215155dff6d9ea2481d9e8c3d722fd72da43d29f4b11a4a3e9258ead69077d9fbea901ccd34ea2eb5578e6de6dc9874da8615374208aa1ee069c017d616a847678fafe31dc3ad98d866e6beaf678fd6c5be5fb74e8dd669a035696e3461d95d0b825daf0958eaa916fa96531526effff930c6cb5f3cb4a0657c523f26186e99a9374b56a5c5112aabd53f45732bb4390504e98ded01705ef4c7e04eb69511719af39587c5d6145edfad9915e34722487006aaedffe05d5fb91726eddcb807c36ca400877dd18677089941941428331b63afeb4d6ccb0333a33e0bb2b15cd07d727ec23b3256b4a468a0c34fd01712a3578e28d161afe81989822b9a07c5879c26269f64d4c908ec2a887dcb4a3fca57c6386affe83a1fc5424fc098789be1266a9e516367c3dd76d9359a0f2a2b24b111c98bbe9b40e5fc59b133c7b3bcbcb477535e8d5f6f0e165f66287f8dd7771f28dcc0896409459c06264ecfebc05c2ed2700b5f29148625c117c6593071b31f59b7891bf12079e181b1305d9227788b51d820ccea65b7a7fd599cce23ad7db532f5619c80ff4db424d40ea538ab551e0c5a9525d60c8a3f4ea7215b9754baee0550162d0a57aeb8c72b1514399b7f4b1d768a22a3fe5b6d697acf19324fea2e870ebafc589fbede656afbefdeb05f0f0fd5887348987d7961b628aa035d05dd622645fb9a6aa14c61193df862e8a551e6d0631b4499b2",
   "7.13": "4fe744b8382a5f2c66f6bb63:e44c0af60a4b7bf06dd434b49c35f88c:d9f0b2e7325b1388876642dc82e9930e30ac7cbf1016bdb6cab98de4fb298181e5e0ae5eef7a5b91de02868d5fe827a547b1c1d678b952913786866a169efe473ab30cff46c32a3a7180c0c488b695cc1eac447d1b7637c6c8314b7b9cae38d7eded339ef7758a2f16921ed87390130095789d59514a24f437e6fe95ead83c5d761b888ef049039e1465905570c766bd2d387d1736c92185ab0dba72ec55de07a49935c7a3bd98e8b78434583254c4d487eb53fbdfeef54a4c23c26e6d02038838351ead22f8caed1851927bb8ca994572ae678eb768744f4b95b988660dde68377bed8ad8d861be8117c4c52811ad256b0e107293c30ca693460042199d32501b1461c2e9800cf19452c8913ea7423c4ea9affaa2ca8d962628d0300203427bb642379498e111d453016d2f7433bc3f0eb20488037c855d90396accf9126377fd23e1e78221ad1766b923d27c2c47d1217164aa192d0ba30d37432272dd88dd4b7e0defa3b43f926ea8a120450d64a9390d6065d030b9219b4349ad3f1981eb437ede8e41489540f03cfbaa90addda4872a964eb40ae47801c58e0700747824058c3709c053b418fb9f3ec3874eb1b474fb19731396d3d98cc32d4543c83e80cb3a4df3554acbba5ad732fc958d1ff57654a2dd8b20193ab62c3906ec239f9950ef4bf64a65eb0ef4085ffc9e9d999155b72ea06ee2e06d769344539e76f392a282a19b6b34411f095360370cc8738f5d9f4fee1bd896542dd7017e1752473031a899a46bec34ced1e058a88eb1161592b2dffc73cc27d78d929ae53c5f8d9b6d13c0d9015399db21d7d4b2def1f5a15fa8a7b4d849408ec1a407b6253de6bbcf05f08f12d3ead8dd7739b6f64de3bdfe8f928cd3377010a230116b393a2ff6f1d4138072c9a9e958b2d8c1631184bf96d1141bb60309ac93559f5eeb714ccdc38a0c9d4bf9ecc673475ac1c8118796ebc5e799032ae44207c65e3d34aa95cd50f27f8c79238d31e81f808189623c88ef418a3e066fed729256e052d203686f94c0c6bd60242c8ef5f21d958bdee756f8563e588b27f64a2fc2becf383ac962b30e2b2bf22b5ab1cced2b40ecd1e29a94b33fae60e00184e97e170a2fe615f97ad5b80c997a67b1d8bac1a79f7f858fd6612669cd56f96a6020c1b586ca2fbb86bf10a0fe054d70d74937d1d147fc9f8d78034a371baca66ec55efbec86f17498cb549c600c2faeb0d70cdf82e59e477235a0fe7376bf68685916a0a0d67d02fd648f37f1b355c93f3fe180bd54ebd655db35e81dfa2dc7359c08eae8ad5db0871748409c3e7dd97cf7eeb6dfc4a16cd693423378d32fe24a797e094d68225658b0cb5f360c4b264ec3fd934281e6c9f60ddd190af986ca01ac3e9ba1d341bba75b1f8ba8b0461e1fe124662c4cd57e783990046443baab0d198c55535d3c95c9038af29d80c9e29fcf074c9887a302c7ebe9ac1996f36911eac20670436c64eec58488dfabec4fec28f389d97166949228aab75f7a0aae03364548ffdc8635cc03c1a548d1b0053b81fb6b4684a64c1ec380941462f176b32c5d0093752d46554b615aa919eb33f3c90eb79f67721f3ff1eb7497bfc80700e24ddf879c90cdb338058f84184dd6bd6d314ac546a305e22356b824345cf2dbaa117aaab2326117fa9a8e40dc197f5a8dc9f9bc7e39fe09eda4fb238d493206678592fcf38dd3a480bd6b591cf3f307f183e4223534e4d3925403851e8e6fc5c3c02002b564f8bb69ae8ad0a1a9bb85743db450fddbcd16a5753bf7936b017e074cdefa5ee5d70482e974081df70796805d4619df6b26448b4d136c50abcfeb40839f2b4c5fcece81dc4c88ab0c16c6cd8fe0768585a21d8e38002717a15b9a25de25138bcde9bb69c9b9ed9941e7c718835e15fa9eaf6d760bcc5adfb6e3d9b0faadadf6046994c158bb8edf71c2a03d67f3f36a06c4262074b6858b27c60aba0afec3279c4dc0423be18676d2cd729d4b94d3e37b0418dae89b22546547e9d9384067147247b075cdf5879b0371529c502b1d487c3877423d226072687d32b7dbd012c98429a42629c0128594e8fb88877c3411bf8594c608bf3b88762cf0dbc155fa72d2908462fa1c33e23c311710b519d13ee6ceb75f14272d0eb5b17a5990d2340b677dcd5bdd015dfce9965c7f7c984fa74d124bc7f89cb2ccaf3c4789f5f37166a60947e98b4c4fbc39d37fd3ff13a5e00994dca3b8d3416a5421e172efc9cc0616d915f5c306083df45ef19442ef603b11b8d35d0bb0fef77d9d5cdfce73b77e326e45992527c870714eabae8641c203b21efc97e6244d611c59f71440fbae0ca234f4abac2df1eb4337fd0bb115f2fcedfb7fd92b91f2cde4160ead72c1f43374aa8ede4f310c636d418bf3693d8afc1f49857025bc38ef64c7bb8f4e9db243facdc4d95464b14c5b55ed0f33fd09bf3c934d4fb841f67f33ef96089c11b9990219f6b52e791609443091e4f4cf4f46a954f78e34af5c83f3f0402c7b2f30f84a5deb5fbe65869f388e0d003e58d19a4be93f3aaa974826acdab59e11399e2216bfd965cc337f1b821a7b2ce65d2d7207bb9dbfae7d476f9f91da67050e9089038429da0e45b2f6d99d9593eca9187b80db2b80587bb722822c8d34fe3c89b8569ec9d41704431babb239a7727b265495641cb744a518d84d2902cbeb5cddd5b9e838e5c48f464b617f0b526a7e7b6f930c971ee0760a6e690a72d83a12073c59618eeaba67d01f76830ccb3b8f9090b80c180514514c08570570f30f84658dc5800596bbeb535efccdf5378648f154dbf423a5b57788325b21f32226449d1f92ea776b48bef7343ff6e98e540b8652a6c7b27704629ca5ad2d5851d5bad3ee4af998f1ef0d53b41618a3f5348fe157398848b6a8db92c087a2769624b711daff75f03ad6736ab045ed88d192079f07badb1888a416d887ed590f1a8fc23d34d835de726131f24303a5e56caaacc639ec9cb5c55ccbc4b231d7a0cc6e7968a8effa1ceb1bfb199a9d0008a4c994622e47ea99ca5f5421f57232b748e3bd88140dfbb5a95de9bf33fdc4661a2642f280029e114251db1b9a948f431b43a0df466dcde962fee39fc01e8e095b31489663c88b6e9893f676f86d511d63661ec89c0a49ab605f77aeca1304cedf1c2fbe4d8dcfdc49c18ce1f376e82a54ecce9ce8f6157511f2b7d517c35b448dd20297235f52facbf593ead69e73c3c7583ecc27a150ced3a109d4bb64097054f718190c455967cbb98e3e2d090cdbb5c1a7c466f68051d382dc0dd87f82ac8b1f30d84edd5dc32a6e50a9ad6e41ef5670105c4de8d415ae01909e3bd24cf266a8c3199e61a619b8b180da6fd46ca0ddf63177db6f7b2220949c6edca174e2114383791c070c6708b07b12c915489f3e587f0a1e7a3ebfaaca06bd98f52dcab295c99866e716cbb4fff6d29c5904681b3265c4080be5cb4d2706fb0603f348764e1f7c764417cffef3948096289715a8d673bf8d7e90cafaed68f0814117219295f4770fb055c72d4a385dbae5324db679357968b43364c3c58f66f67e7d86303ed448d055cabf7d4f7cba536151ea343a237376b5e42b93da473b8c9c554af64fff970ade194cdc43e72a8b87042b298bc6c4af16a504960f5ed325fab2aff68f5c69d1ae6b8447d345944b51ab035bd30c52da544a416803e569af8a80df996281d14964c1c09a90b39f732ab16c8cf4fdca34f4e460b15d65e062f5abd764993ce91323629bd6ad4d04d23392618e215d33279bc8236b3b630c530a84fa70c5a57e423204f8d9b06d83e84e2816e263e7d34ded39109bf896c662e5",
   "7.14": "5c3424d8efb7f66608e292aa:b3c51d9cfe4b17baa01eb4dcfc9830e7:e07b74334925627956b25688cffc4b83e9b23f1bcfb6804ed9c44d2d9175548f41f48eaf9bf024c690ed4e12ed267c84c8d1d67156ea90e1a5fa5aad271d8016414c894a8222786e589f02c99a18e1468afefc6a131417c8510adcda5899f7fca114365f4c241a5d5673551e627912dc58a1b5739e9490a76272f65ae8d7fe2fcf5a96fcf6db54f1d82d0f532ac342dd84bc5a8ea335654bba9f2ae7a344fd3951e99f90bf27c2c3dbe8722cfb0eaa6aa3110c3061447e66bad26cdbd6ea03ca6743c9d413dbce5e897bc13d3527d9162e8a4f3c614d4280bdf01170e84fc1a3ad484a79ef04713930ecaeb36c9e6f03c8836f7c33d95ae33940ad12021af5908dece2606b67b4577745a8692b1632946bcd474e6d7051746ae336a8ac4e23b1d0647b24cb1e6be37af8aff6387b9c58958c7600820c280a48727755e84beb1c1539ee4c1c45ca144fe27aa8b89560d5f94d6b00c31e9a2f0fdab135314af583291e46a83b090352ca5e93a142581962eccaea312d24cdf446d80190e4661237a7bf2380013b6fb421b9830bc5bf248ca0cf0188c1d8d7ae64371e5fa95505689552e32f00bd7d84ba225fa863d80af3927b68c9e0396be0e2cc345844e8de60202247349c910de7fa1bf0f76e824362fb09105decdfb42bef7bd590eb0aae983bcdc823ee85fe3e5a9182c8fecf8026db135d6e83522af46a6998ecec50e4b4d2eef10b554935982bc0e793218f1a57e359df5847c6c31d26eca5c20dd27878a3f648ba73fea4ed8113c77250d27d52a7383033e37ec0bd2e0ba159f6499e03948ce68197aa9296eecff04fc603ed3c3357fa6f6a872d66fd399aa33ece6e6c3e91ddc5b3911269580779ea45c90b08e2db4aeb36fb388206ec6661191b69ee3b3ab3bca10d2c16b134e81ad34af47e5b706eef3737816444aabd8f2fc884967581fb324437b3ffd131b8bc5a90ad042329d332224272e92f4fd26c6662b1f24cd2d88c2ad4452d42a4e0d987cc8cdc58b25a0b8811670aca49d14f156531cb11b50a43d0ef4e9f32bc54f0e708845ebae18af6bd3b3505838a1a6f65c1b7179893134aee9eb9cff6f897ed408dc6388a6f832927e0c25258a182558ffd717b708845806091b4fc8dfdc00eb7a97c219675d5f74fa67fbc76e8e1fbec3b596b1c9c1400b18cb7dafa4f58411417610d01eed9b8829d7d54d422fd8297f1649788f5d74f4d7b2c97b0a0de14a959052895560d7759eb3847fc85148a49553e740924da6cac894ad749b48499360aed2ef4975a039fe96859e576becfaa5103abe2bba3ea719cd805f177fa0e47a5032f507a29841c7857802f2b29d39ace5ccb670e7295a1e6a28e47d3e97a87baaeb186f647fa2fdbf5fed92414b58b1c4a477ebe7aae23508cd4670b95af7728e0cd42211c8019b79612ce38161ad778563139274d874a4e7cb7390a1b92afa2a11c9452c4620df67ade786f7903cd66172b755dd615762895c51858fc59f348b2f0d5ca7dea2c8ac7ba0413df91dec78ab20eaa7119dc8d8deeb714034bcc9032e083e12f5f670818f736f630097020cd0b5da66c4038d359d7ed820a883482e029555e3ed440d49f907786b5ab83a779d0498ab4386d65932eda3ee65f034012800eababf1aebad74ca50089e70c97ead06c6f589e4ca83b093407a2b8d57424ba2e8b0458e058f3151c5ea0b5e428c5ca905d0449129446a9c8b277eb1060f2ebe26c36bbf854dfa0050c9399aba19a6b0a57978eb1c0f2f511e14c113d0baec78b74aeda455fa04d8d606826fbd32ec2cb6ef4b5d2649b3d531a027c9012496e31e8be633c913e099a6c68e42a9a1f17fc500ac4cd615a71521300b8dc1b42cabc2f1b2849cb3475b643a87e2755a761fd435ab74d582aa5c772c1260bd1a4f322a0b74be24c4ac4fa923f9a18032e69cac4d81fb4aeed35eed4008fff39bdf66d25758630a4e07f5a3663ee6f47fecca296262bff67e4afccc286785d44f63637c34973857d9f358bba06c6803674ff953faaf861891fc5e6b3153b37f11405189ef04a3227aaed6ab43b47f0716cadcff4b85abeb61dc382eb0426ffb0bc0117a8ca473ca3b0f19f67d69036907c3638a8a62e82ccebe514e7ec158b20d30e1484641c0913b5844255c67ed181d78f07788b4caea5518579b3976e91863a1d99e4d07beda81f182fa9b8c0ca066069b001cbbda9f68eddb0f5487fa630068ddf4fa7e9180cf92586ce02f1c2a268228048de77f381ec9839c4f2ca8152c800398b4802f13e359a8bd1703ff002dc767fb6b95e827d7bd0264209bfdfd1b4e885107dabebff5da56b1be189e9de0da74090b7226411835139a22862891eba4e04555d6a5841a06485a3e256b74553ded4dfee991bf77aeb099c3bc3386371085277a806be2f0d3acf26848756d576128c9addd0007f64062b26f850c11e18630195efbcca289721acadf4d683b6a52ffbfe67bb66f724a309ae5b89ffd5bfad3ede83cb39b7d59f4b122f2c28d7103b5add5318a130d8680b41bed90789105246934f6219d027a69112400254b39c95b980bae6c4e2fe6698ab66e19711a37ca53f2b57fd5927db16a555dee42cd2bd5ec24808723f4ef973e029da032c8099792dc2686d12c10b1bb8a132481aa47f97d501fc9325f015f5d5f0bd5d8ca98abd2d56ee5834343a937da91994dee8e4be8c9081d930096a55e2903f622c56b537540b0b74b1d8312106290527efc5f03063afe562552171e806dcd1876fff4145a6f23708e5c4e029852e3b7f393db3889108c78d2ffe28ea3c1d72110f2bef112d020e7d4e24a413fcaf8af6f7f7bc1fddffb613773b587dff7d2fcfba933d3d227eeaa4f8d7fd53abf2e17a12f44f7a2e7702490055314596ce713de5de907bbbc17eb24798438ebc413933ac79268bdd1ed75d54c515c4bf5123dbb46ce2e89b2b8d489f09454fed455a92150fdfbffd84d298c220b1ca46ab08acbcb9ad1def4d612d458489243c0356c0cd8e2aa02a99791db343bc0ffba1b3fb132e20ad8932aa27acfb9c8fb32b83ab78760f0bdcaab51e0173244627fe842014849a68fb6baa14d49a0e0a1b6928b2a7bde63e18f2b96146e832674ac26de5c6f2e2b54baf398a98bf137c2722cc4f9cc44a9df8c111b564f514c8dac566c611cbb962ebeab15e2d6bbec89e96e41a49d176d9977310e1930d97cd34d5e0e72a38bf8a54d51f67798cb5b7690bb79a1e1f56423736b6171f1ee9fbf9eaf72bbda16e58f5f7de5464b5cf292b49473307683aa8f2a6b9f589a651bbb36874b61b053bf589b3c9070f2f92b0b25f1034be39d9e95ed17d6d68579c32d1153700b3ef539f1f9629419daaea31328ccb939d696ffdc313617793a23b38e641c128b9b1a5f71f58dad75769c85bed52351ed6479e42822936e159b798742da3d80ff1c3df319398e7ca3060f64dbbf2bd45e1716aca883531f49723608eb57204460a49d31e2ab0b1fdab21a935d95681ef4f664052f0ec5d93f622d481c55f381f8f352e8f15aef498b48b2336c85884e38bd42c7bb6af081590662425d389f19d8a068d97a9d80a5b5ce1318fddde624c531d22357e",
-  "7.15": "7df77969e8317e36da472e2d:4b358ee8128399ebbae1723a0c047cf4:fca96bef3d22e8b8f98098591caf1b9db1c698b56cd4c434039d58622221a6c98c5a6e76936485306adcd84b5c7b82350d079a05f819ed6bc64812306ae3d1b42589f2a48797d384558a81b68bc7daaccc63128604cabd34086f5b1ef01edba8d050caae9c77846ca8e5d01b32ad40655437eada69a98468facbc98720c010a730c3061407edd68d7841a397847a24e43af0b444182deb979c51d8d5455ee008aab6359c26ab6dd9ffe9048eceb1c3e3811187d50a1c132c5f5b90e996f385b83babbc0c2d74fb4c7ab851af87ddbaf5759330c2b9c835273bd90e61f89030b80917bcaa1386050fba6698be0e23b66835d7f74fbf3ca929ef29969059d8450363d00e5891d42bc8f0a5131a10baa8a8e508ff9ac7daec668b491b3edc832a224155ded3b009b0312f4f41e18dfed685583cb39e80ac12d961026aae03c5361c55ad120d406bf2a1c8fca33889d9f0c5263ed8223ceb3c9b77242f28c5de79f0873ce50266a0031b91664a72907865226a170538f7afc4bd8ea278150ffb20f3c85191335ef958da700ffcce9c764c02c82d1a551ed89089bb2dcac4857cd3994160e1f56f832045ca6a2d3c31c686a490b125c75231a2ca6b7f383eda539aea67b5619675d677bc73b547c4394a1db42cd8056ecf796ac0aa2823fc9bda0ac561d8888337f8d3256ad58639777882fc0473d04995f9dc5f1d336de0f4be45336ad410eaeb9573e53f85221c9ab0b44c723008d5843fe933d8b622e2d10d8b483475b62a2ea582886433aa525262ff8e880c5fb9ef695ed274fe3daeb869aeba75ce95c051ef3d7b84a742b72f9c4a56ca2e93e7f7aa0fb4cb00a92132874b52c7a6c94382a0cc92f88ec784e74d3f9f8abe9c72adcbe898625d8a9c5178a8dddc672c7e09c5c8f0021a91fde045c64ac1ac01ba37d7c75fac6855bd642964d9f7c769363fecac0d0cb083f3c254bfe760a127f899dc9255a589217848e14f08e995b8e0f218af52aaf50ed51d6d6b31bd71c1a52dd96dee2f9ffd5170c039537e7961d25786f57d41334f00f1f1979b8bfd8471267edaafcc5e61bfdee0b251c667417a7e0ac817c4682644cb39346ac576489752c744662a21bb1e8307da64fe35b551b4bcd33e87ac2721fad44ca37294f66c72528a80e6e128be64f18a81539ded9bb355baa0b2cf3835ba7932371a4057adee0cd4b15f5cf2a276100fee002b8c914ea56b54a0d35d0b52c11e2cb720a6ecc29153ecea57529e1d90af3148f88bc6db038774cba83fb133276cda5f3d8bc2ec7360cdcab42e1c87250fc86199b42d681c7f4b63f7b9bd8220e5a82b56fcc70792b22c41aeacf792f236696c4cb6d1ffd605b04fac2c5de03621ddcc2e91c17c30472eabd76ec01ae1f274aeb813fcdc4c8d7e9bab27138a374dbbc2a610e6102ca013fc1b2a3b0f52dedd43dc214667320f554919c2b671c4332c9878ce2ffc16a8478f504a6ba81ae3925f184d43f791dc269398d9bfead33b00828233227cc263601593ea83e14bcfba76454ec060d0e7960bef021e1fe539093f0941099122be98ac89e0cf65b841c22fafd8177043556ea2d8612fcefcdc527cf724a7cfb0c4d60bf5f77dc0718aac83a8813f72af590c680440eed9df51e0c4564bb97b4f0a563816291836d5cf91670cc4066f7fdbe715c34bf5ce7922d1782b1082fe106d42c7e4f8d571a1cc270be11a5841fd40180203fa2ac0391de4c614d6fe59d4fd95cee660500016695f46baee26792fd45075c64631467e3355f832876aeb40bf420abd7d8802bf8eb78e7e808ca93d15d3e35ea5d355c37efa432bbcb80d04ffcc61d0f5f522756edf700077c30d2f463b0262f2dc2ab28c807a6d2ca955051d292ac033b663c8cf3ff8cd3a0563c2b151ce485984e6fd2389ce06dd28755205e2f1f46e18735b1f97dc27542bf10732bf00143ba5193824a031290bb408034ae932c5bd74c072462b4747c04f78f2167219c4480458554c5ded0d1e4bd17ce77243c624560ffc91245abb4f30a97e3a64f38de648af254d0af03c11076e0654185e5f975909a2eeee75db71ba7cadd634f4bf0f9c6145b8cfd1e1ae34eefba3124cc3f6d977d03cea7e59d5889743964a632ee1818acb17862f7975c28840a131ae997274b9deb5c87a0be5dd0bc1d82a8c0fde08d728a00286a1ec904e357b9a96b482b8c3c3e5a35337fa901842cfbbb6e752da5689203005523667416a183b8614008101b87dfcef821f6244eca015eb0c783d3bf7fc5c129840156feaed03cbbe2e5f52ad37393867718bdbc72d083b5385bb257f7e72b33799ecb6545c34321a1911fc5d82e5930a8ea777a3039841acae53d3a2543eb95e64479b8d659573d399848f21965b123a3121b5814fe94cda2cff541c4fcb3302ce293027744eb8e9631dde0aad44e251995c5a5e140448a2d6ad96388529c5d8bd531bc74892f49350cb5bea1fbd643515fd4f7e4255da5d76b10b8dfe9d3ad8c8dadb49d4cb1809b0433371b1b5866b67504f477a98360619136096544137a7354fbc89b392d3fbbb4ce39304e7869b59fc2367e16bfe2b74d0b233fcb457d253987c533d9b0817214f6af259d7608cef390389ed2baac660fe302537f1b0b8988af9ddff5bb75918fc093c74f3228d3fdd457d5ad2d668e61c6920f36af6a616c4352105993fd2c56d59e74fa0673229c5da7c9ebb54c61bfbb0a6d0a3371da636809cab1d8115478d371944255016b8d2aec2130d116c963e0a3c9fabc253400657bc40768a67fd422177bcb38ee80a2f065eddae72fbf7beec3100abceb709d912cc5f295f5704cdd6d42a3953e5f29009b65f33d1706d8ffb41c49c2475e52129e6f6c3cfd89d3c429c6ce6b7c51c2299296a782e535fcba43edd2d0862655b14393683fdfb881b1a283bbe4204822fce1122b96a9b4748a76de9671d602d499708d2fd9c0a90fb707a7062eaefec2925ba0b952b16e983362ed093a1ef991ad859dd6a08dfec39e7f0b9b43efc88666bcef4af7a615f56a86ce96da03dc442d2d79d69a0e6552654f4b676210916c9b08140ecb095c6861c096b6623444c84a212b0670cdb6dbd8709ac45302cd14c6f8f60c7c5090d521cdefb43f50b2e45bbd35da05e6c7d8be5050745ae216fdb74d7c596bc7d1e6054b10cc24e5f333f77b1fdc90b8086aab880402e61ac1af78ed85600f67d0262b4ae38c9716e3d28217e39a4e893cfdd98fa0919372c1c3f7ced150a335132cb6d3fcdc0fdc716bb0edf99c1e6ac42fdbdfe413316282396ff0c860fa2a18f5369806912c1bf0b8888e1c6849247241ab9ff568853740779b813ba33945002644c0fc81f0342882a1e064ab7c58f556cfc9f501c70bb67fe51d324d7526bf88d1b94be5d57464672eb0c4a0ce255e88df63b1d4a29718fd0e247a1cb7361d05e22c1e85598e263b5443d6d47da6b854ae9c16cc3b897cf608e9e5f0f8d60efa72fd26fd44998e7167c8002a2a528ac9ebb828f40f96264de7237508b3e34d4b4b9822d7631399702166e8cdae0072858ee5028e9119cb3efba022200e0092bf7db222dfebcd9aa4bc42a5867ce2b39c36606a9ba466497e331181ba26acfafd68712c41831eedafb989571b32f354b2b83b7f6d99b301d0e9981740e2d12dee79843ec6165d94f62c5c9d8c915efef7ef9927b8a096967e901f033907ad6158f4fa61822ab70cf71465e874955105785100521bde55a29cfa06a53d3c8a6a2c4c64a21a816a8b05c352f863c804ca3fbe83307f285626f1fa1bde0ac48682ce8460a29fec6ea59cc60c765"
+  "7.15": "7df77969e8317e36da472e2d:4b358ee8128399ebbae1723a0c047cf4:fca96bef3d22e8b8f98098591caf1b9db1c698b56cd4c434039d58622221a6c98c5a6e76936485306adcd84b5c7b82350d079a05f819ed6bc64812306ae3d1b42589f2a48797d384558a81b68bc7daaccc63128604cabd34086f5b1ef01edba8d050caae9c77846ca8e5d01b32ad40655437eada69a98468facbc98720c010a730c3061407edd68d7841a397847a24e43af0b444182deb979c51d8d5455ee008aab6359c26ab6dd9ffe9048eceb1c3e3811187d50a1c132c5f5b90e996f385b83babbc0c2d74fb4c7ab851af87ddbaf5759330c2b9c835273bd90e61f89030b80917bcaa1386050fba6698be0e23b66835d7f74fbf3ca929ef29969059d8450363d00e5891d42bc8f0a5131a10baa8a8e508ff9ac7daec668b491b3edc832a224155ded3b009b0312f4f41e18dfed685583cb39e80ac12d961026aae03c5361c55ad120d406bf2a1c8fca33889d9f0c5263ed8223ceb3c9b77242f28c5de79f0873ce50266a0031b91664a72907865226a170538f7afc4bd8ea278150ffb20f3c85191335ef958da700ffcce9c764c02c82d1a551ed89089bb2dcac4857cd3994160e1f56f832045ca6a2d3c31c686a490b125c75231a2ca6b7f383eda539aea67b5619675d677bc73b547c4394a1db42cd8056ecf796ac0aa2823fc9bda0ac561d8888337f8d3256ad58639777882fc0473d04995f9dc5f1d336de0f4be45336ad410eaeb9573e53f85221c9ab0b44c723008d5843fe933d8b622e2d10d8b483475b62a2ea582886433aa525262ff8e880c5fb9ef695ed274fe3daeb869aeba75ce95c051ef3d7b84a742b72f9c4a56ca2e93e7f7aa0fb4cb00a92132874b52c7a6c94382a0cc92f88ec784e74d3f9f8abe9c72adcbe898625d8a9c5178a8dddc672c7e09c5c8f0021a91fde045c64ac1ac01ba37d7c75fac6855bd642964d9f7c769363fecac0d0cb083f3c254bfe760a127f899dc9255a589217848e14f08e995b8e0f218af52aaf50ed51d6d6b31bd71c1a52dd96dee2f9ffd5170c039537e7961d25786f57d41334f00f1f1979b8bfd8471267edaafcc5e61bfdee0b251c667417a7e0ac817c4682644cb39346ac576489752c744662a21bb1e8307da64fe35b551b4bcd33e87ac2721fad44ca37294f66c72528a80e6e128be64f18a81539ded9bb355baa0b2cf3835ba7932371a4057adee0cd4b15f5cf2a276100fee002b8c914ea56b54a0d35d0b52c11e2cb720a6ecc29153ecea57529e1d90af3148f88bc6db038774cba83fb133276cda5f3d8bc2ec7360cdcab42e1c87250fc86199b42d681c7f4b63f7b9bd8220e5a82b56fcc70792b22c41aeacf792f236696c4cb6d1ffd605b04fac2c5de03621ddcc2e91c17c30472eabd76ec01ae1f274aeb813fcdc4c8d7e9bab27138a374dbbc2a610e6102ca013fc1b2a3b0f52dedd43dc214667320f554919c2b671c4332c9878ce2ffc16a8478f504a6ba81ae3925f184d43f791dc269398d9bfead33b00828233227cc263601593ea83e14bcfba76454ec060d0e7960bef021e1fe539093f0941099122be98ac89e0cf65b841c22fafd8177043556ea2d8612fcefcdc527cf724a7cfb0c4d60bf5f77dc0718aac83a8813f72af590c680440eed9df51e0c4564bb97b4f0a563816291836d5cf91670cc4066f7fdbe715c34bf5ce7922d1782b1082fe106d42c7e4f8d571a1cc270be11a5841fd40180203fa2ac0391de4c614d6fe59d4fd95cee660500016695f46baee26792fd45075c64631467e3355f832876aeb40bf420abd7d8802bf8eb78e7e808ca93d15d3e35ea5d355c37efa432bbcb80d04ffcc61d0f5f522756edf700077c30d2f463b0262f2dc2ab28c807a6d2ca955051d292ac033b663c8cf3ff8cd3a0563c2b151ce485984e6fd2389ce06dd28755205e2f1f46e18735b1f97dc27542bf10732bf00143ba5193824a031290bb408034ae932c5bd74c072462b4747c04f78f2167219c4480458554c5ded0d1e4bd17ce77243c624560ffc91245abb4f30a97e3a64f38de648af254d0af03c11076e0654185e5f975909a2eeee75db71ba7cadd634f4bf0f9c6145b8cfd1e1ae34eefba3124cc3f6d977d03cea7e59d5889743964a632ee1818acb17862f7975c28840a131ae997274b9deb5c87a0be5dd0bc1d82a8c0fde08d728a00286a1ec904e357b9a96b482b8c3c3e5a35337fa901842cfbbb6e752da5689203005523667416a183b8614008101b87dfcef821f6244eca015eb0c783d3bf7fc5c129840156feaed03cbbe2e5f52ad37393867718bdbc72d083b5385bb257f7e72b33799ecb6545c34321a1911fc5d82e5930a8ea777a3039841acae53d3a2543eb95e64479b8d659573d399848f21965b123a3121b5814fe94cda2cff541c4fcb3302ce293027744eb8e9631dde0aad44e251995c5a5e140448a2d6ad96388529c5d8bd531bc74892f49350cb5bea1fbd643515fd4f7e4255da5d76b10b8dfe9d3ad8c8dadb49d4cb1809b0433371b1b5866b67504f477a98360619136096544137a7354fbc89b392d3fbbb4ce39304e7869b59fc2367e16bfe2b74d0b233fcb457d253987c533d9b0817214f6af259d7608cef390389ed2baac660fe302537f1b0b8988af9ddff5bb75918fc093c74f3228d3fdd457d5ad2d668e61c6920f36af6a616c4352105993fd2c56d59e74fa0673229c5da7c9ebb54c61bfbb0a6d0a3371da636809cab1d8115478d371944255016b8d2aec2130d116c963e0a3c9fabc253400657bc40768a67fd422177bcb38ee80a2f065eddae72fbf7beec3100abceb709d912cc5f295f5704cdd6d42a3953e5f29009b65f33d1706d8ffb41c49c2475e52129e6f6c3cfd89d3c429c6ce6b7c51c2299296a782e535fcba43edd2d0862655b14393683fdfb881b1a283bbe4204822fce1122b96a9b4748a76de9671d602d499708d2fd9c0a90fb707a7062eaefec2925ba0b952b16e983362ed093a1ef991ad859dd6a08dfec39e7f0b9b43efc88666bcef4af7a615f56a86ce96da03dc442d2d79d69a0e6552654f4b676210916c9b08140ecb095c6861c096b6623444c84a212b0670cdb6dbd8709ac45302cd14c6f8f60c7c5090d521cdefb43f50b2e45bbd35da05e6c7d8be5050745ae216fdb74d7c596bc7d1e6054b10cc24e5f333f77b1fdc90b8086aab880402e61ac1af78ed85600f67d0262b4ae38c9716e3d28217e39a4e893cfdd98fa0919372c1c3f7ced150a335132cb6d3fcdc0fdc716bb0edf99c1e6ac42fdbdfe413316282396ff0c860fa2a18f5369806912c1bf0b8888e1c6849247241ab9ff568853740779b813ba33945002644c0fc81f0342882a1e064ab7c58f556cfc9f501c70bb67fe51d324d7526bf88d1b94be5d57464672eb0c4a0ce255e88df63b1d4a29718fd0e247a1cb7361d05e22c1e85598e263b5443d6d47da6b854ae9c16cc3b897cf608e9e5f0f8d60efa72fd26fd44998e7167c8002a2a528ac9ebb828f40f96264de7237508b3e34d4b4b9822d7631399702166e8cdae0072858ee5028e9119cb3efba022200e0092bf7db222dfebcd9aa4bc42a5867ce2b39c36606a9ba466497e331181ba26acfafd68712c41831eedafb989571b32f354b2b83b7f6d99b301d0e9981740e2d12dee79843ec6165d94f62c5c9d8c915efef7ef9927b8a096967e901f033907ad6158f4fa61822ab70cf71465e874955105785100521bde55a29cfa06a53d3c8a6a2c4c64a21a816a8b05c352f863c804ca3fbe83307f285626f1fa1bde0ac48682ce8460a29fec6ea59cc60c765",
+  "8.1": "284bfc1185908be2505cde4a:bd72c5850561649dd2cfcaa22e438bb2:cd01e30a2d73d14ce3b8a01b9e3c59870a5f9984f00ffe7d2cb368ac591ee568fb8b87ac32cecd757900c9f8908b5a8cc532ee4b481aa99fda87452d6e7f6f6f92aa0cd88f5b669863ac9396e3620c318c80319d30d0757822c53d9f8f2f2d8508fe66247827bff2ab61f8d667dfb99f71c8bce54982aa1b74c9043e1849826f6a653ff7ea921b0a5a5a30aa9aa8ff138c2c7aa8ac4b6a9827f829df372ae9ac69790117bf3cbe80b63d6616364cae15a86807de5ae3d536fd412c8662857f560087cecd1f8f7654788d124235bc00e57fb9fed9af18d7da3ea9a75e00f5ac4104a2808cec035ef454b10df2a495833b8be06dc8620b0f38c45ddd7dfa8098bf3628db05f22db5a52c58a6da4dcd4b18a4ec64b04a229b54e12451f41bccbec60f977ca5f7aedbe7e99bdd4dfe29e336b7576583038ea0c3b8f28782e2b7de5c923b313e0b8e358af5247d917ae87ba04168ef0bb9e19453a8aafc1a262ff498823ca65f934adb9227129a63ef2dceee5e444d2449983da82fdef1bd1d4100e97d2bf9187a76437282a72cf1ced192e3e2bacec56b24d8bc2518c12f6bb3792911f096d1cc3ce99ce4c8bd51badf18ac3e79b0132f9f323e380e79b99b1a5c6d57983a74803039c759449e7d09dba7b83d784dc957a5a30fbb1e1f5d80000410aef2f410a5cb9124995d6a878fccb362d90f05663e884322add0a2a5f07e50dc380cbc8620b17509d5919438d4ebabda31bfd9fdb9a57ae81b304296ed6f5ff50f15d5198a2a48cd9c1b90850d93547ecad3c976fba82b547aa45a87db5d2e64b80c5d9f77bbc45df99d827b5eb873db64eb0a03e9a8685b612c22166db82d91de5fa68b3257da7cf2631dde0434a09ecaf86b5a043977a856263890da9830bce392d7642a5cf7835f3659b53cd3014ead3df0a5a7262d5f9ac38180210ed90f9fcc9b198de5900f58c02603031bdc3c480ff021b6d919107ab8d3357963105a39e1b1ca356dad17d934388398f5f6937d95b44fbf438ded5eacb4a5d43ee6997aac7cff455d51c595eed487ebb58ceaca3dfa137a9a21a54ff63f1b37d66941762ad9c098aea2d5662844a018786d5ceb3564a665f47f3ed59b2866e0a416edf38a7fea9518fb6b4508bd280e3b2398996cd5bc0883d850d8790ab50622a264ea6a208cb3f0c2cd35f3c7a0b36a3b8a44e705050c54357d430ccb8f4601a99a1fe9e2e32cb729b4dfef19b6357f592c382630a21c9ff8bc4ea8e35321a1f9030771e721d32df7f81f8c4642a76b729c6ba2c6703984f167db45c453bb6dcbc1cbe81c35d2ac353d96c0ae342660ab3022a5ab5b6a6069b335f5bba994a0a4b7c244d77f84338458fa77af9480f59c0867d310d06498ef9c17127dcef6f9884a3e96c06e939b1780ef52f956e0a5fdde296a1fbd398255ba3984d4916479f6c8888561152156c5ccd184da94e18bb6f24e2ea62bd6851d36bd52cb4862bfca6b16fb43e25c31bf75ba20bd5967b32d4c44c5d0688e54db6765321ecdc0c0f5656e099ae1ae06bea55dae7229af619c05abe495d8461caf8a8e6be5c00939126a9f23114b5b930032eed28cb3978df6f02c0fef2f017ebe0244823126c60e91db6529be88fb95f3134d406fc5f45343a2a868898f2348089f01c1504411cbaab1f6109ff6cc7124f3ffda36fbb4c098330cc80ecca4b23c15b29b238edffa365706ce9e76525a5125346563b77f28687de51dc0c126954ad9fc5ad638d2efa51b80d0e8519bff6fe0ba453b4878acb9852f35ac7faad0056e7207dc2d3b2411a562b7351fc9afb62203f9c5f5ebb70b8cdad68a449a383335b971b50f3c70ff00f44a9ec74ef515c81ca7085de451bb8487ee535429ccfe04b3a29b00dfb9ee56c945479275844260438d92a02c083721c4f81d43c32cef859d22ed686e378705465cdfb99be77e923043a19fe3aecb5dcbb4abdc47f9fc3cff9d8f000e3a3ef0058d35b7e4da59f0b5789c4af023d056aa8c7e901feb1b1fabcf383985bc0f61b10b88d0bdbe1584fad96f997fd3c3f13d9460adb87c6ca4fdfad4bf6bf6bbefb680c4dd324e8287976ff4846fb88f2d613bdadab8dc0b52b4b4ab9e7ced60e244004e94a0703d07feb01a456489f1345ea91b5072e9f0a434bd6bf05b2c67c076eccc57e47f2d162498e0734f3195e87c99aae3c53c1efb4120c29241d64efb6e9afd0f90464441f2707a78387f44e79bf0ddc102112b369fc8d718862940e7e3486f2b0c99a10478e9ab7905bee7609686cb34e70c8ff943fb50ce1f10c5207fdd25f4d9c1d568c9cf0d6438f4cc3b8f4a920c19207605c9527ed95278a4521ba73561651b169e1a5966728e9ad81c257c348443f0875378b8ceade02837fc9165cfe7310b14290f0f48c222b226bbf23341360b138e82302375e9246338a9dbfe056730120bf1d93e12e98d873a1b40effb5b882e7062975cd0b435303fff814048ea65c2c79a1e9f6658c45c503c2a8022205883996992e3ae670735483ade497b0d60d6b93dda7d4640662f408ffd0b4a55459889ba06b5ca96437110d7fb1ba95aebc619f6a6d8c0f08d6848ae97a3db2271dc63ab56af45f91b38c9a1ee5b6de12bd6dc7ff5e544592c4d689a6736041d1bf8f1c990d8fdfd6f05d2fc1410f6b761ce883191459d78a866893be39ef58a1205a8a576a1ff74671a958df97e6384fbeed9cba117634558c2f6bd3cbf0cbf3340ca336cd79705c1d1d8bec4c40645d117ee6fee85bebf07ba9dcd2b006753e004a30ee0ec2552bf1e5394969e71ddb4a6e58234ab6d1a9472e77fd9d15031773607b9f940d01e772fcdb737879526bd707ff864acc24c87fa15c95e9144875b6aa2c3d2243bd3845a92fd3874e11c9d20e7b37a0caa2d07e7576b930c9a18af89d30fbccd18459ed33e31690e32df031296df8911dcec83e588e1da3400760631fd850e09aa5ca8a8e742a2ca2128a2da37f3e350c09099e51480361850e716001890e8c9495e1dd7a5c47ae69c1f308855f5465c36f67fb586b614d5b110e031a77687f07f0d7a9df9dbe5857267d54108539bbab6515a4356dc071591035fba7237b0e5acc9e7432561457cc6da31fdbb08c4772e98fcaf44b1cf5f62082344c03abf278194b9a52c58952f235ae72096b47303d1a7d3c8452ea0a805f55103e8d4be62266c11b7c2c6b7d4a5c2fd0f392f95b80e9c56fa4415cc9af7fd2bd977447b914be384e59f736a37b4f73884d692f848c374aac3b50a457f606777a3ea6c51389d1706ec9ad4d27548bf97dee890235a958db664f4bf5e62dba0fc6f5294d8586ea94637a2d4ced74876e6bd9e6d666d7c13557a6a607e3f6421b2916bc21dc8d57d627209957d62aecfeac81244682ec4aa91985afcc28d2a57f50a90a26b5f284724b938e7cf55dbb9eb113a3fbca468d2e5b0e0ca2303c01be02e9553dfc9109c9eb0ed2756d5758a869d7b72893bafa2af81d459a65011eb59250832243205179a289472884ec80686d125d85fc834e0507ea680ae30a0bc18a70c22006651bcbcea19358fa8764dc3cf6b77111e7d36ab55de0454c17704d8fe5eda1abe93214fe51f266d88fec659df6cef7ebf3ca43fda61c73c9c2dd70cbfc69699e6c3834b3981ab28506f98eb5ed3e13397c5fef5d162e106e10df91c3a2303c8af10a509c3e3235963e804941c052e3b00dbe56afd59eff47cfcaeaca9c3a12d2ad0f539154b22e08fe11dd86771e8eabf9199dd7696d0c93ac5afee1fd3092e2adad0bcdbbc072e71d0c7852aa0978fea96258f526af94aa7c5a7cbc2841a355ebf4e042bcc7b71df4839f6a36ea6bd4f12babbcc2214976bf6ee1a45e28bbc1538f921ca419b4f6fe933b5f379c894adcf03",
+  "8.2": "4b493029d22a8dbf3262df9f:9874369a25fb2fc049fc1180fce5d084:ca2f799462bf15c3b5cd36e710fed016524650eb94b1d8a36e90758694775a18ee661dd4315eedd996179af08d120772ffe3098ff0e3e1f7c68aa9cd782c61ba526cff68f3744049d93635586c692e290fd7ac42b8399475ec2ad7f8241d39e73acf0876114cb4eb4ecb5c66167b6fa69a2c175ddea85ff8290372fda62fec926b5d4211dffd2a9c73a2dbd1b9852b008bd5f5212d8436d890db481822b7f667df19a8b5ccaf79d75b3c81abe2574407929466e085a594c10b0b3488d02f395f55799a20e8b0cc50efed94bacd94ce6c08cdc07e845804ec86455fcc0aaadabdcba464c0a774c907ce8614462f6c367a82059fcbb84c355019211cd747010e15719c0d8f7f9a18723a98459303c629923f0aeb650d09a99672ce000fbd396956e053364243f44e2e5264386bcdb236461c5e3a8767ef84c12e5df9d2bb89d44cabec9515d3f38804cd74b4890ea787ed496a2eaa1832c6950d3092d00967956aa0c65d251e253d5062945994f5fde4dc8bc6c274f2c78fdc6aa6dcf633e0f720aca6cc2b11f917db3e2c6be837a8d46ec0f215ceeb79746e7db6ef170b9ce9ce5c9f5789de40ca7037fab81e59287ece776f01ce9a39c53fd519836671264bf4d0adbd0f813e6e1a6be1492f32b3af8c0e00b3c2c966562e4f2c081b3613d644358335a1dbf656742942bdc20b31dcc949a157d2979913484bf8516df9dd783ac88936fdcadb0fc4e458db82ea45e51cff859d5a63ebb3a48f9dba5ea2a2a38ae7b2ea50312c592663544de937c081d3b5acce1218e1a3644629d0da68384fd5a041118f5aaaf74e255c184e6f69a5f434edb876e0f80455e99109a94f9cc0f117ea813b32b490555abb3e7eabd5d1430c649836abf2e99d91d83264750161d0c62a7058ba7fbe7699ecb3e66ea1a703da8c3d17888e46de6ff69edafba63b0dfe371083dfd42a110660b1361a0b7841d958d5f0e08963feb862f269da845c3ef40a82f747256efcb9de3ea756afe05180aac61bf8e9ecd5575e082a67edc039a4f4a90d243fbd93439a84154e1997d906ff65ca92510d581444c5ea7170e966b55ff9cc69be98b32717c39d3ae06b17ea53b6ae027e4456cab6a039dd6c67b7d401389b6f4be6986fd561fe1160ff1d22b15ea5c25696dc2dbffb0f003263c1c3c3ab25126b67c0149ea9fa5cd21ab6e9fae27b3c61ae0742b915fdefadafcd0aaf63598aa30e0e2243948a38254653df4f8950f876bc37b674a5ae126633e99b87d312066509935eaf9c72edab3de03b5450c951ed03538a433ea8b8da644e7be500b059495d548b12ffa22769b72f364ac2ef0ef820a154a434d8f4bee4426a0c33de5299b77dd234e3adca92c93c5c07c8e8131edcc2fe56c77ef0adfc7069166915a560a949f1e12f774ed8e0fb38a6c3317db6bda9106b0da56ae77e5d7add90e2cffca3e7e9a3bbeea8f40c29cdf8bbfc0e3e97f91e9114e41e26141722553ddfd0228e61478a301c622c9d9fce32d9bcee2bee9fe7b20388debcf48072629c01c42eecf539eea208a30f9e9048cb55bb687b99b436bd945b667a272dcda3c4ef481266bdaecc43e145f5074c857dcf7f8c9831dca867fc16d464c3a29082bdb5136753200eab4812504950bbcab95471fe65b641407ef51f5bde36a72b3f0ed8d6793e760ae4e0c87a516f4ed32d051a2038e47e94301b918722789462e4418f948fb8d77cf3370a181ade11ba57493309719c128d66c3d9ce26f465532d63136a79d73dbeebe1a9f4d02eef0b1732e23a9720cb0e01f62ef70fd33a58c435b681393fe1ac9a1050644e1e0f7255d017ee0e2dea7f610f27848b2ec8062b7d013a9272247235faa6e8c1fa9de69edb4152a2b9407efa597c44e5f6bc91e92f9947309dc170fa70f641f26b0e323ec71db0390efbd55cff2a02d9a6fc6b75524263da01ffd6ee40bd877ab78ad84636b14a787b80d706b11a801279b3fb9a82eff9e295f0765b982d6a5b2a0032e94309838121a872fedd6adab169eb937ca205985697c261ce994f6ac6b8f4fee8d1181f38d5fca561fcdee066e32440ec258ec1b9b964126a5be19ee926dd337af45c11c5982917a3948c861c3c5bd494d199886e5a2a9be6a9f2dbb480bef7fe13c0fbd9b0d577760705a33f845861081a6dc1785dd5ff324cc5d57e406971e306e52f13c78ff91e2a57064e0cb7d37f31ff79a07d9073d4deee1a6c37b7492c95a2dbf0791c3f7fae24c73535b72f94de81bef372de4925215744959b07bbb44329993b03270b6c831236c145571079586fb44d972240dd7fe73125c0b27889f7e481b518153723dc04db8f9f799afd5abab87f0f059c8bc3ac711d0fce2e6da583419930144bbdf14a7c1daab31028e517624eaa19194de90d281b2dfc3d101acc5e25982c44e431e37fc6bf93bca2f8a8d17fbb4219ee347e6cd66b840a42e4663b8c6f89d01471b7ea5e7fd3e0c9b5b9a17cd0a146cb3a8aedfc858273518f3d514b208b7ffa90b775459a7319a87e9eb4e898dcd72103b5dea50beae9c50ef2a56d38f96abe5e95cdacb2f53772bb4c7b08694ee3c2654c37a782087c2d93dde236c1363b12ebad153aecdf52f2d20ef9f2ac4c93d608e02c506916ef52ae9feee9d6354c0acb0ee7b1f5211a208dae86875320305f6c0f10e10d1eac19fb57804ba65202f93e4a598aa13ada894a81376337ef46caf45a474e4a0ffb31642eb8f6e0a890881583cca9ed131cd59296e9c8e263a73178001506eb8981207fc00c5e958d9daa7b8ad78341a5b1f2bbca316ab579936945f62df91a09531310191c07c22c41605160b783c5cca64dc0d410e15786d6255abd91c6176d92cfa2e70d76d85fb7736499dd48d04f21f6d68e96063318a6a27dfa207c995b38fe256bebd6d0c286c034764ece30aea6",
+  "8.3": "0fb73ef6c4698617368b9dd0:50075065fa82a9477f2b29ff64b2e039:8ab651d36e61b938ce646aa0f18aaa0827ee4c7e85d20d390dc77e3b79f965a85a399796a7fee6973f316658161ebe4ee6012e76cd436ad41ee50c91681f6d991932afaa7e8fa1480787c6f779de8b79a578f3fb9b59b4b683ce8a30e8ca9254c8d4e94fd670b77dda164aef4423cabcef96f835847b3361e7ead5a140014089650b6604457977876ec6acd494759ba63fc8b1fc2c49a7b1489b9dc3e6013cd550751f2c62d47bfb87af084811a1862281149970554607c14cea87f6b4d6fa821ca1a97f892edb87045bd3d13f2b2adf1f4ccf5c8dc7ea195d1ea21039694fde594a85017da89e31cc1a9c1017857798acaced2864e49ed2d30bc118bf807c6979c508c984b8cbdc57537d96c0b06e44a0f4e21d5134130abc307f7ce54fceadbaf4105e01b0d42618a674d72fceb716cce28c28ab5065a9410b3a9fbf6f00bf0ca7998bc5ba0e791eb5f223ef9eb15cedbe08deb64c51313181868d4869d78df8f9cc37f2d71034acad8bccb523b9f0703313d43f25eeb396d431b442162af02b4f6d483988b152c02763705d84c6bd588fc5cda60e955acee3f3df1e872579c10bb7aaa02798f19907a7ca96e587f0a22dd85a96b8b372e03d72860d5b42c131b461090d604c63507923d8a9cddb7e29cabe9b3f1a95209f1c769681ba02ef106b9ba1edc22dfdfbc8489c26dc9ba6d46ded0c52cdb22c71d40c491dd8455311b986876b0dc9ecf8bb736e8e8fcb6998e99a6e58183f7df166b2285389ce7c70183fc9cebd0c392e6933e1c079eea80d026fba750593cd836731c0ae4cb12c5289f88f324223029df4f0f400a6b8de9afa7eadf61ac53a39d048606cca3538c182fa708c5bb131a3326a0e7ce5a81c4575ce79d0e0368cd62475bd9ad5900cd2019746a9f3ecdc3b9ed74ea80491590f271f6e07a554b6894bc7d4488d63ab14f7539f2dfb4855c857ac6de2893157ec1ee5959157d9f23d5016b145c960f4c9852df774873871945cf94fa026827140062ef02509420841e28981a898d5eee62529a4930f6631c961bbdccf53707562647844fce3bf2dfe5cbee94e622ee4278a1c11ddcb0d4d5876210502aa2ed8bce40b040c1ccfadb2244c73b8f33c7b3510e01c2dc256c6d73ffe947c89c5193a018a538fe5bbe3e79059dad845097e31523ff5779c74441a77fb248bb6dbaef0291fe3c3e14991dad6095c9b1504dd8c2c617ac92e230ef5926b1745cfda13974a07e4131fdf4a2443a10ff25ac20ef3008db5700631c66d764d1fa6e83023f679d3b1372fcb1863137b9ffd35170e233680e01483ac23174841e478d20197c178bcc7d40c931b4070a8328501cd4382d224500ef930bdd33e3c9df2ddfb1294ff0e12eb150ee3cacd633c8c203ac8c4da43c414fc236bf3bd40a73c24cea60dda1216548a9259d33062bd6902ecd72f395e582e4c501c7dcfcd11a7a0f4548ea5d7fbbe65746cf8a6339a214d682773c03b842544cddb2d203fc5faea638595c2dd306c00dce9c1a4b825dba0b2aeb03c27ade4fbd258e9d64347afeaf2b1d6226f56fd958287ea00136e029d1d81a9920e253f335d5868bebdf1071753a485ddc0f54dddf39de21276020f3dfabbffb3dd62a3e248fe900d372c4e545142f14010ce8a10f05897cdbf48c101fc3a31ec2115bd033d611700dd76b722418131b9bc82bd22b15a69f47278115b6981daa041a67b08c21d251e17849bbddb15639cd3a2aa20d7cd15136f3eb48bc7abc37b53d01b8f780e5bd91e310b5621cb74c44708f4ae18e0e3d3b6fdd7a9391b69f8b4c4ad6e25c6aec1907b7546a715fb3779958a4cab88ebc26648cea8b352f9c442a16f555a20e4ff63914d9a4ac10433a95748eb83e89bb88e383ebef38c16086293400c0ed023161d43c2f2ed37fc1c095a48bd9e7c5b4364acb6fcd5204d9109149b2e3cf5af5ce1240f0db11662afd906870bf2026e02ce9ccdc5b3426dfe353c1647cc71f65dd01b09d1b07c9f03db5a807112bd63c384dcc5dae9b75a7e63358cfa7a0dd7666c74c2e61ecb2c83e1abb2c1c21a5e8fb76ceeb4019674f7802a0f702f40cb37d886616b0609aa1a969b80b1824ff2ec1696ac29fe8fa52f4d36436c6fcf5d469846ec06f708a7a4b3bdea4125f9ccd8227813f8e6b0037b3952d11621416aaf5607e0c162c826820875247f3cbd8fd3e520239c2a39263035463712952a2275bfbffe71ca689b0a56a0d0e3be652b9c0aac99b6ada88ca3828f48ac6ce5d929812cb7d52ce2ea6358f53bd0201e2689b2b21fb592b56ff6c3c1d8e0e6e0ddf2dbb4a90cd574d4d52f52a7bd8670a342cf54f4b26156a803ea34bd1b7da74579a193fd307234d2d25c74d9b7f11d3c713704cffc1d622cd2a9d8a0b874081c4648cecfb54590d681c5b32ee159c0007f26a8ed84c70b3707d6ae21db3f4caf736719a7996f73f2ee1a703174eaa62a133c60dc61b7c87614cb55c414f434ac9cefc2850748760fe47c3c2ccd2d76211df051e230bada3c37a6bd217567dcb187b99a4239f349ce0dbe9175f9fe221974d75e2e3c4c9b2270bc79616d30f84707a2f3c86f548cfc3660ec8f0012a318b0a975641a97bd1eccd8ef1f0acf1fe44b8932d7e58bcc3ca1265f39bbe9",
+  "8.4": "57f34d0ad44e844a0222c362:cacf37f7505f12c019a1e07b1df19409:b44e1aab8507a0b6fd143fcd43992459bd3a610394dcb2486a06485218309d910ae8d12acfda5785d02787aa583a0e4c26f3cf2aaaf7d951e458e3b15916d027aa419baa037f2878295d6bb9cd9e9980760a817a2bd04f27b03dbe3de9ec2c79d3dac6490001bee1c4dace565f72386eda269215e91743c82e99cee96b2fe49b5d818782d0593f8812e01e7938bf6e747e854cd6540a5810dbc3be0978b880f0533f22a9f0b9d821de7561f1b15ab5e917728e68d8cdffb4bf141395a3a1a69acd9760d4ce5febbc8eceefa8ad46b934ad230ccbb1b6b46b6771cce8f92bc10cb2abf4691c38b3cc11f15717c4de9c9f7af2016484e9f9e0e15e4d710a1d1b70a1d10fceb22981ecb1e38f5b9ebc7b33015ad2fd2716b449e84914572fe5f0848953d31923ffffa607ed048e05fbc5705483bbbfb89bcd39a46d0371b9c2ba251c346964394ead65709ac1d5b155c888807fe15557d1fd84de1055ce0db13d5eaae9d00afd77f393a9310706f7c9b6b83e039f3178b1208bc9951b98f3fd39b0cb785691739c37dd7381ac40c77afef6e7c84b560eed6b52684b3a0756c9d9fe8087dd3d0e5e40b61bbb1c27e47d501f53dfe67e1cdf98073fd67754b678ee9e16eff0c4a8507ed7d1f309e21e7982051c1f5ef1255e537fdddf6cddc76dbe8103bcc99173efd87757efa5888f566e37843d19bc720fb664cb15b0f9c1e1409d1ad6a8f1d79bddc2d2b9eb6b2a6cc71e7a0356f11952eeb4529b0a4c4a428705359b96912dbbe21faeae40397aae74ad0a354be630630df6295c03840c1fff3b4331d1c2ebb2d96eb76b54ad064f745466ec1c83c392bf947d636d5ab7f8325b4b41365e5269264e0ef129edef02e3a0a9182fd7e4c91304a8211abdefcdf2b0b53f9cb26b5f3c981a2a146b3d1901fa05b4607403742aa81c1875263bfb52a8b2f73b91963addcb62e4b1543bfce0dd49a6142f32a52d458835ab6bc670b5516860f4a864f4f61724b7c8ab44e17ddc571dff20d73b60bd16dbc159c203feb4d8c96c2a838fcccb315aefd1456b4d7e33a397ee9084276443a1ee1691e1dcf75d1da263c3df7e75c9e326c1f865d42807e268baf114578f5403",
+  "8.5": "dbf1200fa378eb8599c0813c:92cb181dfe9264c76d1c0f1f51ba11bb:8a3ee7ac0d71d63645f021ef4d71e9858667bb57ef31de72cd394bbb2207f2a493149d758b48fee0c987b5c81e472596f0d66a4f5c4c3508031d10f21b4b06d4f9964f0bbf8ddd1e07d7420026d03210089e28a889566ef6d9ddf4bc736779d1c381d88d6fd89262ff16dbe3bf2e3d789f2c35ae2157ac712fe0cfb98d3255870d622e235f880b0db68e74208f1c948422b3301efd3acf779dce93e48d761927f01192cfe2a2c16e95ccb8a727a62af58caeaddf213a13ef5a88ad080aa435e230a8b88097660afaae5e0aa50d2c05861a2971b29b510cd7c34f8f0dd16996e886cbf72a37f7b9a2f61dffc3611ad56d1f7189111a46c7beb9a3c7f736534c166ad1243e53314c275ec0b7377ffd645ac1897adf173ee5a7323c4b3a1fd1d87c73a252ed0ce9253a087754e353eb783ab8b9de42cd2388c25c82ecfa7e04fcfef13bd104f1290d4cd65773b3b0177e2d8dafee3ccdf5892f7acc7e78e60230e98773d8334c0a7126979e74126ab12cd884968ce83c2bf3d66f4c8d0d4fb76f2a5e4ebc6b5a2a8154be33bdddc153f32f205f25a7e9db7fb03b0bca5de19b5583afb422544e13eb152583a750df231c75ff2e69ae09a28a0327ee5fe23d96a67b750f773dd5302b73392b86ea884e5f1e76e2ed51e50571eb5560e147798835d8845f0d2e3ee95f0ba0bfdc7a2a81aacc7cae2797f19f32deae09890ecc8d89b9080aa37917701de433ff300cbc2841a65e76005aace14c8b35d0257e04f7dc66490f39f28c7f5fe1d1e3a64dec8db7cca301fcf36fe0cbe97483fae193f42b49603da46138103d792650d7b05939747b0a4cf7de9228cf4bbc847e17de91aba0d1a556a4f681752a6095bdaa14e8ee0ec898c351f60933184d5a0e6c8f99240667fc068025161c8344cfd98413f41744a6828fa447fbdac40efccbd82ee712de9ed54171bd97bfd1cab802c843b9186189eaf12c77c5c3bbcbf5bd7688a5329e01da8390ec3b5a9c7d57f33bfc217f8553e41d26e2f677eef8c0fb2079da9f031422630d0ef2700e3a9150f501a122ab77dc34843ea3a2f7b5ee09194776bcb82ca2406d14167a893600bd10a9348c9f2865c2e2b84eec3a242297c1dc2cf7b5c1196bc5ce918596defdc0b1a3ec70d4e50cd943d25f5bd683122396f5379c73f2a91d4de3f1cd486d6f5134d34abdfe07db0bd427efe7e8735282f561cf7411c0a8c1615b8f6879ca98648baf7b45f2c5e2585a6e08f89bd9f61c6577588d82a81b4c0224383d710d8809777f72aa4fdef68ec6ba07933e9ebf1223c29fa69d2276788ef307ae50f0215a27db6d4b94d74a632d7c70c47dcb502cef283f7eec33b4bd321d825f6a1e32e90bfc63c4d110fed88240a4f2d9b29db15458dc0b",
+  "8.6": "12e61675ee9bf4aa1be300e3:c6128af9ef55f9ceebd7a248381a3379:ca585bbe88521b623b51bac979423f3173a012dcb01847797bb3f8d801cc9767135ad66c116179981f6550e986e0a4a766871e34c692d3f742870281d8cf377e63f63300b1a28de25137fb47918f8cbcdfafa0f6d5d36c28c97c214433bb9116f582fbd7dd0068b751be1358d9d8ca9cdf3d791960bfbd3f7b68964fda3f1c101f8bd5e0f1abec59160fce8441d974524a1ae807355d6841bfbd6105ff61b349f1edc97874476b136c0e5091cdca5b71255330894bf785f922fe851de5030a1c2fec2049750a5ab41056eb9bb3bcafd17c322b5f95c68baa7846d308a5b8f7625f366e97eb77cb3728f6fb58299a5fda621a0cb6d529580b92e06a4f3268cd9c146259d5a9ddca373ccacacb71050ec11e67ab989abc57c9f261bccb8a969708f897cfb994b389d401d0c1ca4e858edb41a533bf38bc8331b02a305d7d6dd01a39beba12a55106c0b9959b0f6559bef0f536e19be2b2081f3d0160f4ff08b30acf5bfdb96edc1082eb3d574cb48d404d87b17b849428bda9b4957ba779389b8472cee06134ac1c60cfe42cbfb93e1f3296fdf15691060a42fd8fea2a6125d78bff952f0103c7c2f363476241caf0551d874e4e2f3fabbfaf520c17debb4f7548438af1e62a77b6af0abcacd6b33a365a91a62f4d64dfbd9ab39f30df9fae8f9da8f3a75d086fbf5a8930a945e6ecb6836ba4b1d6276557df55ab93f136408c77c3293ac0d9f3f0399b38606d026c0ce715b201a6912ec685154171a29ee9fec25973a8fa98cc6156448604fb10619cd4fec24b9cc208b38406526e1bbcb3cb54f03a9717100bbc7948d4489e045c85bc7ad831137de4bbe0f4586045809e8846450716952a852b05b682ad7054b60a739fc70acd431fc61a35c9455ae8378e1a164e664f458a79d2c3053314b26e0394d242f8c6bc6e0befc2d340e70371be2ad766d1363f8008c58d9655c393eabe74bd59d90683207ee300e4b9a65e063fc89e007af51ce1c099ea77f185a938e56eea81bb80fdd4ffb4fab471fc908656ee18615193edb43c",
+  "8.7": "f6f3d9d5e90d9d9477701b82:6a093c07a1788b8069701a475a91e26e:af1adaa1297f2db6504c9f9c25449e010785585ca3e2b1de25edca87cfd2046b29f2bc80f53e7b573b98606d5d1461f9291c7378e55552fd9b30e0a4fa94a036d62f13f0f93f92283cf0545b14758bc2df6f05f00cb437902df5b6330d9ed7415b9ececa8b4e347fc0c2191a67e9d0a8497843b9002ac19f683a1688a9dda06c9565af14621b8554e3d92423c0857c2074504ffeff6e78f7de7b40607986a4990469532a86ed86fceba112bf373f4f9a66eb023a6ed5f155e5ebef9d43346cf542ad6a1b8a84359c61339de0cc572971950c7abd572fb0cae2d55ea18411f440fc7174c500eea2016aeb07a35ae45f3691bec3d35219e03879bb7eea2da0ffe845b16de72e17b2064f87ae4d6deee940087cfc8dc0f15f02f72cf41befd4cfb1547212cdcc46a4fbd5553e9d74b6a32986d25122f06aed216ff0a9427b588c6c2359fc0f20fe48dfcb3ea0560711a14806c07ab664437d5db476c593c9944223e73f794247d41ab97cccd241664230566efc587d3b58812af6ef44aa076b4ce0f8e219568171e0a8161e4e8d2dac7232b593440e6ec21631b1a7fd000a6ccc05dcfd8073d67bac13c93ba1fe5c5e0f8b78fea7bb63734a9c525ed185e1cbc1c517affa9ddb739751c0689089afc4aed1b8f178f3149a6f1a96e100871de533ae009acd886a08ecdf9b07c320ada514f891e4b2ade7eaf982d7fbb61dab1f922d757468a6e5ae151f1d77395761ecf8c7431e3f39c70430a178b2d6a3d922a295967b04f524629409186c37ab40224c81478a4044438c51e56cf2800bab6bc577fcb1c746159731fa955a3cfce76cf83bbfcc76a5cf5422c7ee6008867b3c334649fdfa3e1ee8ee05010d4809909c2507bc6e7af6d1ee24c0c731dce052054ebd7140dfa0ac422318a0c2a590ac7cdf33096c3b4f0da07531a1745a26910740455ecb5d3fd7a89954e55f0178e3cc84888d15a1d7fe1d06c5f05ff3889f80cfed0583b1980273fd4ac300",
+  "8.8": "1504eb27cdee8150bb750bb1:18e1c9cafa08900cdd35717f1417b038:ee9400c663119d229c096e320ab602386ddf1d95ce9d6664db3d435750d5f054c435f76e470874ae7714a70b65b5fe31418a53693232cf118a15d54510e3f41150e288ebb89a161361f661c4ebfa72625d521a93fc84f7b6ff29df7f17e625cde8123ea1303c2ccc49c905414b42630967c36cd04af86a4be57a08f382923b5a0209762477a29e1ce3d678890391da71e021eb4d89fb4913e2e0160390ab7bf985bcae5738bb95758ce091abc1e56e2a65d81870cf34b41b7248c2be6a93ac321659106e23fb839b7c329dd3863d51103e73fa86e11d7dbf581f6d523eda0b03ddb127f84198935811be053b8fdb4c4d4264a38054d43e99555cb5f91c54b640cab280ffd6dcd7080d2dde7303e9db803523f301b522b0d3843e658613c0d089168ace8f97a92293758645bbfa8f06dd41f87b9c611bc81f6141e84d7f06ae4824e145b7a2e2320f6e3cae8e031aad9e9fedc3645cd3dfe25bbec30aa643c2922f8b88a25086feb52c197616f88744dfcedcaf86f81e33f8d5107b02fbf8877f2e24f192b37d16f5a8fe0a4f19ba99f9ff8f874fac8301477f560c4a1cbc53801e1466788870d2ba6cf1fefbefd6724d4346dc40bbe6025d436666d5ee0556609de5c272f37b2c2768987a0cdada2d238d3a1cfc0929e1836e5058f0b21dfc6cc7144559fa27850790f8ad85dca9ec0da7fecd5d25b74f493446ca67c156803c1cb4131e6bb03e135e7a525114ce9b7c9ed5bbef178c8ec68de7a869c4bc9c130c93c66bf6064b912dbc857b4fd049f1976331ddf545c97b9187836aec33ed1163cc10749b02fce93dd7317f6267430ee7b6a169d976eb587aad07aa36d2b2b4d9ad980d708cede2a31d666985ae2aeec93102077159ea58ca105f7f90b44817c74499c696588ea68dce400c9ecd43e3ef4a0494c04308ba3f571ac1d3b0d47189f39bc88d1b8a0cda2da9773dc0d04a",
+  "8.9": "6bfca017753bd139a281550e:886e8f4f40ae7cc12857ad77b60d5643:fc57a139073003c05ecc1a8bba616d878e6e7488d83b6d08987834d604cb6c5a8fec17d8c0cbba0a4053a60449506333119c53185dc64319e4885b7ecc2a8d39bb7b2d58c51630ff2376a322c302996ad0d7ab1118b255103384f421679e7de0dd06d3c5d4212c6aed49a53f850981aedb5c570ab7b18813fd2287585f964374c6d1d50d36ca764113655f2fd0b40007ac394f35e205c431141df4acfdd9836674bc14275590b076e02eb62e67fdd4d4102beabd8ff9fec8f24534b06eb589fed175844be3b7288027857563e133124508d04ecaaa745df32b1d6b7766e9f0f4064cf00216d5e99645a997a1123128681a8e00b0d74d8cb170c93892b9cf124cf40205a6a7027945d2f653d6a7a7d3e6aa043c4b3ab22f65a1a5c59c0f0c5d7a21a256d7320068e23adea18462772472f76ecc2b5b63a4eb773e41830b3cbde86931fd090529248054fc3463b875777ce9e5159064dde24b24af150ac515e26a45a68367da78eca81cf2197f6f366a881850e8ff14b41b4736fc3bb1a94f0959a6490e3d205e8b3d5c371e8261a4080cc25f77fa743e392bfbd4db6283ddd993b3632a51e63996a38ab63e8f0ce2a72f6ca8b088f7db9db2bbb18738210ecaf859d7632198e330f2f51de8597905021891067ee68f956cce18729c5b50f4cafc845955a8d038a56259e76fcaa77b236a6e2a457fb0be8204facb1d7422884eee398e93fb3932525365aa1ecd7a4287ce27a62f121ee2f515e63903cc65ef128f60c397a7be834a3676d83e85fb7904cc504c6cf9e917720f8d134740cde7faf5802b4eadfee5184a6895912cb4d06b58085af6388551eb376a10ef52f06b6f6b7316137a3870eda9596eb61c715344e024d34274e61457283b6135e0d69fca0af2a43d81a83e184f04e1e085c3d2f92bf0d04afe0d47500938f9ff919cd5c8bb95fea20826003bf01a27f54854b12dc8650dbed4de785bb0e564fe10542d8236e7bbc1fd007283eabe20b6fe6fe10651e22ffb50d6121b71cb401fa1171a9be9624e0a4b56b62f897a89fb3ecef1c5601f00c7d7c4a20b059db133955f6b7d3f1e9e1ef99ce6a5c942b85a247828108d7dfa1354fb590cfd2b5a85666aff44f8bc24dff4afd7e2d198a0690b4a915bf308a44c01e9c33fd6473b27658daf5c14191261f39efed0376c2c0cd702825c7d65a21ca6d588ea97ee7273146a6a39f265f1c7875bf2ec0a47d595f18a8e8bfad1a810eb1c4120b68d15ea69886d855c278995a5740367dc2d1673d6e59e95147ba9dffd6163c9a4807e9021845256ef54a7d837c7d233c8ee77d99a842dd29d799e4cdf1874f52415a66c18f1e5bb4ac2cf3e23f2de2b5d7524650d654248877b80fff5e715d615ece958e80f57ea17c16f18e751be8708c2e6374a65e7912275fe574ba304a3ece9a4f4f275c202414fbca51bdc8670fd392205",
+  "8.10": "d1b857e4fa8965f444e6bd06:eb6f0b63f3bf6c779245eb04979ce858:1f77a785f92689cb97c346e0f58b477a422f46e0b762593582ff793a27d243c087a2dd6a5981b4bb6fec5f87cc81a4f88cd2442f189afa0caaa603d29d3bd15b8816dd880d4e4a02188645b273f58ec99da22975a8822974ca149672027227f69f8072d9fd07b3c6ba7f7322e8fb9abce8cbeb8c46a0808c1ccdf6b08388a2af6735aafb9d5854be55b8266a366d347808eb506fa4d5b614c992136483310f7415c9999902cf7660e8b280df5b7a819581f68b3b31130eedd11a3f1b87ace35baea2254825c0bdbedab35086e3f73f6d6585ad7e2225732ea0f1bb0942ec37bc7629951a74fde26f7e6bf6007ef8cf584dc3d133008011d3ec2336180b07a6fe58188405d810b03b4b1dafbd12abffb62d209634aea2fe8ea1bfeb1012dc3253c00893d764671c1fd8273b6c0c88c5e330c64938ba9ed81a3f090302c7d50f6d7d182b0ce58f73a2fe327242385b708ecc8184cb8217f506d82776d4fc6881d0a70b1ac6348dbeff8b17445792a15b7718dcf91f350962c03e1e5c6202a42cdc76c0423b8c9c21997f2af77bf0d4ea3a90f3f0cd0da6c07ce56be4e8829b8a35fabb690b35323f34cfc16ff62943d4631048faa3d667dd84e7626d1337b76d5eba295f7397c65d37ec83a79659296c848be9c50d9a04e98e36f6568a814ac1139099b4bcc55ed7e34ca64940bf0a477bed9943aaa9bb6170302312aeeb1e4482583292ed7fece73b34925b5bf9ded780334e68d19a44fdd18af5aeda0a5e44636337d26e95d62277c5979dfce6ae5124e3a2b2b71caec06f46056d74151c1e7aeaa909522d9689d660f1ffea91d1e2a26331eaa0fdcb13b783605cfdf6379df7446ad6db28ee2072d78dad9a2a5a3ee73b58139b7bda231e395b6933b12f5105fdd9e739675eab774c13c7473a4da0f296d2ff0c0ae061325736b3dbf8e0f81242b17e711a0451273398d06d538a6cd1dddabbfcf27d99671e55319f520a629ce9d4278bf5ed03579704e7f1b073b6ef6d6f6aa02488aac1933e63b55b1481a8374f9dcc45404c4f50040423ef161ee38a92431d931a1b58cf6e34fafd73d9633e67684566a1e87294b84faf11d877004ac201de03a10b306040fb8db7c9871deb9c7b24c1425cbd58c630031775807cbe2aad0839932a",
+  "8.11": "c452ec2ffdd6347bbc3cba4d:caf1963833747af65faa308993db8929:075745f0c5bbdc10127477b0552897336b4f7efe3b2503484202d0709d15977635aa23e46b028a6256c8751f790ea8b6023dd00c53f645a23e135349a29fe6361f47de633e3583d02ee204f8dbea310002e430f47f6b51875eb9f6d0b69552c96adb3aaf9080b3b74281abf78c3140edd94a44356fd0f1e08b39fff690944ac73e4ef4773ebe8d43878b981fc5177e2d5dad343edd4208c81996ebcebcfe781449a1d8068147fbc6960ba9eb018c5d475c23147fcd7366cece9936ca6fc7f6ae6a5caf3df720c2b964f37f6541c2f76f75ddb34950e41f63ec4b9e0c5dd073a92dd0d4187c07ebfc8fa46bc8d51e17c473bca35d187bb5e8f4e600f7c3a3c62bc521a2c3b935ad23c1ef4185d1f06de86beb81150d2ad88c97d0137ace71296cdd772a2cef8291ddff529bc394925931c1a84606844ae2764d8b6fa05b371dc3fabd77a363e4ceec0584c17c64482df89f5fe7a964835f9f9455df6f21d9d53efefd167b8ced605fa8ed05fc652f52d09f90eb3a15376e5b43d56d4f6ffe1a7c99afcc6f5fbb7e53123845cb15e3739b1f8b55ce1ba0ba694c1b022289e7bc7189d6ea760b5659c6fce00eb102f91edb774efed4b839e13620ec9da80a34f9ba2e9274138ec43e6cf2c1c3b2221f4b080ce2b10bc388f96141757b03b7acc7a2d979e71e5c2563ad4cf80920377b6874fb28a27f4f05181bb99e64e1c34d66a4720010304942146e30c9ba9c82bf5a06ec15c274fc4aca5a411cf31f6aa686b5b1c01c089b07b46957132de4cb7c01a1bc0371acd49d599b0079d9c89488fae49360f94132be229ff8b4a324d47399e82eb8f38dfb759f4fb7cb58d49ed6c1ab21b939d41a1e4088029683016d8450d8a72ce4bb246340db4bdcaa9c97e4914b04c20f61a18977e92b5f4cd977d366773a263bb7d4590187d05a4516affa7e2d977f351cee6b35961d3d5b4610e2df8f09e1d13e3c58bf4c6abdea75804f1e73402c9b100c2ebee1d88602380069e9c1b1256ced17923bcb8643ef60b8db5ec6855d12e4c39d619e382abd36a48e72a7b496a219899f37a31311dbbb54b9f062300bd1341f41bad7e899b1535e29f15dc481e528a016c5cdd7ced4769be3a222cb57be12453276bf6e23ab6906eec3fa03774062b39875db6c1ae6444e516596241e4e1e476a34d894e10f7b9cbeb6e043beb4efd295349a69f02aa98c5dcbd6b8a318890a3e6e23d6eac062a028f7e2b9b8012af0c7404731bdf757cb8b8640cc80cb291b5843e8951c3e60f85443978fb537c3cb5d4ee711b5faa8bc86174ceca31c6111871ea9b2b49a13824c01733fd9937cf746ade8587ed28e34ce136a8532d78b17e890bb0a6cccffb873a53140846d3293347188de47c4c43aaa575bf2160ec45d7785937ba91bcee27d61535e7e73d414a6ff31fc31b9f8dd0ba53a47368ad6282d2ed215aa508e2e",
+  "8.12": "3c8fcefce7b71031efd2953c:a731e3674fc6983539b4062d8612ae84:874bf9bdd20a24d66f30a5f201aceabd57d23d21ed3214bfb1fa6d51bfa510b26e03ef0486784263715573b616b00b3a5771d07712500bee22a26c1973e0e8a3977e5d3aa9c4ae80115dff704d2d2bd87e7eaa97e441a2e9546e1ca46cdbfad5c9223dda5c7002e5b27d733b6ea8d909e2d5846cc2f67b24e63f56db23b9ed3feb6c23c7b21a93bba07fa4ccecc2d90c582f11bc64a145d674a58d969ce554ac247a132b4a8a52a1f30987ae488415977c7060de8580d8980a9fc0e7de8b97568382c784ec78196f51a5df8094e4a7f717318109d92cdeba8ccecd1dcdb635b272e8437846b67d07a646ff58dd5a185d5f931dd9d3a4979298fb11237d6ab9e42d87523bc5226bec06806e33e389fb94bf4e61a778efe2654ee0500e62dddd961710fdd83326c18b1d71f9b2d37c0932b7daa80830c78db498b4b18f8fed9cda3b73cd1b74831b72fbe442bb70f9b43c213c2f762956797700d7cb976f134533989c27fa3d3585b6203ea95a189c6d0c387d60c7c5bbde4db1c6b307f0717b6a4efd473d229413641f53a5843841a191a7517508bcb08d3eb7cece52d31448dbc549b8846dda882b6b23470fc237bd3b7ac4abd050e753e16ea8fa27a8b5bf969dd5e52b433579216e0be5d70dbebbe4a74deb8d1d8bbd4e0da020aaf36c5178e0c43a289f2557cbf62ebd914d22e77071f18d9d63e8a7ca5332d31079109d32024020cc3a98b5c4a53e275be57629f7b1067441cdeb113927e8cdf99fb12ea82e885be961a29b92a5d9c94a31db881ba3553e2099a66122f94169d109c164635869a025f296d3efc189b6f406908dd745c7995af07c9e88be1ab839e657fec47d7f5942df253f965aae1e4130bc23b2028200ef55c87b141212b6bce7142eb45ec647c5c61f56a01644d1610099484588d7f31a342b43ab14bba3a88439f086ec47ed114eb18f3edc3a6e9905e95716be6cf14cb6f57ee95f26d8163cef6fe2d7b1fa586bc17b4452d21d2fdb4c916693e1ba950d5e9b9f152216443ea573f5c7155fe6e8fd43f7951e2771613f3307a8d6d87a9aa8b4c0044b3908ef89abf6dcab889ed2a42b5ab8766c783a622f57be2cbcce4e76a9f3a45a2ade28a041450a3760e298bd7a52c8fdab0f8375c501ae0aa295c941d5c699fb94dc28749dac63d7efe543ec7b34f37d9fd95157ef76f56bcf2cfb3e9b637bae3ab68acb19084067bb397b0196969b0d967c8f520443332d41028d0df05883e9bd452f745a6ef7864ae17c948016",
+  "9.1": "ac8eef978d2182e99b3a059f:a0cc5d319ea803124596159a74fda5d8:0528b00949ce183c7562a886bafe752c782d3235693ed36da32720289fdcc69ee41e588b28facfe48458f580daedcab6028c06a6c4979a31b8b25a7acb6ec246d2b3ba5c60515ca4c934bbf3190848cf5243267522a7142edf410a5cddac6d4977839c6bd16ee193f0239b87ea678da4c68716b69827fa5e946e8e61d1a9acc58d0e87159d39134b2bec5bd5fc831a2ced3f6f1f38db4bc165258af832082514328a0c2edaef6fefea486255f9574476d4ab9fbe7d177b69772f9ff65a017eab99c360d9940d1c675298763af2dfd91362642477ab407d815437f6b94d6b4cf4ba869f8ff7a782f5df40e9ac58c9befdabf34dd53c6f87147026db3fbf5f490550fc20ef6004104528c8e96e0373bfd59b54b8d83832e3eb7f4f215bb0009258b88e2f4569789ba3096c688f6590a577b4f819ea69f8d1b79393884c30716485a781ddcf5dd032b9b3f508501a34109673dd4c9b03cffa039221a23f0ac892967d9565101a7f9fff457e94e39bfd33ea6021d0ba0e393bb22c8fb25d22e0d3508d99394a732b9656bc0ada99efa9c69d48d7d52cd3fec3905bba761a07a25a8685be323e4747ce9d89c5890fecc1ac897728996d819ccc15706b286051cd7c37da9a389a553493a1e4804e05aa481759d7b7ea91d626efeb70e55ac71efc10ae141484c34717bffe623d07945d5abdfab7fffcb37371592bd18f4d1be7f05feaf5513a94ccc8d6ee2c762a140f6d9df18cc2648f23785a7823852769cae2b47c51bee901046695207387000245be59f6a17d8ddf71552fa4a7f459e429942ffd2d6f104887cda5d419c26f2116406efff18d5b56c1d679bd151752d57be80792772ea767076445f8b4600b35117021c2832ac489b15271f0e47c9d7a8df4d967f55ebbb6b72e372b11bbcea4e6ee303d95de51d482ed7901336f387c0751386405d40f2b903fde38a1342a9e0ed626bb409257ab270c1943a87dbba78d73eb132dedc229a5ff61c8d5c2cbd96723839cd0e8f4fea8cf1b05213a08ba5defba90e398b95c8ed9fffa82714489a143e1c712a4fb356cacd3b27fec401c162b2017d5de7ecadc6c0d3ac8d5252f7bd2c19cff850a504238feef7b961f1af9c94aeac1da180701f115830e3a0dd6a72ae7eda10d2964ea9a81271ab3579457ac5e1ced31484b3fa318eace5e33f2e25c27b6400641666e5e1cb6441f1b041c72f02b1d975c98e1346a7b9ae9127f28719f3d5c257c4c48e5b73d401dc4ae65968c8d782abf9ea72a5d26286702c72e656bf593f46db433d7e1331b6fd5f19e556a3e1d6476476ad8d84891425a72f53aa57ae67f9f51589b7097556b982fdd379074dbbd40f95433a6b265b5d136eb54b59cdb2fcda064808c262c48d806cf51ed3e3834bbbc1d6551debde27d92f6fb45af9240aada17599294c89b2f7a910f9f7d71b88967f76320137cf8a36f42f846e9503de165f5479db11a666e596bd4e8df1f57c8044b3cab05722820851e04919b0e5fd1bd95c78904b4566323052e0cec3a443947251e6d218e95c8e59fe0a5daa36abfa02f21c4b737e2c449cb90834d83130a37cbea6ea54686eb9d04ecb28862d20b47cd1487063acdd8d32e2b2507835d00238a02245d03649ad21b8dce0ae09ca8f1064bf60e71da51331b12dbe5e630b231dc0f80a2d4cd8a8a6343f4d159febdc1a6217484355012061a5a604c8b8a719ee263b762a37c19e7f10ddcdc087ab062673a7195df8143733046a7e489ffdacda004dc12059de46a90b3c5510b7b50f2c39b2965af9eb39891c71d67221fd36ef939bfae85d7a27bedbc380ca139b4dbd68588b37477891b12e24ddd2d93c29973ddc282e8b5709573074f207cbe74db45526ee1440c372f20aee15101403938c8782fcf2727156552009b848d620b92847dee399c576ae4638ab67dff528b08d1abbc4b9eeadefe343eec606b399a7b47f6fa62b3e622e383d65cbc3611921cbefa52f70a30525cc85f7ae36a5e2587e115fa63a13491f10150d4486c0863dd11846744bf16beae22cf664388c42940789e587345515ca188b23ca7669d01232c876c34284e7deb6a3826fb34f6bfaf4dc866ade02e2672abb65315da29fd00565e14e4a10d2aa4cc0832aebb6e99fe19d4f4244ff733fd26dc29af32ea6451a7fd147b3bea1370be48a4e311a72eb7d3cc872b2afb5af1f800388618997678abc120ae2884f2d715ab0e2533e5ce42a9933ff30da5e225b11d80a73e458dcf6066f42ab8d7c65e42171bc484a101b905934dcf1c1f2b9de61446f68fde33e621da5e0d7b48f93fd551adcdcd3b203c18e63debdb9389f2dab3ad651a03673aaa1c8cee82ae1906132a56f9166598345ece240da25aa196126b57dce4bb6a4393c4683250c21cbf93a30d330aa48a037fc3f55f6a8a4147c0b6629cf58b781a40d6e291f120e86da0f185910b56ba56335d2f800d913df47b856f8ea2bad1aaa68ad6ddbf47ea1136f0cca6e66cb2aaa2152bdf6823fd3f9ef1ef4fca1e1402b8194dbc15b74a7da7143e0e4aa607538c137bf82aa6b83bb7a7c00d56e4b5c1bc14c7a9d12e45bc2a558d2870a19946d731017cbc83cd2587b3f0083b1f4235e2944c0699a5788c33e0a81f9a1c57d00ba078e8687091a449b5f807b6bcb91eccb5fc4cf554c5617c9240a6dadec0b07d1c8f6fce66cfb66ec4551bf88b8967fd6a807db5f70a0a3dd9530e56f66a8c7be35a6892c3c6976522480544ea2b2e5abfd03786729c8f7ce6a466fdc90f7a11e31fb083ae152a732bf2138109cd324ec6eb32705e15ae083164f907fa1f1f9a3646bf24f9870f8f48866a",
+  "9.2": "9f2d45a63e874f66069451da:db47e124c5b87b7bf984fbeb522b0135:8d781b0681f96f1929e16e0294e97f6ffadb231befd85988e5623b6a04e37cc627f68483c02f4158a4c8c0f899a55ea44c238c812e5935c08cb01ec273885adb362c26250dcd747e2556b66ffb7a9f62bb28c280487844b212efa6acf4cb5cd40b7a5a7bd2a3ea393a859e4bf9d12996c69ecbd618d5306865f3affbde6cf5d1f5e2c40245db66e086737eb11cef453e8c9a6c6cdc21fd08464afb4ca6803fec18a244d1b93089e45cfc732ea8a19e21cb5254be5098a6e85a529fdf9a62abe4b23bd52a936093c2a0ee58dbf0bd7efb9231766e99780a6198bb7abb007e8cebcbf12b499bcf2a9e48e25efd9edb8bcbc879a9aed4576895cc53a986640d70d306624dd6aa0ccb843af69dd8c9a202ed1b8541db46314f61262540b985935eff74f340b6d692f0e6ce76796aee5fee8a314d0cd96bf5bea6fa60cc4f8a492d4606c913158c47a6a9c6e89a69ae424ae2397cf934a717be0790334c189831b34d229d375cceeaf914c85b0649ae19167c8b7fdadb43609eadd0be35cdd648e7b8e007e4d3e47f4b0752116cdaa0231e3b4e0e77a514da57448a69a5ec713de5ce7d9efb922c2de2a0212b70d90ecf634bf48d550be8527d2f4b8c1bf13e1eb4e21f350028b469c16776df759fce7c3296ecb639fd82b6c326a956d5e334a834335ef92ae12c49e3c0688aa6fa8459905fe087af3f22854247a03fb000bb58b57669be4c6a0738b8b38e44aea066c0263f207dcfb7d3d37ee861f103350937790642acff13c929c5c4e0f45a2a183f79c829e92ff3c30b7a9b7636dd73223bcbd1b8ddd5c84794c3b0db357f782df3388562e5afe1eedb2409f1d6eae6efdb9841bf6b2d06ab949509569e2ef2280d5f951e2755cc005f47a13bb87eb027e3fa843c149653f2baf391788fafd8fa024cb6e9d5aa3ac6cdb489d94ebfd21d98d29a384fb99f491645cf9f59aff64dd1dfbbb0627a20d6248b45ba49fb6c251ba00a488a095e0b8a5c8ff18abcdaee1a07e653a703ae3dcabc3cb4688796915dec0a02aecba73f6a1052fa6b9f3c9a23bf35d1dbd98778aab8e3868851bf77d63566f657c16b012964c56739143ad71fa8714270a4000312ee1cda30331554f0cea40d49fd0bef665d418e8d7f9d305400ebfcbd43d67b39287697b8b7ba93ffdd118483aaa076c01ec6b5f715ccf44779f082802df31d71ce83eb7f7b88b029c49068205c58c7ea0d86166b1592255f3cc156b858dd246ac2d95b131210af40e78c1d5f052c842221cc69c93b270a7a832ac317ec8a4fe122161db59c26e8b1bd595ea2a61ffe01b36ac4b0da94c31413c7fe2c9477cc7b60b3fe97d40a3ed1f9173bd569dda6ee516ccfc9ba5f4bb149e333a1b42649e0bf1c1dba066eba2c19556cd4593ece5561bcbec499a9551c5dbf884f2e3f18792622e319f467482dded7efb8da10e08797fbf5455b8d84bd7acceebddcb7d53f83a7040cecb4adfd67485e777eb7882d782842b4d59bacb5048afbc82694487f293f7e3c8609e593c455274409cc834a3845f8d271d96acac9861a3edf2e0ddc54ece18ef21c93e6dfb793f5f000d91cd9abc9587b59f92237228cec41dddabfd97172df0cf0003cd980233968a3b1dc9c61dede18324bbed72474f1388be30b81e3b6a2551ff427984b9764b3366c45061bf513a2762a7eff2f9fca7af48f48bdeccc740f94871fcc805502da4d7c245b92aae48fd772497ec702492a25b27fb12e521bfe051503a9d957a791f8c6cbce21c665ab30ca288dcd1d911056faa6d82c499d3d78255806cb2f66e45ea36a6c3f39f7b9804c40c6b169f574f9a3412d4ad811190a3f3439859528d546a7801a75421490807c13bce470c3e2a8d79f02b023c9fbd2db49c3f30a22a63d547c44331b25107dfb124dc5d660be000def9ba7da0b2ea811d9794fcc3f6150e6b935ad4154d3e10b155088d49a300d171bebbd1d3e20ecefb861dfdec4eaa72bb9acd94c6ce8c7811eb72d41cf2dec57d53ae55cc1e5a3e0e6827e3a755d200d7c14811ea6e55977160626dd93e4f395044279384ec77d8c49537a8b8bee8e78ed7c28bd4ded7ba5660195ca821e02e835b4a0ebe9f195ad074ada56b77b405c2f7eb04b3de10e24ac2b1e91a2abb7f5b9928183fb989e721461f2867e7f0f4f347ca0aab608bb7c4388ec4e986f3655daf9a4128e32eec0c985263fccb934462e68f1212901edaaeb97b05141ca9b95d4fa583e0e778463707b4a3be5b9f415d4e219d2d5189f5afab1478dab044656b5ce3b77eaca1eceac0b32e719e39a8182c43733999700f35a1686b2ecb31a9ae0f41ce10743c815754bbaf7e558ea425f25c47daa97598f7c756bdd93f09019e296836c73d4e166ab1f837be1458f8893c5b605bbb14589dde36a1ee407e031821b371a70e1671c8b38ebb405d3561ef9164171197fa2c15646cd9ee4224baf7db82708048fad1f44357daa124a3e3170ed40dfe290aff57ae22c59f6ae6163c7f5955578f9f319627988165ec24238db34835aea393497fe2d7798523e7c416b6af907b853ef361b3ff542585c52bf6b314ab821bb38e5c4eccfc71ee185d37729b24190caff6ac73c30521d4f68754ac191fb92ee7cf68af330ea8123be1780ab91cf01a1310f913339c1ae6be8837d6bf6e6b91403faf90c10754efb898409bad214616f8d74189fcd7f727750380749a705a10ebdac8e52bd0409e6eedcb68ebc004396888c065c7742e7afec1eb30b5eb12301c3d9abc105e988486540ab875911370eebec8f874296a0190dbc8d2a36da9c5a0d4128fbf99c383fded84e913d407a28365663104cad5d36f499d7051549f9f5b02ac76ba9514ff63330ec8c9c43ced675f9583fa241238312f8c2817bafad7e6c1781e766221ec42bd01560b4e67aab2eafa0e338635767ce61094772682b",
+  "9.3": "a530fe2c25714c22132f976b:4378dec7bda123cf809acc1ba6c29265:93e82e4cfc7f7d42d6256fafcfa680c338a8721358fe88db024377fbeddc14a74e03a6efa8d32d9123ed566d75a14b5af590ec20ac28d71da8e6a25bc2e6be9a1189e2032d0f66a333f856c06d5f0ad2583c8fda43653c17c4ae0e301214f590cff8ca35a012eb9ef41cd6d9b078e205fc38ddefc1647cdd073b5909a949d40792820957d3ff62bf9b11df96a93c22d9ed9828fa75eab6c5943b92074d08144ddfd93daaf32e5cca2707b6d892934ac480ebec2b308a81d0b1010016693556a107b2c4220a18ff185e03730f0dfe317abd502fcfdb33020fb4875d019bb4c65e4ac9f71ce40a8785d97fe18d3aab1a1cbae880e293094c4968d212b4fbfe9cb24c91f1e308236bedaef4c3ce29725e63a48712b862b96a308cca1dae5ac1b7cb2368f5a3a341c4150513d8d98c7d2ceeb6c9bed32b2812df72a1e59005dc303a87cef2a5bcaca650765e21707459b3d2ea39702d27dff1d78172f4d1f46b869c5cf55b042e48d31906dcb99dec7767e4174691a419ea47edcc3a97ef559353a76744949a45adac12ea28623113323b3955c96d8e232d23d06decbd13d8da1ddf61294159992aa5d49e1a246d8d1e7e9b552e42c2f53bc937226c6d38bf13e1d68419f911050030f51460761823f34f8a0bf08d41a666fbdbe551177e5d8814ed8687311f5394221194215346a7ec3f70dfd3a05d9ea094033c0e7f5092636bce503b8686aa97dd4609fe75994420b3cb2efbee1539021214f59a60b161afce96bf05a578ef26165d1e50b19718a51e0ac1878ae91bd1c4dd74a0724bb16d338b77eae92b7a4d1bd01410a183ac85942508f1b3211ad365563edfb2ea104587217485b47c3b7330d7c89bf3ff4b5eac96f1c325c447aaad19255c575146ce39a7e93c34499090767a76b0e4614eee326fd592925250df017f598440864069535165e857698b7924cfe7dd44ab69e738946ac4b7253a3734c3e4c0da99e199da37693d77097e1b95c80f0d9e7ae23ce314c7c338f5b678ecd41604a7d3760da8dcade1229e003ef4c013e315452c5c95746622a0e25425cec37c701a666aa6283164b91e600d7fc79c0092f4b7931534",
+  "9.4": "0be13aaeef78c922f650ebe3:31ca864a4248ef6e1026e43a184e5816:262d876c27ef2930b9fb0e04f76bc168652d3426ef592d48fe02e1eefe6d615e24e240e1a901433c37a3e2e81c7243f5980dc94f06e74c154e960b034a8f07be312fa6b419ce744955614441830bc45cd4b4c4f3678dc4e3814107c137a76d52ec10e14b4b9abeb19cddd4c5f978f75c10f1ec24d715324363f539da799e25f10fa672842659a6223dfe33b86388c1bdfc274129d658f9a1a2465fd5eb761eb91b4d29787c38d601f34ee3bac6fe3e54694c3c560ae798dea6c1f45f4a7b9d7727af737a716d66e699bce0b232e1fd250de8682af1c8de7157d1896cf0b1e66ddfb293eea612d3b446c8b07ebaaafd862a8fdb03833815491d2866233deb8c7fbf84c39ba8b466dd90a33c9100d9efa666a73e97ab29c5490154d8ccef8de33335c1a9cad4fc4491591e9a56f9f5a9f9aa228223922826ef90a15d88e6438c27921dbcbec5cee988a237b95cff7474aefe8fea624d8b8efd04f2f546c2c23659deb86de4f30dfa0c55e2cafce9c2b35aba82cfb3ae35893c30329a1e06dff95cc631ff4daa214463e822b63c541c7e1a8bbfb7d06f6c17d86587f1dfc68b1752353c56931b415cd96024e0d7a70c42b4a4d34c0e1612322608fa9f539ea2869869f2b2a74e4c9aa75fb1902b56fee1e1b6d30c0778babf9530c5344b619f33fcfef002e39db475c236a95c3352f6c60f7b14a92998a62a6e4bc387102a2f0d8d8ff00a4d0349033a338330c2f4c80450a14ea84e87805a9356fa452f5bae1fdb236b0990fa05761a651b21a14f17050325accc3f5a5f9f6ba522c0eda1020d71f8955477f528b383dcbf1b0c7a0abc409686af557187e5aefad856ab52499bca8655c0e53cdbb7e9a66853ae120ab8652e365d578924a9c841ba90403f5dce5df9c904738e526a0db8835532693dba100046ea11f74337ffed898567eaa5503ee2db03b9be8480783ef20eff1cdf7fbaf2361397e8c5b55309307c2aca25bb52d7fad4086336cfb6a0ef8175c9039bb65058a16964f930a5f0875e1ad8872574bbc24706e7de81886285a81fd19220332b12db3771a93b648e818af0afe8e3b2a249417506dbee9ac40d0c7e51967366a8c04047a0350f549f37972a776f38cf192c2316006f6172024266ab90cb378428577a92a0339362ea6694b7bb4db8a866538b131d00c229f8e4cb5a7701453230af5cc9d0651f4faba1cd03a7be90c3746f629caeea9aa542583949e5eda07ab9f0a5c7ae3a3acb4520f2ad789b32228131869c79e22ef1a5085d6aabde0975ff6562184f745e20ef94a983b5a2af566cbfed053a8db223589cd2b0010768f607f8e408db77c50e1ff3a9d4c8239e4f018a923c124cd0dda4",
+  "9.5": "06078e2d1a5d5787dcfddfdd:a9858dbbbe23c42ce114a062a073d270:eb2c5b8c6ab14dd8b932bf82419783fa0e5aed4bd29f31c7a14bf7ee5c4cb785ed8f338229b855ededc211027466aa738f5909077e68e826e0652b957c5e6963835b49beeb708850409d38a8df0fd84919e0522990b9ea50d6b3bca407f78cf8ca8c73667c12642089f9280b41133b39df604d4e048e4af04047c7761fa00578c9d53dd16af5cb0820e71fca2c942e7c788cb1f961896f5c6bcd31fdd13b9fbf616c3d2fdbb8991a62e725fe5d3d8707da18d563a6602ed199513846d353b809b10f90d39c822f53a050db321b32b1bec8d1213288ba85b45f2290c3dc42b288efd369017d019d4525d18baf1afbb80589891ad0f570176e7fb7a2f897ba5a39ad26b76896102f01802138531fdd0ee092371790ace61af981283c4e0325f2830fe4b9a3a623944b0ba37f75991425fef40c054694965253ab52f63ad2d97eec5e7c5ffa3419f4cbc9326a9dbe22a9b80baf09de58228ce856cc07f3e245bc53780e155bdbcd754cb4979ca5a88ea86707eeb02c4c6460bf266c14f9a8bc634082b6a8bdefbdfcf448e400535618e082b7d4420a7e7e036078df1558039bfcf341a08efeb9eb8acf938218cbade435c2cb8309bffcf8bffd11973d8170eb7b420a68bcf9de10ea1ddb7ca0e916da7e828a1ec91310dfa5044084d7d7b56cba7e377a54225b3da3e020ccad0c4735640ef4f0888bd71f9695a7192c5db8ee46f4ca6e5a2dda7f7c0830371f3f6f85ca872e1ead5ed0a713674b823037eeba5a9bb9a0315e2200e979933ba31319453c495cd0cc3f0c4eb770cc27b1f1692cc4904ed49598ff56b0e55c95db140a290d152f5c864c5360f97a0939aec542e906cb03669e382feb45074691bcb81250aed1849fffdaece7ebbe014a1b7e4fd8d7571ba579051387ad3059de49b7074ca5efb0fd86dc4a34f04154f4001b73e55e0bd49373f48279b83934164ae8e8f6e96a0ef5c27aabab0c7d7ec4c4d42f5f36b36d7f712cd08952cf0395c3e2e03f023878322c0a1e0b25a1a60d19f3658a8c1642e9c3e029edea3e6d38c7e8dac9c265aee3eede4c8f855a761a553686f58574c68a16e5c085c9583f5c774e5167919557933a9eb1691f974c6ebeca5d5398760d24fa5bd3c084447f0192fa407e08f842d151862764318be3aed4053389992b2050c8e95bb7ba663eb38d2806cfc9e173e3816da903f8",
+  "9.6": "136ec8d24a9a6146bc82b34c:70c64ec3c3c15c08d664e2c783fa012b:1914a2d15b938593a36f59e9aceacb3a7b90b274ba408b5a978cbb0afc2195aff2715274f9edbb5e7e4d814e9325e282a318aa123426a8a9fab5cb4073dfe99b559b1bc65f0a1c16f91f64e7faf995fa593fbd718d7e5a30302f73d3faf3664144f4804c7f53e4946a485f9522493f11388c508a3f52802032b3ad8258eb40b44cd720079be8783a826efb03e6f8ab00251714507548455bf9257d7852514582d01e96f4650670a0fed78559bd2e456e76489278ee0a2f77f063f9f1681d84cc6d011e8d33118501be0970ee95d1161df5010dcb7bfcd1eb0710f6c26a06ea5209be494391fc73ad8caa521cb9cc197e703576603be57db7e336e82516b886cf5c8ab7181b9975355ca9c13ec379f0f22d3aaf602e54d8b8ac45e64b8e958e438270aed7c4635431f6388cb2dae02d67bb40a849267b7323dde9d258c4130f61d4f897102e6e1076a5c32dd02ea482837f8f44cfca4944e2a6dac9f946d29e0ef0787639fd3b91f2f59ae03ad6254b7319ff85405f3ce75c2d3264ac5362f23767c8cfeb1416815d27e50ea34453122b7d49fe02834754f2d7bf693a4af3301f83ac39c1efd5df4ba7db4e89ae0079fde11af3c09767fc89852d27f92a5b9fbe37666a5e1efcf8a119def4c27e041579be18b01980c118432bda452b21c893b4bc8712f62d5264198c4148434bb8ce97329192180719ad103a8987ae15bf6fa171ad16ba9f5ba8da7ba8b0af7506ea0c71be0ea9768a59c53e7de72268487fb60a20dce97963e032ade3d789ee3272d5f6c4b91ef614af9d7b3839f19ce8aad1b81d3a1be661ab39a17ec868ab1098ec1b07595adc8d59fa91e92c2fc2245ced6f8225cf4c3ee0296787c68df47183cdf747ddb83b221b9d29ba27aed72b99ef0903d1eaea9104f5d2cfbaaa066cbfe0270a5859244a4e28e8343e4eb5bdf8d7880d1254e96e33e4388953dcf57c01b8604f5e6bb81479b677d17372197187ba3b5836e008b5e70ba9a1f6185d352536b0c0af158ed2e839021a2ebc1b63de8e75960b53371a4d9b461300ba93f0bd04963de13c39bab570985df3ee80bfe7969639fd2ea28b0a13b2f9adb462be51eef6792068bdb4cbe0",
+  "9.7": "11e944c4772f785faa88dc02:16bcbecb953c91e37f303710c6a6fed3:08059205b782988c85bb8d053d3b83044b474dd7c617509e395cb94ee02a8799e34364f50b75c4bb2279f538d3414167bebba215d2146b387948ee401a2ac7b2f77b6f4958f278a38938278ecc006dd6accac24a333768f44c88ca9e106d4ad844b49674da265b4aade7fe4753ba538a6f51a445cfe1f5656f2bcad2f6ff6a339186a2a8106a948b1e3ea1275c7fdb67d471e1e9f21aeda80fd4795db5930ef17b15f8535019ac570ecd5b120d93c0fd007dcf9c5014d5169020d58c99356e5d05c1b47a16286c6e012630bb31585331932953176a2c79fee7857dde2dc0f63f7611791dbef2f5b4b1d943da3f4f701d9bb997c52fe3dbd9e12cd98ebffe8b099f82d37712ab919046c312b5eadc53b987aa0adae1599d00b2d0fae394bbc61b2a5dced7e9d7652303f1e7d856100aada45f49de76f71b1cae5620b16eedebeeab1831bec9f282101bcc2bbe04b531def3246b10a41d202c55ad70f8438971ce712af3b0c6eb71726591fa6d19b26e94e2257a8a6606af773d8e67ca22820c2b741f4e90d1b16e4753b94068bf95d8055268ce4f50590ec6e31abaf343256b1c4d5814e4b28ad850bc48f743f1a277c8fa71ab2a481f3f6809acbf44931213971c4f45fe82271151c63decda3a7e10ba84a5990084ed3afaa9e8ae46ec2021957093fbd579e277ac34102d29b9c6774c8dd76c9ad54ecd77119e0e20781f213110923993da21dda763c2a06435f4d78293e6d57475f7b2cb66e62bacfce0fe6d78daee91afcf7a8373f1a11adb410330a3a585d21384a1e8ea5c2786f51d2f3ae762c6d3ef4a9f979745dff9e0167c49429ed44a67aab716ad8d4fa067c68b6e1a6eabaaae9a310bbb6c751bdf7281db817359e200e034fed22dbcb533a5e2489bc05e67fd41dbe1f5c2f50494c583135d1ba8482a7fedfa94e701b2f762e2bf7892a1f919706be35f91f6c3644873c5be3e08a65e05797438aad5a656492792f114e8ca2fc8e936420c7fdff2177dd57fa11ba19b9b11c9e994f6029bd502b1e2286f1dd38c561d9a2ee9a29105d9068ed833dc94158292f180b5e421da2b0cc1ec94521aefbf4455f3441b2206087f7c43193c046bb5c70f4a4cd415007e931896c0b688f608990d726fe1f434b6731ab5951ff5eae7e2bb3945e48e0f6aeb8542e566de11312ed679f9964aec43143eeaad7670d1bc5c89fc634d77d570e64c902e0bc22f25a04f4c81b2cd4cf964eb5938cfd700a98d0aaae60d810450bc71d27627925de426ac7451a747546f0e5e68c47d13fa84b9016458e167be37cbb1169304b3179c5977ab7edd344054d1370a5ccfb1f5aac67b3add821204820131f7948ec247f1b4795607ff2447759acb958096e5b165f57cf7629aea0d981e15a8a3d0ec15020e1431b831f92f558daf9f0bf5b7bd236c2649c6ada4da5526908c5d5998f7bdf5fdce5efa8fabb6c51eef9ccab139bda17187783a40555023e9eb31dec5b7a2098ebd868bd8a1a82523fd29d115d7fe89ba16a649e953b2",
+  "9.8": "8ad663d866cc365849e2bc2d:7326c366cbf2558914281b371ae97986:9f807464300f8149fad2b6c0ed5c12ccb4f8a7ba33cfa208f6f195c21e206e565972f011a51f38094f4bb6229df67c6de59506f47d38611de482efd6a768ec9725b188c51289cc7f34c1cf60c30c290f9733539e2d6300d1c368798a592671e7263173f8829c4e973e72d8c2fd60b44bc8cb6301169d311a43606ce1978f892045329f8d6c4f233a55c889a3f0c3f1a97282a61f2d5a7fbb0094edbe1dff602b327965b60f8362b7c984d6a4503513aa52dc07d1d574282071650fc6e0947345668233730ca889233f058d3d2aa03fb524f0e1dc8bfb58daab0abbb37764eefa618f1e214216024ff027b30a7caa85139c617c7be4ced15de878aa3de127c616ac50529ef5b85685874a39128dfc2480ce5e2e83cf7b7e511a36672acd446baf5e82828e6869a99e4085069b8df43b6fa588eaa7ab698539426768bc1a05133269fdb1d8a5a3604b6910276c957cc0692f1f5bf58bbdb15863f8887234f56791feb48228d121970cb4d3e7aebd404d03748293dc8113edbab245478fdfd369dea9bdedf3cf4a5a20ce7e162f25ea70772a6e981326c90a39cd60af892a3e4e5a78eddb43311cfcaf49c41a357359b3ef14d58397402083790df49b062eb0085342600424cfe0a370c33b4ce91285fb51552b020f44287c32f8d4a818db1ed6c2aa107d9d1bba78f5f178aed6ca888fdf2b270e02397c481320b0231e1f780bb6362126560fef8effca27e8251b7678ed5e7d1aa8474331e82c039a9f51bc72f8ff64733c53535994248932f647dd1a1d8eb3080d9ae3756e649e10d6cf872346f003a0f6ab21474aacb04b3f4e1b9efae4686ac5c0ad57cbb34ebe5e79ebfbca223ddc6965e87b401209480852994064dc7a65e285fcc727a24c0023b7a0468331b5b6f199a58a704f58d23295ace357b2abd4e1dee734ac1be95a7e283db168cb47da348f8a82f39cf46d4eadbb3a0cad692a785c04867c7ab24440e21ea3b277821a7cb0d80ffccf10ed16ed0c3afdaf0064ed6a7d501b1cc4ee1a39dc887f98760af0f11d8b4c63d6eff5eb10fc9031d8f847b105ec08dcbc7de63a02c60e075dee1b2032530b08581c8e5b16bc52c7448ad2755831386eb9816b0329604953f6b5dbee9fb2e0c9b38948f1a5242fdca920a5b06ec4e04f4d6390ad25776236fedcbc4047973c8f009ee396baf134e32b7b3d69c988cee10a4ed59ea24f9df4fe020b7a753436b019ceed07cde4720986d5ea2b2b2673966a71e142b9d20d02431c4d254912b853b86e08b21c5fa38a7741954725d2713c0b664600ac82aeaa5343ef13b90d44d0f9c1d29bd45815497e15b6cd0b743e04c0442b95aeb995ccc8824bc2b894363c034a290cf56b27663d5f4a4b536b5906155d2157b08d7a7609a9421e630cd4c487bd881cc3ee220e306ac84235dc8f8e3305d5a2f49d02fad6b7a0ae9307d246364fbf7545023860bf793fbda215a412b5a20d4e1a1784f004c1c225c587ef4ca6bfbf38573fff5683c1b845617b6601",
+  "9.9": "8575878b058ff9afa81c7ad7:d6e2a47457032688c57f52f17c88d534:8baa57316f863a6da7fab4298ce08eacb03f2515cbe12aaee4cfbcb13972204cea053cb4a96121ff7d2a4ed8d395c47d3afa9c5ae61a730b0f4352d61e25121752b027ca6807dce0858b9d0ed90da583f07fae3cfcd1de8502c73c7ed4978e4142da00119f111c55be98f09d8c9d379ac12a69c12f03f3d1d53071b758fab9e6f53ac31133e64cdf9c054046efc543272bdf8a57e6faeee5a7fd6a9f22404b9a1ad44bade47f7dfc56e4a118e67de6003d47fad526fea94b49724c08044edf14a17969e4fd9ce0d81ca6759b01810e93a48a4803f07d96bebeff0d45bac6b3789d9b01ccb9bc8651391d07db83164529ac4d1ef92e53f5f50ccb70934a3876c3a03179265599027b69b0b13ef583bafc4060d10be32c40862d731e290246dfbde092e95c53a787f1b8f45816799e98ab7feb36033f2c78111c4f828615505423326cfe7387c8a93fcfff6504a5dbaefe093f064432a3601ea097b928c944c5e54a12299271cba0d0d76ffa05a618ad119e001ee12f265b8e73b399b9477efb46479994bae30a9357507dc0bcae7d92e8ec7e7abd6db0607febec7fc2d38836615742b3a835fdfa4374aa111b113beb4e2f0a3d7a6617a03217e91250330fd3edf6d8b50d9d675f0682bfe886362d9a1c5de8ef7995cf79881c0201db83621caa53d0da8a0752aaf0ed18b7535352fb64c79bf64454fd7c68f777592d210f103a76fa490390a481221424b4528e1921a613e19cbe3ea21cc3c7c30b361d51cdea9dd8d12d446ae07fa10ded4c0124a4de8422567dd06e55adfc297b013dfbd8e5f62ec89c4c931eed2bbf1b0518584d34f5f33aac4bbc674b72f1cc34178dd29b05aa7177e71004e558b1fe3f51b03184b9fc700c6f02a120564d9116c59a8b4a2f2f77db2e4d3948213234af9cfd19dc1229d56cd841d25545b802c489901ee8f9ead48cf1cca1370eeda130ba3bca05e916ac51c0625f9103c3cb62bcda72e73c87df115cb1b35da3b8e542c57b67af59f427dc391edce355d5a2619df8a77030c626345f33e5744ea28f51c735ebf2b832a90259bd7ad44869f684939dab53092cf82db60b3c32c87b17a95fe9bb03847c28dcc07c45c95afffd9ca6a45d9fed4402b6a97966f8c58e3219c88470d21a79229053045c9d51400b5540e0051868f267d2ca6e6d27ca6603e86605a9839c849a87469ae75f85de6b977a801360d7298ae16cbbd0f27d31136987e6b96a5d53288ce78edb4acfccc682042bab81d4c11273c6548b1c72d0881620e69383b599c849625c3235f35764fb81096976de8aa8235ec8b847aa0c3cbdd240bfb5a9c2ea763b82b3a43405e8078d4107bda9e813611e57f1703af2b3717631954a0b2b844b019c5e9b8dbf4e1cc590f69040d2d1db6916ee6ad492558a5d5f786bfc664c19a66bf1f2841f14de99968912000394f96411aec476987d7110a9625ca6fad0a8848060d98dc0ea041f5c8ecdbdac7f5049a110cdbdc2668c050dc5e0012621d2e2203b0a848e4bf010a9a681364b1f02c8fe547367b5115cd8da99a59758f564103c5f29869b10656f00e1050c79c7a9826c853906014f27a0afccb3e98111b46fb948a18880d880c5bd5dbf806fc43fcd90c44b244534e44f54ff68b819518c2d4e8bff9e3750af5c615f9dca0b614d08bb2a6922ecc28b514576dc79a6674d14148ef4dbd2f76ba8f07ccb99ed8e497084c32a9f4043e28877",
+  "9.10": "870193241520b422a3b1b87b:d7cf190adacebaf769547142356219f8:05faee927536e3e3631bd9f50b826f97f8f9b84e1e983cad2ec3fad9bf52688dc39f6d560d68c5231fcfc982cbf9e6dae639141f8cdc1b5ad9393492139b3920f39080a852ceb44dbaabb31f27fe77fe5caf8fc54c467c6fa2b0ea3c9b17120c1131f9ef8c5c47379eca963f8888fe5ffb33ce0e47f04e383919287ab00153aaaea398f2b67725065381580548454ec66946ec3ac4b2d7aec33b682a5babe00507d43be522c628513d0004b9dad0a401f9c4fdc36619df82fc8f425457662d9a2d29e31ebdaeee686043849a9fe4946249bfee3c9d11b2033b534c714e811eb56e927ff6fc5b68d095ff76607fab8690a5861fc44a82a4c23fad5e19a71a5628c0e7b5d59fba2161f7171a21496f6c4309e9cc1758c34135b4fdb32c5c91c0742fc6703a6713f13c46b9d42c3103e2766ae8ef1f83917bc1a2055100c6a55ab0e39dd6a11e9438e55a45a21e1fa408f14058bb44854b45367d25dc269b2e2a5a94652aa1fe511c93eee450ec9b79b4c007e15a08fd54fde08e54b43dc76fdd5dae62daf4f6da1ef38c82a462aa44ca6825e45b81f63f500d06cbe2db5b81825b5ba6dd7e321d96f3dab00582008e794f228c50f18231f220eef3a3e405bb92cca259fca9f76796c110a454423e8bd6bcfe995db85943d58cc9a506d044afe786fc58595639ca2eddc77eb3fe0466dd588f9d5f7d6c3a16f87d0c3733fa9fbd71bf692a365bd7b39bfd209b46ed3752e0e990ab877419bae719966a02460b04170e77a71f98cfb9d1e530f8a753f4dd0735a9b1eb0904c47d494b31fb170bad5bd7cca35fdf209996dce4ea7deb64a4644851dcef55ed879b47b76483d32a9fe91e14f8c2c05df956778d29db10836fb32a32084201f7dc1a36a6e8caabf09466145f1c2bc50aba0f2cc073f7973366d6d91432e745127d42b599cbdb393ebe2903bcd7da394a139a7991ad038e97b5bcb6065541e0bbdfa4d0f32ca2947b94c8949dbbdc602a7370f2e0351a9378edd895240b57c8ad90740fcc6889581bc809273fb1af2f418fc88248a3ef3e7b4f20be712535cd8dace593d7708249f0405adf31756a46ddd297517c21a7621647b399099c6fb825357982b030feed67f3e0780822d1df1bbe08bae385668d5dba038e5720588c8b4ddb0ee069371de2d35b176414a73b6ebdc5895de7845084eb9eb1f8e6cb3c43513c577edd5098a32fa1c47d2497583e1c081d3934fb4256280685db235cbad77889474e4dbf7f6effa4e52c04d70ab47cbecad8cf52f22077f551230df9fbb81c1026d1ea3cd9c15580694cb7c46a66a265d1e3e825ca516db23fed406ed7a8c392c2e749f7efc698bb660cde9d37a25dba928ced57a269ece1583e2cc55be658af35d29dee90303d2f2d6ce1ac1b1c6064a2bdc24d8813ef9507469c9172b248861d9027ba9ca6bed16aeeba7993f75ab687875643d317b798d2b3c4f3c73371f2a2338b3b1ae9d525fc3f8c804d18b302dbb2be4b2870e1254ac614acdef44c569b6b50b7a98919b42fd513409ead00dfeadbed71ab9b9b200380e5e6efbecdf3a8383e4986ae18dffa246e82dc5571e0ae0e078d97fff7d2c7dea0b94057941efe0e35770ad2cf63ca6ed4f65c4767dc1638c87e3a59f06c771a29d895b14f7fc03f7f23906b78a1a380b08e4e7e36cd305dadd7ff903142858cf1717f7f352ad3cd17f2806e8f36c0e638dfdb005577f378904e232d14a8dcfe21a92abdbb4e2a543be3bc1b01c39ee22c6a6f1ee6987a0edf20c34903b280154d4344e4e0ef50cbbc5c643523ef7fde953667b9e077c32b0095634baf248ec3c0d48d0e6d4d124b51d5beadc75474fa07e4d99d111b8d8dc7890ecc7efca2bcea77b82b0441ca737f5139abd89f2b465cb205ff99525ba0b86a74ebcee9feb384ce4fddbe3b1cff5d8c1187608126780fa797956ae182e0526d75daecf2d2ea9ce2a81b5349dbeb8e4e1f74ed5b12ff5eb31b55d9807393928ef41d3b3b3b7cf78919470a009c4c8adcf60a98832d170e159b2e51955aa74565038c955c2fc351739b09bf6d100dd989473bc93ded01dbf85ca91d48ccafbe63db3b15a98f531879553ae2a40b749596531e11c6461294837078c38bae0682450373b9d1c244549428537eadbb7c38906448659838c44e38936b1acf6b24a377c4a836f2772a8151a491035f15c438ad818f6077a3e5a4d2fbf592ebbb57e7646ffc1abe388f0a6ae1deafaa4e672dd987ea2844a621199198a30bb91bb9e48b986e38b533f4ae94346d456d311302863056da",
+  "9.11": "1f29b4def8bdb72b5bc6e659:04a2f7420e5ca51db2f864d10e2af349:702f6c071cce01ab201c2e565790cc6da668c374988fce554aa1ec02f975b7252353c91b3dd5543667020f08fade16c6aa14302c143a6ad4ecad8084e5b9a4a1e3ad8555d55002b328bfcdec2105c49809f6245f43034989a555af761dc99af55efdc5081d76d370ae2d2156ca3af166357588ab340d42acb342e6a1131c51a2ce91496cbdf75f708468e2042c725c1e8fe94a26cf72f1117d4ac8329fbe3feaf74876ded938c6280cb7332d23e4cfc896ae0372f70a72208705432ead04e9f50842f71ba42782115f1e93ff7f5dac257d3f01af5db918844825d1342a8230dc91ec832b1361e806857e1c15e9dbb68a5e174453d656ca6d7f1b5780c2238233928088ecea783a5c6b3fe0518b9c252293ed1495e28a290d60f2aad7e364e85377f968b4b1b313c981f763b4beaa3cfb97e2a62a32f416aa02c616ea1abb03cde917ae6e63906dd352bc0bad148e6572330e099875fd4924ca4d17fdef39bb1b164b70ed79e1144cdb2ad92be7aa93cdd1f137c82eb296d064d6172f226e8021cc5afa30caac510215fe35770ffa7a8952a13f25645f746b4eb8490c06a6e5344ae3f8616475d82ef933f21f730dd01c12be7320fe9d8f880fcb742128e24dd3c51d7eab98280bf3eed6499959be1cce6128ba8aeb9abf896576af854bbcf2983a5ad0a05d6cb9b4e2c60f9222d0cd9b7884064401393b6b80ddc7b66026d84a84d7c5138cd1baddde2ac586da10aeadbdcf58ca8c5e77f8789c7fcb9da1e90502b0d5ac9c1061d149c27e94c716e458748376fc1021786e583c257775c6662e9288ab58b771c0f3eece796228710f6acf3154f913000b95cddba34f15283a2d1a5e497101959ca051730be2ca6a1b98f5536469a75beec30caabcc637e432af84783aa30e082d4a51795730cfecea0babe04387be9cf535400e60fcfb29a835710e52bb7ec1a5dcec3cfa2cf61c88c91ea340161865ece96fb2e9f5401b3c4517e4d66008f090cde7f4e622fce86efa3dc49d2938771b33144decf2c331049a094ad151d7f1d29540adfcf34b6b654ecb7bd1b956232cb641ff911f89d6c8d5c0ec4c4a7ac2d6f1bf54216657cb0c4c352c7c20e6a61ddaab0025d06939fb4f56bcd61d8ba0f6f6ea99c0f3d145260db2b9772bfdbb08ebbf1d38ed515e61cc14258e4c",
+  "9.12": "6bb80fa6b44d11503d85d86a:5b277478b97fbf9771daf65d5efbcd21:38ffb5b6b60af279bdf569e2e3c584da7164fcf54dc66f0d1f416bdb377f798c2ab361f596285576aa464f218116df3cce6055bef242008cdde7f7e31e0e18237fa3b3020b9fc4f2b922de7a95a1517a547872c08f14b89db1e11e5f8c1dec565aadd0209bc2cc43f587df582fe33e786955f28e0c78fec82d1c7985a3d6fc9b6068ca3fca0a5eeee8d21eeeb9a25d0441a915b39671688f9be1945e2eb5e56b7e1a18bc1d7f790ed5094d29ae189becc206573f7f2f0983fdffdd968bbe6f7d51b2ac73bb456d2db4fa792227992ede12f2966ed47abb16911bc9443ace694beb6c362a88499528caacb12a47e2fcfb1f59b4efe371625c8ddde06c24b5570fa25785608ab0615be85f5533abce9dfa9ac7884d5d7e3615068e662969cc4f43b5eead4651ade400995a01048cec1929d5855f0873c5f68b224dce210c435f3c4a0350665fa7283a534aecd11265666a75c8f939200040285c43a52246ccf308dda2200e72a791343e67ab0c45752b749d42dd777f206a37c8bb027372a9887089adf9bdec5a11e24477aabf731e56029751eeea567239176006490f33d5404cc5c982d355ae03baae8fca5dc927468219ad76aa37111daca3801c437f3f28f052328b732321efe7580bd5c12ce9fedc14a860f9beac5dc18880323d01eaa3c89a00f9649ed15e553207129a75feb1626ed17e28e4e11b142330db63dcce2cf1a9f18c6a4d5f234c239358e4b990588c6702057632c058bedf54349a0d7c208a153a30d35db11f900b80554e9ca32b4f51f26e8c30675a99d34a10d39c2812a27c08e7a2e810a4bbc484c50b9183646a2ac9241bf58c87914443d2d6f19d84d322d5bc2f9172984c0f6f8cc425daf04ec4666b135322e2af44f47dd26b6444eb985e49aa4005e79681fc8aaca3b6edfdf0ee394ffaf8230fd54f4573de6161ac96f6912381e6c543fb95f809221926eb28264b3a78ce8895e0ab8e37f80c8d80b6a4b3180de2226befc33ed7f35e277e91e14939c1130254843e665f1dc41162594d32d33e3cca6bf1e22a7dc62e57bcf97b234abc1825cbe5236cb90ac75422c82336a9381b7b6bea44f4c2f98db496f88f5c1f351dc273573cf9e7c19881944ead5a2bb6d95c56e47c54ef5658e20521360ca5a1c43d651fb692ca05f95928db5b9482a56cb462b3c664a1f02b8dc772426a57f1df161f57692273aaa9830ae12eaba5d741917927a52fb241fed784d751bd10eb00f7f48d3cbff95c56385c250a38b19add9c7af8c8bb110510eeff4d2a34c1ee2dc0b45e5407e1f12c7810215d6382be8c215bce274fd34756788b3967f77399b3fa4b058beb5682e006b782e081de496f7da710aa1d0b0fd9b6131fe30e338c4443c4b368bd0d0cddbd3301750af777d2d7cb68fc45a576c3c61cecfcca4760794a1c5d0cc2c98ebd207bbef1f74491652c8ec39b083ef4b38e4c405592744437ae01da9441510aafc267543679be4f2b82dafaad1aaabc926d53fa073d66e8e031e3fb2f2176ad8149c91e85078042a59b8fcd4f984319c677fc35cec14104e884891dedb5d1c44b120448f6aca58878a7080abfc4bc4c600891c7063b26d1aa00e28172b08e0351f4943eb9224fff8ee7bed820cc134cbf58c3ab7fed2b73cdc7341dcf4bc551fb0f921320cacf8b9a369e85fcc9a0a4f571a573eed6e1d5d90e50de4245d8f513ab8243c0e1826706fd9148347abab547f8b121cb8114b308c1b4acea7195fa8f75b1c5841a4bc810149b93544465358cd361e2d2bd68f966c849a746aaca3cc91693abb2afe4ef9522c01d42d44e984edd2a145f84ba9fcf5b7e1df06189192b1f6448bddaaf7221562144bd37bd37b1bafacc3580e5932316ac41244c25755509eda792dbe6d05ca79ffff6b8c8fa6319bcfaf71826809cc59e0320f8eb0b8f335de6b06ecfa33bf91b78a3410b4aac86e43531cea861",
+  "10.1": "d1c8e7c399d502a9a512f901:b01f7d6da1176c62e204cadbcb7ac610:721e1b306c86e2217f201303af532f2e7ac88e8edbcb22960706c9880662efccc66a72d0a1b7a84a1fb15cacda137ec0f5f920e5eaeb4e63e05657970dc2c1bbec3a6de55d7fed39ef49ed98caeb5ef742f80d52ca97b1c6fe6625a445f3b9e1102aae5743a3ef8844ff7d036f3dfca33e50bb15237981d1a4ce21f6c20226b176088013bc7c664b348fbf0fd6db2ad9f8852ea3d649ad7cb239d318d1612062bc9a869557e379ad002a34307b49b470894e4b0834d5ba9fea8bebaf1ff35b228275e67de865406cc6e5cf479dc22896edbb762179922a1d7dcd93da3d3d8f046b5c4daa905f8c44550842230a20968b92f97368c9f389bb456278ac785d0938d368252225f4dafa2b8336a2e0da99d32231baee897b95bdfe1f42531a2f65e06d0a2e023f24449831de5451aab7fcb0b47270fad070dd318c5f7c7969292aa7de73655d5238a03ea257e6663fdfe92bb53d266352b7fda9d26d38d198120444491aa013793cedb280f502c90654d588fc02c56b2c34e4606adf2d069ee0dc7213a3d5478aafb98fe606b0fe924aecc4f283b6c48df2ab48087d97ffdc94881ff43101bf5fe22cc016487a4248ad24c56dea2adefd57a3d88fc6a718a7850f929f93fbd420e67a879c6147385c39b602e5008fa7c1813ed989492c5269cb12427ff85580710ad094faf3c69a598751fdeb9d5a57ac6420cc599e5cde1c93f203a270c9629c69d53b4b7d0024549744fe2d6ea4093b6226f7ad51a295ce692e543e07e8a082923f50cec71a416727705352f874c1006de65cb809e358b763bda64e3d3670851b35743165c504cc57dd954afc1519a3e0e9dc45f8319f6e9805d7299faba510937a14366ae32a7b664a5275684ababe234728471a6233d2f52e0e858f619fc7e641a675a546dd76f09deb0c86e7b333e45a121557121979b623566e5892332c44e3f1f8f8af7972e5bb298adf898e2211cbcb5db7ddafaaf80753c52990b7762ff9e4c6678290756f5372e5057920cc531d7307aab14d57f0cef63259e55eef9d9aa1c3eb743c80cd5deb0186304db3649afbc58afe04fdec20aa865db335a3a5a53e4997b0826cf4d6ea883a09c8e4ef3a78edb7a43c97d22bd477789230c488b9c6ccd5882b07db20aac1f964b04257e864e516bd9ff0f5c8254207b9bcbfe8f49e8fe2c1bdf8e4d945aae49c6f961806ace149b08e11e009017f76681ff2f4f25a209475022aabf3758200996452119a4219a8a01e415c981868ee6975e9798d161ba7c0a69703f8947d51593038619daae141b0de1d68508707a662c8c7cf96817d0483a182f9570805b85f80703d2f1c83844bbe193753eb596f5007c6a40f248b3d24961b07633ae3d1b263f17ce06febdb8c90d0e5c841314fb6746ff73c45724aaab5ccc4becedf2c6206c80850441e1f7f10beecdf1470148f39d4ff7a3ed35e8e4579e7c2d75f3043f1bfff5a1040e410c439ac9e341a8ce3be02ef2c002ea5c3c2a954d1dff9c27a3fe47a2797e35e4ea238af78a744cc3f2fd8366490f037420b3a0a1bce04a84a7d297f215aaf1d239a029859275d4f4c6eab69c0c9e222012c10fb873b75f9cc6af25ff53b055343923aee05444f6729a03e4f0e88ef4ec90afdffb08b4b2dde0045770c337c4922246eec72b66490fabc676f9bb99de6cfdba5ef929097831fb27e1484b90dce18652f97153611aa2bb40647aa5873e6f522ecf720223bbacc9c3f152b263d163cdf3db2d818ef1390e2fa9d8aaba3a1f178ec132e2985f5471a04248e800cda18e54e4a1fbe77a5e348812d7a6b89661bbacc5c8a5608f17c60bc6c5abf1d4689c7d5070c854cef330e9b13a80be1bf17ed25c703c05bd7ca50a9d6ca06883616eda04367497d8e9c4ba49dd997d17bad5b636a6427327df8d7b0ef43072178770385b9ed2b03d2f7e6a2277d85b215883b51eb68b06c026bf4a36d12ed478710ca076c62309939512521346f8e7362f19eecd1e2ec1949eeb5a73b4923d0c6084c66a45580e6a47e523cd2ac6f975c73129a5c041d1b06513ae2a2d4453ed014910e455204fd5d8401c84bcee1bafcc9e98b5cd7d02723a7a84458043949aa224bd4331fd498b6a44d9ab8cce94cdf6f1d14eb239ffb17e8957404dc48175823b25fe9723449c73acaf48b6f60f9322ccd1482bee72ca7b080342569d77b446917e3ca8f711c6cead7a20a540bf3e239733b1d3a8ccd5c24c5de0cc266d0e96c379e616d14a092b2ca1e22a58c453403bbec96f67e3125145a901b67799e05787b02d3bf616e77dc162505a8551ad0541123f2bc2964e9d79fcaf8ea5321ce5bb5d6bdc1c80b41bd1f66a1aeb1a213092110a79eb50a37b2cf71aa8094a80e735c2f021169afbd709b52b100f957c593305ad2aeb2d4dbe0bd396da7836de1478dab7add9f1222c79eb93f5ea45638bc0ebbd978d7473cab61797dbf48d9ec71d548a81e8daf10223081915f520cdf964cfe81abbaa4f38e62ffdab87a91c68b50d31097b18685a3ff8c37c3d57232055bb24764e16c7b4f7b1d85760f1f3e8779b9194c1615779b1b9491c28b77148ff26edfc849375a234b77ea58eefc89b9056378a205458f755f61899cdfcb9fd5e9170ac74a4f97c0628195d3e76edfc9db8167802bf3a48d960ae19deca2474670db0ea6082a918f2ecc64d4514850de4db964755c713b91106935e9798464b88cdd188c6a899bb0321e0bba67a30e6aec996f9e4661689f3217d996cdd3f4440233cb92465b00ec3697c32585ec5896d92650be888ec0ab1316fd8020045d01a5651dbd03af3e3fc8da84eb0d313ea37734f77d1302608275e4",
+  "10.2": "7d48b7ba105c25b03eed2ac4:c24d89b1f44c4bfbd55640a63ef44391:b2eb60808980d990a34c73c74cff0a66e041ff9f741dc93076f0bff2f7023676186a25cc3202da73fc87671b43e62bafa39ea75b2e324b87cc466f1aa2d05789ad5f350518c7e37b200e2f25132dc73a16dc8e4ab314a7f68fd0c2dc2e7d7535c8364238f3e09541cada4f6eecc4a6a0b87a41d9dfb50cb86213867533db085e92c8ed7c54b651ed2f613f684440318bc0baeab501492098c1026bbb85a67d1b468239d8d23ac957e248782cc527638a6e9944d89552fdad1d8a8fda8aef4c88ed22626081188c8d8ac0342215a89ea5bcfe50ef2da229e5a623993fa787ec718981c34105efb76cc02d191f41eba4f82eaeabfce581e2ece501514c860b7a9f61ad8c68ad2423d19e6c520599f73e15ae634e4673e413ac80ced08287686bea503b54cb217ad0d77a5db85650b2d61fd0ad5b0ac60704f379381f277c3b9945e85f0395a30b5e60e4f7b6dabce21775fbe7032d5a78bff2d7ad4f7c04ca537b08366df5449d247f9327462eae032bf848137d8361022d7435444e9b08e7cd513f78edb11aea8a3dea5d1f2191046e001ff605b8023c88ff952dcb92ac1bf8d6b93cb10d039d313c6216f2df72474a7411afe77d4f810ed7fb7c01fce745bd61d340aa179d256470a3d843b92e898c0ea010714c75fd433251701dd06c62d1fe91531bc31a3f0f76f26acf96aee9bdb276c402ff50251fabbb65fdbb5a7306e170533a45427fd6d4ee8564a05fa0018d22cba6c215e5306e88942fec1cfee2fa2234398eeb910832bfd4ff775587cf3012e46763fc057ac8e1409302f7e1fa39b84f69292623697a4c04548fc9ca845bd4d1f41582eb4c0ce379b603b1ad8338410b0496612dd034436e1801fa234de5bb962da12bc29c0b19cb7f38d8da7a3497462d320ca339c46bf4a759e609de47828510889c7a2d7c31e8861335e62c0f80d2ff7b42f9440e251be519474f5af69c3878433000b482cc40dfc2ff59f4609e7b416ddc20adcc764652e6c9c92245ac5a92593efcf814fee255f5b949b63cf23723dc5492dfbefe027a65a95a313e5b36ca5d9ec58b63a348c646fe55e311aef2b8e08972e59a7ffb521017b122f919aac5209c518228a281f9d99678328ec40c5a4c8fdab3c0440475ba7210edbf06561b6ca32962aed572a083ab83d66a22fece385367151e5ac2a7b12b2270f64c2e697ad153bdb5a7509ed2cfd8a7b919b9a822854720b8af7ac5ba55f959dbd75e216d0539175aba9c3a3a825447102b49e38e31fcab28384bb0437da24c3df2c86d3d78a71dddbfeac4036ee98b4ec8eb63951fc4986ac645f2dff1b80adf7670d2bc35b636ac90326df84068662180ff2d658c36ee2ca7c869f5bac5dc86d87cc486d6c9e3c812f804ebab0f18799ca3868bb98b3fe2c9e2a6a3c74aceaf9afb405faef9d5b7ef4574783eff1c1cdddf538a6f5f45c61e1a8a12c371ff475d00a6eb238b232a64e0516a6fc6a9fd69df44c2c1dbcb9fd53e3d007195f5b474366ec37c4f1d4d83d5ff8b3cc087c481c0024532ef53a7c89152fff947f7d5f3e005d1c4221b15a222426591578e1a727fdd81e41403d0e971c1bc504c9ea6f6bc31ed7c50432fea22651216a6ccfd5977bfca0fb731a81359a1c75644d3d5f6ca9195a82f94663f94038244109bbb4b84b65e6f49dc1d494d3f53a9bfa26af0f7c8dbebc8f987e969c07c2d3b3e6157f11f68a56ae32d4689170a7c84555be35ff414f4466403046fa066975050b2d0068fab5ef1c919a3381c737de156994d27fc1826997aba436e0fad295e37f23d041108cf08aa2db279c88376804645f8bffdd64c866fcfd191dc8ac404bc6e123153e8701bd58ad0205b20dceb4cdcfd6b8e4c19b7ba0c9a2cd778a83a0434cbd7e2df0d98225901aae8e0026357d106cec5e72bf261f0065d16283a0cc62f8ddf009d81f02a7e22bce05d1e9a823f1578776ee3e4108d8979fd027b4bc101d95c414509fd36a57d7e104160a475b611efc8d392aea942b7a5724e01512f632d53c6c2d5387e88abdb2c22b85517b9666d0b4f309e0f55c7c8ed0196434d7414c37c239d72488dd2e4de9a646b990f9b79be7481bf55fa6c16e8f6f42396dba3362a16f09aa001994d28228334c95291e30a560f6d3d2442f68fc16b3f197513be1ef6203f4058f578973cf5b477a3781e19305caa701cc83f6a7e6bf9a6248b46f4e33dcad19cfe7057460cd95412c6eefc00fd0c999f5b24e11dceb07b63313d6e1e49c0cb3f2b83ceb7cb90b91f79bd7d36a70aae11daca97b7fce08fb89c18b7a701a3bced02acd070a2f3e718ff946f05c8457447aef8edc4d55bd8b1d560a94fec73cf0638006ea001b182aaa2662ce0d025e0e73a609b5e38c139035222a7ca8c76e4597ff118fcbaa78b31e99f3e14252179e04d1bcc05b0e24559bc1396b150b5412d4b9f61bc06f2ea3236e342c6",
+  "10.3": "d5e812eb6a946903bfeb1ee2:d0931b07ea7bcc518acbbbdf23865d6a:3bd7f2d4e676cfadff9ba580258652fe4d56ae3136524a733513bf5f92346d30e9e554cdad7e65fd27b0e6261f4b557fac42a7d08e22a1919ca8bf0efb5bd485506dd2143a0c41848332c1e90901f4fc5ca07524d785279153dc2cb5660c8c0949c73b522769075b9f7c91387439be057fae774e4f44e20ac210f91c3c12fd09c3be31bda618afa1f72b4916d9024873ef5021a31b5b338cbafd5bdcc360202ac2cf0172b2070c5efebca75d8f3a91eb482a1405bcd5057213e81a4fafaa226d53feb87a4307f83a3cb7438ee8e94fe5299f7108fa3552b10f1672da9e46da57521d2e7b7e95687269ee2c6ccb4f2928745d176b728c48d7ab53ee2e741f3576ae7e3557e32492b7d047dee2bc7159e09631afac7869f2a6d8620b3d742e785ef00c07ca6e556074a68a7b49dccf14e8c38d9e34c3709d6681b857d99362c795596c8c9fb394dd41bf45873ae98d4d798eefa0dab17bbe100103907fb3f68c96584eceaad65090eb11c9180f4389c8c4ba774be74c21e6f6d8f587f519633de820a4ce612db0737a9a7a1b01b7aa1cfb0d62efd95ed2ce75d59f973fdd7da28aace1c7469da853111da4b016b8bd18bb24320591e3b1b5b1098582403a930eb22384b01a80e58eb21f2a85a7da7c4f76fd63842b4a66c920d5aa1c68352e4c8ad75969b0386cd2d8d5f12731198c5dc8eb1ba49c59b76c282cc29be98dc9998e24a22a4320ef64b3d8d493405dd8a606db77f544c460f79a56838095d97a28a48d2ee4255b08e79ddd6220188c2b5669987dd5d6136ea695eb22d23a05ff4465397a7eb1a5170d352b0ffe78bb44c6c74dd512b318f28d47d24f652ac5dd1f57bb35a02ce12f775b2bc837aded827fcc06db69d1525663bcd871fb38aa55cbbd7aaef267077c48b25ad055203287de77c4f9f4b1ffb81414f1e286e1a2a2387f5881381a6373a51f0e7d77591ef1bb92cab65b549e273fd35e71a7085f4698825b32b37c5eb6ee737516bfde4f90cd2e6f467b06b419a42143b9c4ccd779b3610fe30c0737bbf9314b6a3199702db1ba6064346a5dccfa2da21bc738fb7e1d70adb334832385f6df55c013fc34f36fd898e453e6d8d7c979b94bcebf3071dd390b916ca98839acd9ab0f33a844147d5db04f4cd562e43a84624a678a924eab7d53f0176cb33fef7d24d210c4712d70ba9250c737784aa5c146bbe2bfc18c388c5629bb414dfb01011f054afe829d54c86829687fda854a592aa171e794aac475415e568503a224374c614c4ebf811b577bd5a29907009a24a90975410638443956910dad994683dd70b35717998052c1ba972bd522e313634114bf9a3b1745dbc1069784a9c2a34ea4017172c084574a3b5695e1a03c343f7ddb0989b4ec5ce1c97ef0ca15d1c7b8c6c0ba7eb58b41a0489433a4118a52eb63a3f70a941a536f94a6be6e10478a18a671c2759a001a7049c79e401adb5ada5f6aab900457a17ac55473884a5e2495c12aee4337b0078666e4f5a1b62590f4b6a6d4352ccf5f031d65cda6fb0834617d3942d3d0191387a85465a74076dec1194a029652826341c4c4c9d415affb7304922fa8b99a713667ebf52124c19755d00b88614647eb24c74d9748fa51a13d9600b481fed95bae0f5927bbfac1978511f53cb4281adc9ab6349e969d445670883b27b7839d15e90e604546f6ec4b0f82078448c60b590d2d22d07a79a5f5bc7c9ebfb1d2d5d90e34d5ef04ace053b17625afa3889b84802e35b439c5d138037c05d90f7f0c14164af528a513a0914cb34ae6440aeaf97f200bb8b0ed25a49b5805d550b2bfc79672d8d7797521a546e5451bed9ca0ee427a6e1e9e8454caf8a5f4855b4a6675bc227e9b00a299439dd38cbda0002fd84ac8bf32ddf6c1bebe49954cf61bcc0c47e7929c6c50e72aca51cafe3862b953ffaa9dd0c3ee61ccbf2f2bc69930991bd0a1f0e6e2b569396f35385d7967c0323de4d337a7514a55659c3e97463b8fc3186ef71819a17f34177c4ec961f6e89e402d8c708d4d6085e9029870d657e8a4e944036b1945bb59e9eacd3d68fa7edb58707679a69c589ad27fe69bb7aaf8e3660dc84d08ab57f2b97ed5eb10551b35a6e83663725f3ad2ceefa832eb18fce341b0b05e3a3ed4d49272b65ee937813fc3622a60a6756f00603c4b01c17c724e077894fee81d69d4477ba891c0beac75f21bf96f93c73b760867075c31deefbcaabd794c2a701bab25685411a2c4df7c78da8edfd14f2e86aaa5cef796c9a383dd8a333c6d3125d3ec34f8ccd9b0088bfea90d58ae87da32262e61be24b2315c7fa372c71598fcc6bb82fdd242bafc559774738cd1afcba03b84e85de7556d9dbbb692feae5c1640c8d2e0d270844f5bc95b5d89cd419ac623890d9c5795d9a0a21ad82a894522bc9a2abe492217bd21a42f3f5d2ef90d97c911d1f7241e74cc3a415e0463433fd65db0fd15954997b8cd04b3d177bb9654a43e5e92dfc84dd87e0b05b6c49cbe1fdc487774fb5c13665942ec9302c127afac34553bbdd168e25131c4f88607cf438d0ce3c551581822188a3ad5f04f1f166db65bb55ae679555d35393f661f5a698cf10c31a65a56ced38fcd02b68471b599f990a992994bc0f04fb0b2e7a00cf0cd6191448db4639ba938dc8e7b29da91fc99d871ef97dce8073f78decfc3ac5e8d8f64a93936c75568f91249b700c36efff850cd6e7ed68f552022e3ba4e74a37f5c4950a556d683c3755d7145a3c5307981ecd1a04ccc11c353587494f40fef1ebb9e250ace5dfdd7f5a3b00ec99804ffde123cd931b1a6febb01b238baffbda1ef7baa35867c37647a2b8eda0c5ab346d63a2c7471a587e37abbf6dcf7f298ee055d8ba99162fd21c4f16d9535726fe2d8aedeeaefc9d09873c3e00f62a15137e7fc8d73fdbf8015f0fbec8a634ffcf84a0b53a46fda23a358db282cc2139c95c05bd8f76ce64a75dac1838c6cfba1eac35f897baa4b5d443dea6a2d444ffb726fe51140003190efd8d7fe938374df4744b687d32673f94dd8cca0dd8d29ac7b1cff68e2ff850e70c7d9a1aa9d4feb8f889cf0ee3a5cc25b6e4b985056317c23e9e490745d968e7971c13a7b4fd431ab621d868e66c05d1ccf7d144ad1e39eb8539cda806deef87a0cc4a50227332d6b4dac35e79f57055bae3a639437d3de3a8e",
+  "10.4": "adf18851a82ceff2e25bda54:23c33163d4e0151058081a03d924a245:7d591a4e9d42523e03b36955215612781d9a11166e36f675d8a7b7cc4d3870196ca18a8132ecacdd8878b22a651ee9ee50d9ab53cfefdd224f064445b275f115c52637e814d39e103aa8281527f5485c9cddcdba7046352819f151ba99b2a3b382ba96b54288b15f5c359c8de51778fe28dde6159dcc90e859bf1f736d0f7aadea38cc7718b5675496694576612986a738ba3ccc95a117da30f446c28441433d77dd0cd4c3a928f9e46a59138d694845f5768956dd6145a6f5e4df76ef87445e312b4d84e8362b673148fc427f9050b44cd3ee31d5e71fd7256b64f9fc9366f7d8390434102589ca743e88e6808b6470520421f12b391ab16565952fab3c1100fa0bf1ee1784c0c544c1c8037c7460a131f1ee8d1af7c046c4320e4ad4a3558458606f5154f2f59f03631ce67fd15e628b6701699041786d5f1c1a7cf6607e74a2e822ccfcae87f110db6ee16f7322a37ec2a6a80161a5c281d88e7975f506f26d70a3f8ca23a7ba208dd4db520763cf974f77810183a1265af16eb974168600777f0e4cc53ea8297952ba3ecf3bc61f449ff3fc522febdeaa49e2ce26d3c04949eaaf0da7203bf17e9f158c01aba33680c9789da5fb91b935c800c876378392b302b5be3e7d509f5daf53db88481be7ee26405ebd6a74d06809dc7a407e434c75288edfa0d34b34ab2c607dc5f4fad41edc0c72d39282a0ac3a6f609599510ab8f983d700077c22938a69331ec9282a8013b696385ae114f07701f1067b9416c417e5af7215c17c7dbcc4f3077ea4246d4898d08d52990a5581de9d9d436272b8b63e912e5c45237cb38fe2ff085b5557f7999a9db7b84f46b9566cfbedc8212698ab0311fdf11e897e886b18cabdb971339d715c146ccb79658ba6f4980aad5c86b94b057ff3b3a209bf1d56be2fb906afa028e6405d9c39fd162775a4217dc947a6d2b1ea4dfab41e2dc9f1a28e23bf70cd2c6ab115b0e0094a1ae68a5e7204737a49714d556dc1f437ea5b0585ce25c2bdf36988cde536688b1c5049083229e0297e17944b3f99e877114fc505d44dc487883a0710881729259c2457a1ab26c89345bf152422fab4e7a07ab5b07634b283fdf439d17077f12897544361cb5505ecb8b5701f605947496f9f47eb3954faa7d935ab60a0fc4db554353ad47f167c134f4fd281fd8d1cbd4b4e49216b11b4417528bdab4874c2acd809e2cddfbb1ce3eeb2e21a20926dfc8ebf533c128186b991bfd35db45b08f017918935b825df7aa4f98f3f21e4e5133222d2e30b68afe72ebae5139e991a21403ccebef6c899da20ad7f08073d1d214319c3fc0dc7e9d92bbe03301e0a51aec8c16f176840f070101b42c1ddc77337f1b73a07c832aa13368c985ff9c73b3d0ed6ddad4c13187331b551826bccfdae8fdb681a26e604f73260a0b6915a92a40d536b732936ee7fa33fe9eabcca3539b7e0a4e6f5a9a5221d6c261cb571bcb41cff1bfb4d1da4925244dba598f3ceaba1f826842a1e8650bd639ad39e3de65e55de5174d42701e800a0a71c1dcb6584069027ff6c8495e5930ad8c0db8a48c235ae39373ffe06ee12e81292aae7e3fc84aaea957b5bd1a74098425ede2e415e9d27b2dbb06c2763f4eed40483a87174ed3d7cf860c97559f2b050ebc6b0c26bf1ecc92811ea12ab16bb98358ec6a20ee90359ac323894deb8b8d317240d68bf9720c83799d3a93ebf5a5a2a928701809bd35a5a2ec58d69997b48ea942a5c8fd0af283707668ce015bb0489fd60e6f54381245c0f040ed748f0b120889c09404beeb181caa52d49c03d112c0ea076b7ef67b16cc879ab667977bb67cd36f8b1016f9427e317ca89151a05cd101bd4c3bafec72c9ace10ee984dacc4a76cd6510c7af08045838d6e01f6b1acb4f01d9925f29c895215d058d564eaf90b68b82da1bec4be4496d54aa9696fa44bc06a90e4be6045b7cd757d537761a4a8b42f16a5b53a84eac973369c02e4ff456514eabfb84b43a12d3164c2ed62a0ae95cf1f9fffa6963759ab93373a2ca1a8fb18005ae79e49a2d0a3c7c6cb0b0ce2ac6cb571a8b5cfa384053bc0c68fb01d2f7dab8efb956b359f7c2c8d309ee079ae9572beae60d51404d2b3e8cb0b3adb2bf75445dd72c504bcf1e7163d849afdcc25bec910ce0a87181d217e32ebc52e294df5118fc76091b92fe4c7a315cb44daccfa12155104b1cf6a0cd2e6bec6e5e5bc0723938e3dea224749a3a7f847b61e6201b5c384c2966fb5a78a02c9e437b9f334376251e4c4d4ca2ea1164eb5b087b84cd9136b06b4203aa1f83de2eb7eb2152c3e95b256e8b927d167197ceb7bf33a8898ce58a81e759ff1788838ea24fd4c2cd782b670da49de1403b34cb51286a5ebad70541b9ac332a350f6527dca2c0c06aa46013359078ccc504509989625fd7af3c158842b2a827622268607ab6ae74cb74860653b05f3311f4386d8702a8bfc4dda91163457342de82bcc65e5eae9dac5f24140f48f68963f4fc02a93df7543f43038a49a51f62ba86839680dc4552c9d9b36a2074e08e2668d85d93d839e2e95691f50f2bc6e41",
+  "10.5": "f12909395ff9a6cda4aa0d3a:1ce3769b247834f52fd098d9d1b7ce01:fc0b4f1b7f2e49565196f188b32e638432cb61d539fdde691561774832eccf8f08a6a9bf3c2170470a17b15be657f5eb70eae8093d7610ea51c0b907a6febf3f2cbd3b39889fe9bf05e311245a397440fd95e3800e75022fc470011a2ee7c5309ac751e9b93cf9fef56a71419fad067847098191c1cd3bc3a0034d347901a7b4050bc02a3fae0fdab29e1cee0ccf730fc47dbbb685de0ac4ee27bcde0d8ac6a502433adebbb37b3af6d9b314c835c61cec3f16c0e83d7bfd8cd980e381eb92b152615d5daa8b82d9f64f2ced762d1c641ea7effb32f197513035a005a182c2febf9b796eb4f40723496f9817fd89c351ca097e4d9a249c9aecd9ca50082a07bb575104ec42e030b0a14accd840bfd01abc24aae65bd130a4b56dd0fcd204742520bd917b42f7f305b05b82be3b0c6a918b596d4137c61390879a25b7f96b3192cc33cbaecd11f8369be892256db1bd8dba6c244b656a7337761191d04fa594ab6737cc45a7f23783438aecfeed395b6549935688b80a4d4083ad15f79a8cddeffb13abe02b549d2bb79e2dc7c155f0db8562fba6a3de894de285b76a1ba2de5e3ce0a0564b1ab1179832e0609e5bdd563f40e37186f56f47b493645bb27edd76aac06905aa48292275b3a2cd4824549ac40da8e06dea34d61a59d3dbcd06dca902a109c59e0d23984e5ff0e5908935018e0283f6b797e8c9ae52db9d369806b73a6650c94c28b52d9e3f8bfc8b2b25b9d286f84c12f50ed8c1bd79ee96024ae27916a3fd0ac59b6372049e6b275e4bfd77e69ae34220b75dd777be1310ea770b6a10d9b75a5df9575e67ef711f42a2f17135c077a9d961e9b1f7b6e1c28f6b8d9a5ee61910931d830c32f3b75a58ddbd8cc29595315fb486727d128696dd3615e2980e7674022f44294ee7726eb26393709f9c5fe9186a38680b597c3b4096e5dd5da619daf98fd8f216e8fae336b9e34024ed34ed2d2d82318583b1abf7566833e8a914c397a86b42f24ee90591cc7f2ff7429abdeb69ba52382ae99bb74d43d5e5ac2e9ff74069e37e874b44f1b540a1c06488c1dc7ec8f9b87f17585fb405b875af26181e9c8a87cb51287271e7b86c60019fa318fac595e322d4a861d6a1e0a7adc1c85e653bd633bd0d1e63d2f375ec974b090873cace6604d47a163723e43cdf716038bf20ae69f9efd022a1da41c66732cd0597f7cd7974554930714860e4894fbec7bb01c471c7c5c8f50e6136693231ca838161c01bb3958a6a0f0dd44797e96f7f03ea1a68575d26a8313705419b898c43d91b9e5cae07f931d5a48f3cafd5ab9e7b7cc40da38b8abc19fd22ba269c2d69dd003fffba82b1980c82bd58b62ac5e4d112efaa43c8501acad0bfe05181db08068b90ed8e39dc7d060e972568d2ada4339ad2a9153fa75bfde266cf6e85e89e66066d66eb0d096ea1b0362b42d7ed92387f93a0c066787ab0be81c949d0c9bb6ea58dd1623f727258401f932e199f6bf4d4cb591c77a5a827ceb8725fc85180ac2a61ff063be22916a7125bc705ae070910369c7c3ac7ecca70c32db3a6b5e8cf5ed2c356a2ecd46a89f561bc4ec39f5d8041efd1e73f16c3f464246ec1380c09ba7184e73b74bb08b4f405caa9be9643ce1d16c8bfaf9037752060ad7f18788926c0eb04f0ee622a5c8b43c4bf2aef034fe704a24af1b3c7db67b41e1b0dcd8fb4b7c48d0920214c74b0ee02142468b91dafe949298801eb6a087903f1dabb986c5776848b0d76d78ee24c540de66c9e94bce46433c4984acf9e399646d21a086f398e45dbba4e697e320c6cd81154ad8e102d7ff7398bc1b9be35c9e5e35b7990f31783c7149ad079a8862efddc517b56c4bf80a0f30ea79c2e3bf438637d7f5df632b815ca888713e6e9a312e5c0c95682460f228007afb727db089c00c69dd78d65a28a88e1889811fdf8e7da5621608657b427e9435f9f39b3b24780217f70bcc038abaa565c84f10ce3fc5b228d8970b99ad19bdca5cf0f9ba1f38ffaa5b1a2879d96942970a98d89161f88d06914c147a2064e27991c6522aa3aba9bb443f8fac1911b3dcff7039fa79d7f8cf9f2ed19cabc83f84149a6d95e19d51fe975a43cd2b7762f3ede8bacf7c1a918af979f33471d03456993cba9432ce07aa1b9a4090d6dcb91a477beb8f1465f0564da0f41e6358083bd86b9bdc29f2a1fef36cd496a280b49ead8e972674e2f56c2dc104294d652cbae0b44571ca706b6c83d92ddbb39448ca62b2ca131a74826f9facb02eae0731b723a048fd9ad53804da5f8e6df26bbf7ef05835d44a232e4f0b80381d6c573dbe2946d690ba0d15622e481d116d9237d7907b39b18369e11b4b2a537f209d9b20e3027f1afc8b43a82efc7cb2c48c6da6d58388d4a3dac3ca052eda214c9b76ca7dea2b8ab37fbd2557e8ba46527f9ae3f3a8f6738194e292258a77629d602a23a806a9397b7c7a8740025b54b52cbdc34b25b2ea140f8eddc8c867a47d8a90e93f0d821ced321b9a0e4f1d85d1bba14cdea025f3e46ab4a6cbecb58c32f71987ed3e517d55dc5c191f6cc4e0b41da8cdc3235f6a953b7a087867fc3c3b6b3d0d53eb209758a04841ecb079c2f58d177617420fc92bff9e8507af2be0f4978b13147d9f580b90c1cfb511d20057be77d9bca9ee84494e2565a542a90e1e236db94407a7cd78279a7f32c8344dc0b15e31e8d746346b46858c09b143b57a48b5188d02d11a4dbe240485eb84b176abc972563f0cdc126749eecd3d1b46c554b2ecd158a0b29d25938981dca483446b9c5226e9ba006641e5e5e121b5ddd86a7cbf9d42d8d28098c11952b921cf79b4c2dc2a5534e4701b6f566f699de46781a1ddfc9ef07c423e5c7c544d7aa3b7cf9309475f3c6f2b9681c513b9005cb7250443daf77f64978c60385f5a5247eaf39d39a6d1fd72f2ba05451c61bdf55bd79c16270cc86af00bdc73a5fe4f13dc0d2f24559ef3a40161fc518510410431f79d5c5f903dc880efd0bd9939330cca4d5c19258677457ed34f0f6c5600018c44b449b2652a68850df830f12a404e7f3b5af322e97075c38c6e8cf8b294ddaebadfa060fb3c03034c2c429d8e1a83ed00b35e773ec80f16bde4f6ba58e521f2c1d29497c965fefc01eb1f3dfd60c89bc87b8915720e0546a91ae2abe306cec97580ef7728d75bd2ff62cd1ccd02b640411b6696bd9ba8a5cba7a4dfdf30e450853e6dba17ab666bbc3a552845f2cc1b1d725f362b316681230cc5719bb10f9cea5f77deb36ce7b2cd1d4acdf1f0c3406b29a01e923e52c77059069407725977d487c5aa857b0d02210c5bbcbf261a55cede6f91704d5c32f613cca26521f6330b4d1f0c6cfddcc0c354f478d8a92d735e7a07dae266aa0380aa560cafddd55aea85bd7",
+  "10.6": "10ac5c80c6bce601a32e8c63:2511c19c2d0e0bc6c55cd0eccb2c7162:cd45e56b9b575e9a7c7cb37b0f81d2d95892ad18ae8bf3a5bf11d69b3c93ef0cd284d94c20be4ed30d18c20ff4276e5df7812645a9ae3d328650676b23ddcc9676f3be485ef6c40784663a2fb565309cbb8fbe1cffc1fe8c680ddfe20af461d963ed316bfeca320b426bf481bf5a71ad908eff15e0158d38d3b03cca4d64066f37ca9ab569c231471ad913f3757d1e6fed53bb5f69db4385756c6e0dd697392b260ed44d41e24029aaa2f3b35a38effb666c1554775e6053be56136de1fec39d461b3ceb2ed1fe4efb5015abe803136bf73ec2cc7e502719db95d4557a3ea640c2c0f3bb5b730ef276f96c7dfad8f0412c50a6e10c204c03755ee9471c2c5c8d9c42d6c38961b46bb54ebe680df5e8792f13c57ce8f352c96c5bd294d6d24e1fd93c55f4f70ac4d250f7927f8b81e5eeeba6b518a54d71308b838293dc8879c8561cd5ecb67a050a61fa1d8c131647e2760eb1e4762d2ad62689fd7885683cb0aec2597cca215288659e2814d0fbc5592af8ad7578c88ff73480afa34b49881c19b5097fd5bfa76dd113588f482c5e798b5ea15e9a22fd92e1ca45b1cec8543cc2c161e66f754c5e6a03a2a13bfeaadab637595c08b4a09247be6d2873ffb047808261be378a2cea19f24959bf48ba1235459753541cd0e0c6267775d8fc2f8ac461f6c89ab255f97423369c9e4c0e982d834421641397ad8172998cd91d4eebe7df0e3eb9c4ceda0c9ac4960ff7e4d06ede906662a6b42bbbf370bcf988d9aa9248c7e35029ff5f4f8b57e5ed55d4f1f10867b0321330cece1f2561e83e7e6138ee4eb93d60d4d3160f9cbc848c9113c2becfee7043998a4bec4991776520a5d93910f217544c6c3114ab82414c3e17de0311bd17dc9b8f6fa94c43fbde606aa7908dcc55ed47180a903fd6b95f69128ab311cb3517be0f12154643c49633ae964092d45b7a62c1d678db486180773f0994eda1391de594db86270987e662aab416365fd24e9e43672a31b1c263a968b4c15bf0c0eacd7c0e8edb8170d43551ca514bfadfe5134d7d80eb9763b1106bfbdf91c2f92578897f559c94497570b2c75d27eb03c7ab0636f901c1e6442da1f92da662b8469276b18bc2772544aa3f8b5845244d5b21e6d1e261f1c77ccdc53f8ab716754c5ab3ae1e80ba3a9bd7137c8985f7e6259a88efc8f4f724f7aa1d405ee365d63ae5dda62696507896bff447503bf96bc349c25717d9bc03e4fe344691e767b0df97e0d99cad64febc1308c2fd16ef4186443eab0ed5c1733af346c63ce0eb334091f3ee28efcd46d6dc3598360b3b72f81ed6c744c8a38fadb87194e7e0840c8ee4889df676afaf0a67e72dc7a281d784148ff105b1706d7b93af857cd66723062f12d671ca9ed5c353c7cb6b54a1cc028dc0989f26423ddc34978ab4674a571cec9061f9ba30579800c774c2e382472e803a8bfaa061a4e003a55be702c85d986c75aa48bcb1967838291d18456db4c6c1d72739841ca9b1d606609917821ea432c17877d3a32559352131b044ed870894c98f82347fe759e89382e576f024cc7a1325632dc32b92bff1a4a5c76a3e35747ada346438176d113a7a0667706c1224da028dd2364b6b5327a8fef10ef5e04559ab4aa403d2e0169a1cd628d2d3c91a1351e2dc435cdb891a8a31fa6b47e5708aa7b9ef3204157e87ae2694289ee822301ad795f992fb0db2081ef2afe7b386385b4bf7260e4347786a5b1f594bfde7a3edc0181f33fabebdf4b1fe50c41df25aa6ad282e75d1f26901d0db1783c0431b00db6d71a34f6298ee0282e707f3c4feed4cdd38a8cf2d3282a003404f5c61e62c2c639fc32abdbd744fe7adbdec28f92731b9f315cb25598f8f",
+  "10.7": "1e55e48dbc5cc8d99f08b3ba:b6bf04c5727497bc023acf4504d73e32:c454f640edf783764789075f7a5f549ebd9a9fd1c43c9273a5d9209c12547e9ca255d3ee964ae7e9a8ca7badb495a61f8eb1aad4d789b1fe08abede30931c6eac59905db46aee084fc8079b9398886b10d3ac4ffe0850b0568e95f76a909d8e444db2671bf0f1b596b366188f4a75d518228640a05b60f6a138b45e3f7365990a884f1a39dff7289013b97aaab78ebec0d44f581d13721b12803c932fa5a1a6568de042cecd80e3a3e0e98d446132a87b781c49b7072565c36de0678020f9460d7bd543f8bcd8c09607561be1ecbd8593c25552e9515d330063828ffd08c49f53b0e8690611dd388c5e14a9f53a63353184970036ddfd87f6e7377f55892fa5bd6c936af38d29986f0abc89129388a3cb8f4cc95dbfd4cb492701285fae22d7ee8fe823f020485b4d57f51483dfac0223a9aa9687b95916dd7658ea7741ba17a032515561eb54181239fbacf60637e2fffa0da5af1a092a489549449206e06fd9d3df8b1bc86a34a07805013c1d743aeab1aab4dd509245a7bec4e55fdbb6d3d5f95344bb8af8ab0deb4775d8ec5f96afeb05ff2a7012092d0cee032991a66553502cd7ad0302526356f5f0c531c547bb31e83696b3729c248097692ee55d7ed66b1869d5dde8852ec73b362398b6dbf1016d6d1bb68d9db30ae071e7ec730b7683865b372660f9a654cefbd563c2da18dad3875410372a8ab9e319550c18aac7259f9e3b2c3efa7af6f6d8df6ad781573fb49f9f2db8bf0e0ee99c2f4d155803f804301af933952ac61d4829899151fc86bae634dbde4514cad3df9c24d6bbb5e27f4afacee6f36af181f136478b0b7c26c61d041d21798014e399e59a4318c0a30486958e3569a853381ee13f058d1eddc9c42a1671ecf04cf0b4841ca9aeb8bb4fb72b9fae2d374ff9f99bd485e2bf2b4168aa16e8e3a8b06eb17a0825be9a2556caecb016b8f5e4679b56799d8a0ed01656dc42eb7650f57b05541b99099cc5525ae5bbed4d3453dbb135c387eb465e98ae21a0a5dc57f87ffc30d9e5fc7eb9b8ecf543a1ccfced2149d09961eda33bfecfc511c152e2ac32b0f479b819888f8a7dd1f0466809fd70167bd338af9fe381dfd45452963add88fa19d0771199308e057eb6cf9761b8f31767000ccfde9999b1ea0e0d0392514efeab438483abc8e669ac73634d0db0097c5356fc8e8d8a474d8d035028d62beea5a89dcc3e67b6e76ce62197333dd7ab240a482868a44b9d27180ce6ca70b9bd60aa8dd66570697cdf937a22da98d7c748f8d31b98953b2c86421dc4636d9e0653013a98bacea6e709ec43f379b3155c0c07580f2a5749a533a61bd3f2531cf4461153f938ad054a689483bde23696cdb30dd4476738953531b08ebfb9801e541b912b88ac03c0fc56ba64d7e1882a743bb2fc6774e31b01a1985e893cb6d58863128c5a2dc77800ca2c8000c5eb62659e6a9228ba25bb1378381631f778ead51a4b43f850146beee060e7b0666ee7da4dee4a3828cbb39bbb84d85ac4535c56c399b05b9f68dcf6ebc852320680b275b4b5d5b221696a1173459d3e87bb4df5c876df3516d56da6b2fc4fedeb5ca1ce46aef696feaa9c9d94667d485128a1859fd19801a4b470b78e1b33cc370704d4bd86474c33e82a31fed6158ce904bea9ad2a6e00cecd42ed99c04b46e94bac0b9bf788830ebc3521ffb221cc8ec4d8f43cbaa782ec060856b10e3675154f626883a311face6af7b6c8f8c64b7ac6e5f0d9a5a063987dd6393f5e13ef30c24aa6d3f09d662bc585519047e78e67945c29d343fba7afc948d692e2662aa10f6b4bbe5e9d10649a92fdf85939d6ae2b36618aa21d32a69787d4187b4ec5b33d9e8d697c63f4530ea075e49b5b517b77622cadf8bc5ed11e2e6170b7cbd16b231f04582ba70a6926703c62a60e039deb9f117267723542903f3bfd5ac3b3ecec5581c6b223f1f5955ba47d9dbc01496d04c41f9b5922ee3bd093459cd4385e195531049d12038b1a3514a13b246c3acef069f715384e4f843e66598c047d107732efcff947a74491084625e862c3d5e278744277d59dff0b805235f79d42d53a77f9a27cf06fe1548d75a3b290830fe933c3da7a7bbe624c1b116a415fe7e0ae866650d7c10aecd2a8f21201795ae7a5752b676935806b5555522f5e182205539b3d955181731f4f069597613240c146496cf9aa881b34af89495b5f8bbff927c969287b3a90c9ea07d253dd6b74a5e62bfc457d9759940ae78bde9cc2292ed5e48b4b711e07c02db92247ba355b430ddaf3a4adcbc77a395d2a50dd19ead0da1820c0d9453cdb6dff38ccef145e00e932f7be6a44f1d845342fa8c20521f631bff0535bc78da651f72dd41931fa96d7cec1b73edf7242a2dfb7fb018487832d3b7c6ed7c86f1dd25693529a02df11dd1a3907f2ddbd2b63253f14216f7b6e606b8e4fc9432a80423d8ddf4ce7c08f54dba218f9f5394a10025a180ea9eed67a3c83ab870dbe2d8f066c3b237a47dc3015830da48f1b4d3304c614f2ff4ae44d19a9f46672f8169eba38cdb668adca717b876dccb1dda743836fcc4b939128d145cfba23d3af236249d45c411bd592d924b31aee1ce1c77f719c2e580f9d9a7f60cdc949c2d4db7dbba9a6c5d0791c1295420d6bc20e898c44d0277fec019340b07c365542f427a055008b74bb14d51e1c9e637336bcce6db5421d20fcacab6d1e8c7",
+  "10.8": "54b339c4144e031788697f75:dae447c1b9042b9e55050e0ea2aadb86:229b380d5cd9a799608b3281f74ea287787f0366c5d1dd35d13359e4473077467ea249cfea3166bf93e772950d740f4447d0dc91bfe8cfc079b4aef69d1e733d437fcb61869222eb14f5657240d4c40207a185c60456e1372c38b62306195caa741d11da1513a2fc1dd8b884e9e9b40b203351b9504053d5fc6b670e9d6dbc2728b6cc7b8feb7eac0beb7147a7bc9560737288ccc2c14914de7c81daaadd8a61339c13c3b8fde19d86620ff30c5887ccdc4fa918fa273a9d814354a5eb74132083db763dd423c8aebc14ea5fa028881da03cb1f823c055fca89a442a170104e72820097f85de6fbcedb0675b2347863b35d13bc3e8267fc880589edbe1043030b77473258d4466d8d6f7416ba87d219903f362fad685c94eb320cd3f725e71573489e6fbfb04865ed34a0c415a02d7161e537f6fb58b0a196e2d1b2a5a0f9505ef03b712fe4f8eff4419bbe9eb08022d1071948a848a9d8e20f086ea4cf3ee14c8d1b490f4b4e638a77ed871d4130501e6d9e2fcc2259859be64929254dad3072aacf5896a3ba54c5a17beb28690cf0cc542f41fc880247479b305738947ba610be03a161c65a00af37b4bf24835bb107ba036571c3dc01bba4577d9e85c30b54c99a73b76d50ecf226f258d11b8573b21fb0fc77c942c7f94b41bfc1aeb2414a5b30a0f5ccebb5d4d0a0bf94935187b61843e7f1c96682f34cc10247c6c13b16c068917be2b115ad2356ca37bc718feef23e9fbafd9c6e8d5d6f5a20389806ce685237c03adeee87591c091bf02ad3de943c2bd170d5a4854b31be69165eac39e99525160a5b3803d3da77489a9d9bd1eb203d43bf8b7be060d5ac5969e9f523a12791bf13bd8d6b0f9be8f5d86a11e1340e327a3e165b882b038e59f92af7232f016537c61dbe7a65fc159e768fd46c0e3d501549e49cd0fee248a131f1fd4e42de3daa182017baa55127a418212c3f3795bc9d01593ff0a620c3f1744d5e42060275d9a73d610c428cbf61733cd46f7455d072762eb6289796aff4b1c5cbbaa0f630c28a66e778427bae9055beb525a8785c56b7e93576bb52b905f531ac46f5a5f9edf4587f4faab65035eddcd28fad607404cca65570ef8ec58357f4e898ad97967885eaf092b7a5c2d15eaf735fac53856c52550437c47f297b4f7a70f5a343bfe794ec6dfbe598e2a0dbeca6c33b588f89836ea09e2822b0bc5d29c190654e7edc4b539dd98c847551ad218c5b84f24e7ad66377315f950bba1a6f0c3241bd6ce933690ead633480851b87c9738c9be8c092d7edccf57c1577962458e228491170d4aa7bf28440d6682a874cbb5eaee0ff6e2a1e2c3c948c348a11b91a1ca328df863456907f718660f7a4155acfbb98af7cf9828464f207aee077c11ecb3a48cd915e3ee5268379019b06c4bb0c8312994b06aa5c995706ef9e8f6d643d7c2b288290a875ed5850d29311417bfc4a1057417208668f9df4b5badd02d284ebb175533ace2c13ba4ffe3f15461ec23622d47d364976721edc9a8cfebccbc84c329e302d164c0eb8ffd6a8565acb79052518a35c773619ec73f3e9ef8285fcdacffb5f394d7a92499242932b606b179cee2ab5c4e1fc4daedb8992b0835f29686f10248dc29728bc8c388a2b2d2b7ae8d50bfaace9698b5d0825b39cd0816b0e67bc17d9cad36a70319e03122a12dca63945ee83c1200e94b08aa1076b44671f63ebefebc16895374e1de44d102c506c33be83eb79fd95b8ad308e39f30d463dcf7040be149722193e1ecb6a12ee8255a0c17dfe7b9dc66ffc6ea718557b820024a628e2dbdf2730b3b92f7c1bd8a3cc8df67fdbf1dc78168ce007c2a9653ccec338fe8b93899e4197844a9e2eeda17a8377ced7842add82834584fbccbe900ee13e902014341a44e1dce6087ea60943a073b9c6d27ab76402ba449369c7b9c9e4ada471833b2a26381d44ba03f41a8c72429d159dedd70849818a8d4cba353e31415be440dfeee4e6c2ecc279ed63c5894335c73fff56d7889cd0347e23fb9ec34766db7c213869fc46f1fbebbeaf6e88ccf73b90c9951ba84d754a2de15c9b8cb48a9c29a1d0ccf7d016f5f6a871cdf327f320d8ad9ad7d44b79f5ceda82b2616d21bca53f79a11e455312a35e400fc60d3781ce138d30f61a93323",
+  "10.9": "332d491d5b58121d10396f4d:c3736b70adf3dc3e99c4ef298eb55e45:8849cf20e8c310553a8454a561cdb1c104900411bc891d976d31ccf1c8ac44f8bf84ad184a94db4d18723eb6d89dc36b48de869028b9b5fb14200c616dd0317e54b9cd421889a0bed86a0ad48e3e18aedf6213b0e57bc6d41eb1d0d80ffc6855bf6cdb8f04e967a9937b957978094c3e20491cbf184b7e97113641536aaec00311ba2010e1f15c03f273ced4d7bedb6ab48caf5484d0bbdfb544a7d20f930485ce628c8d3f125c87fcbfb2968dec218a34e9c1d7c9b5162dbab438361d678bf788291ae7e599df255a5877cafedecf3c8023adfbf08535051379d9dd6b48e49b71b076c15875f1c145838d8ca94bca2fd8e75b17a0df2754ec7938a7e38fd0e6eda12953cce69e56ae6b4417980ef2c17babe74d046b8177d1ae99264ced522909c4096c1f7bb89c6ac1491dc03b5b1f20bfc1facb6dc4568942a4c4a890caa3d7547f461ff3f23860fbbeae958641d399d982f8c049c2e9c2e35c412152d2890b0ff394b281248e4a0e71d265b1d8748d16cb1182a4a16f722c96434aa401de2cafeb33db6849aca30e2595612fbf370bfc93cc117bb2a748827e70634b36a6141f8b05831d6fbaff7fd7f48ab507ecc4aed286e76c889c59d99e4620b5f17d182f4341e4da74512fb529325582671a7253e501dd3d734e5690b608e185ab650249eb973c327c6248ba51e72964048a50de2c82ea76147f7b1ab6900b5c77d3ff19c22cfb8f3a5009e99f561a761fde47bfd96dbf0228fc92bfc5d6a8c9f84edd1fa1226e1f023fd60ba887d887a1d10ab6555e647d3fda150b6c6f5d88059c656501904f96fb0e1723408af40d46e34f8a1241c3b863cb6f33b9399b7e121f95cb3b835cb2b45d34e181faa62c8d251985f49c83a9d795139fc2c3eec441784ce739535caefbb9ed785daf1f98757dbad4ba3ff34e5d0fc17dfaae9cfa39d643ec222008ca7c04b9118b675cf896ed73813ef82d37bc4d23695687f611c8f6d5617d983f117aff7eb0460110b217e7f842944e9eb593ad8d645837078ce14f7c335438dd4cf903d74898f850de93f84f2fdcaa3fdd1dcc9c10f5a02c7cb9b9d97dd17e0ab4977541ac4301fed18dc44cdbead10bb27193d876c5a2a65634f0f9ba67a22d6bdba1413fa971be108f756c6df94d3d395c4f4ef30cacad927ef10e87449d6264da39110969066b12ff7f88e0ffd91c894bf62fd90670c7f7f4333052bd42e78c99ac569521b46d9f37044486e5bb136b3a9ba049feffb0053fb1855f70b094ba6cc747e5fe1809c64de3e17d78606e17fde326156697caa753c56a1814f1f5a5affbbaf883f1406f5e919bb025b2284585afd68da944316ea28b7beb3aab4f25905473e4ded93bb79c50e0c56472fa012ef74576867a3451964daa761954b3c1dd20af0614be6b5371778997e5b94416cd235ebcbcbc2e47cb8ea6b9695c8614652eccb2aa9899913150b9c6c2dba66734e8e20f6b91332913b1d5211428863063f938448a94f702043a2f5b49fde162eaa39edb6302d0cd432839fcca7665e6a61e93d6b321b54e4ac3b63a417620200d29131b2e814c950aa98fc446150142b185d20fc42b194644345cef6afa915d6ded25f984e76bc5bd7050d2af5a917754010c17e2a4be7fe4438690178b6df3ff5f9c44f68dfe1c111ea52ca986f7e206f05d79db3851deccaf8a3bfe9c52efc3b71a38a7d1a3c36542cc4cad807baef9cafe3eacb26a4951b3e55d616e58ead8392a0d484c0be7dcb89e4b0ea0b0585976ce7aff36d3e7461356f195a2065f0c2ce5d15983e01de60eda41be249e944b493c1f88c3f07cff43af84431d4730c065f38ebe55f80d363a39a13f68ac22b68939057a01107c31236c6e67b25d97d1c9930c4127175ced60838525eff2f47fa67f25ea5d568156654c1c374578df978b98ee2841f36f23d7f4f92b27a1cb18f6ab50cb4589609b7206741f626323377266c3380ce7cdcf39a2bde42969fe58c55228ddd1dc6904f4b9c47582560cb2fecf8ef5c6cce1db1c8de29c45b0f2c98d955c95d982710019237872f79e64fb842c5308bc84d38ea3ac5e3d63b2f78a238dcaaf7e9c49d03c56cbc56c61dc7a7d994088fce1a7ae4b0af0761f394f6204ac21481403d4d7fed44444b317406d3fb87213e66d3ddfbb5ad40f87f19d35d076cc175edfc2eb7172249bdd9dd7606777d0067c62c75ae11efa14e01e17a2792a0c6dbd0f99b8314bfe25ba3e8f5db1eda4f967e6ecea4c5a324b7dfe23654f66d579a0180f59124571077262c85ee92bcc95dcaefcb1e3c3152eea56747679c882e63f26b68b7f4458c66f299eb1931b6174efc96bc43cd00ca39792c5e06154fdd16575b35ebc147c3ac03389976dcc1948d136644a7a69f165686aeb5b520be6eb39b616118b98e07b0831f13b7c68ecbb240a2ebd8289b2f6ef45635d845d43953e2a73615541cda852ea509611f5f1aea988a2f6d45ef83832d88a8d713e492291ffc18d48d057ef10219c681a6ee6e6eca0d3298a44bb062801f4e6631a845da829e8298518b17da70dc138908ba8a8302f7077a3e294e4f4d981bf5f4e8d708e3142e46b09645c85d36576decf94e74914",
+  "10.10": "a356c40bedbbad841f7fd49c:f5dddbed122ea5e923772f8982f1989e:5efd619bee687238dd9ef03a1a2cc1beae2fd126a8e7ea2390c2f8cbc791e3c26369eeae750e4b8206079bb9588ce86ec695cf7bb8f29dd4ab49a74df52d5008baa7f82a36d14cd20174c7e3186addbbefdc496dedd68a03d78d772ba45d7622e54e3a28a17a951364864d85f6630b55e578a93b67dec3aa4153d6bb893866f25b69d251fce9976655b9b88ec27b8a48781fb9a76cdd15c13acb0ea607fe9a7ced25eb3b4bf57035585a4ae152df1aa3122be999ea34ffe62c6e2adfc86abeb1925fdfe5a6bbaec5cf8dcfbb2f78cb415600c1e238f3d6f36d6aec92fd5c5e00f022d5953dc4b5236bfdc9c251156b94a96c8a317e66939b649c5481ca73f9394e4c71c36cafb8dafdec5e7d705abeca271361c16116016b919afa6afd815dda5bb5d48afafd0cbc40dcfe7c03d9f51001a97e4f670ec9eb67f6e5a3c59dd4e5de1cfffd5d80c94c48f4e5532ae8675a689cf77b368c12ef6a36e675692f445a91d674481ffed56859ac549da8f168ff7dd4a9b53acf6cd5823bc8265afd42ceef55d08668b8b388f9c94e8e3970f0c3f28f99ee3306a03fdee84eebcde59e29320746e352dcbc0bb4475a5a89a9ae0275db3e4e762698e586aed9738ddbf8d01d1e099ff2c1056815eb8dcd264495905fdb9bc02f0ea8907a48db7f9da36388f5acf2b2b2bbdd2e090d18a2d073d352d6485d3c2c1dd41384766060cf87f17d92b2d2191da5843735f4bd4bebbf96a756df1ee87b5d2a8286a1f586e5e0246da203ebf7522ab36017f599681c859c5beacdf819686e28651c6ea2695b931574d713b215043b5b8e7ee82f8bd74e5e0b9a1e5486ff2c064364e81fd7240512bcce815111711729c56887e12bf2cca433ffcf8f5d9e206628e4d56e516c527327b3edaff845e92ebc00f86b81a711ecf08865f72c362855a0dd63f2bad6c9f5a0a0b9a32ca32e36ed2f20b51a90ddd377c9acd0721f77aa2f67338eef66f33fa05d016134695f489352316acd817add8844736ebead394ce629e589c4aeecc530cdf38c92bf8f296ca68676e3fcc8c13d403de5e364ab37d3e7d48c163a8736d33f2ad530cdf7a8927cc584e7ac0f51405ff751c3efc75dc32fb288e9b80345f1325ba62153002d5343c8d14139e56ad694c023ea479c55376d30c7b8062aa512f9c997dff39949406d2f0aac93459e7ca9a1abafe1efe09637db298f831e0fc608397dc9e286190c041c37251bf76e197f4681f5b281eee35383fdad896ef00879f05badfeead439b1d3f1ec110b9fe913e98000d603e65368bbbe3a14bb45ef919f67f7ea915f2e78e3471c1c10d602f3180f517df3d130adb3f23de274fa1e7b34720d3adb491ab74345b3d7300c0586c5a65ba21775309e70bb8824fc2d2cc26b7dc835aa95d2b5cb21a35e9b68bf35e85b08cbee7dfa8b215e30c5cec480be88cf2e3988620e8019a997e8a7bb6b23d38bb946dffc12fc440911b4d1873f8a8ce92adf71d43314b32e49c36deaba89de0d81c7b5d87fd43314e854cf39f16c64ed270889e59fb6c4e879c85f541dcc5502db02ea83d77728d24dd265a6c4e00721fdf0c886e05dc90d8f37c3b20aa819addf5c01b51612e192ff7310442470c8afb08dea6c1134d222ae6be198462b168e692c9b797cbe693f22b8b4c270d02536b40ff354d6e3c7379de3c97068a2d24ddd1424659f8fd654e0e8e30397888df5a8a6f5681e28f181516e19b9ed11c25336f6edad280502641f06cf5cf6a732ced7c5a6de6801cc17af127b68947554da5e88a51981464d61109af8687105c4690313d97424892b64e109b5313f06d7eaec30845a70fcd9b7da8dd3b03d0f79e7d7ff14645885ecf92b48d61a1e3ff5779d123b9ec7068678d7f09471474497649085229ce2b5a416ab07ce7961d17566dbe2f9c0a7c8a2400561f46ce44906d61f6932ac93937624413bf535fc012792a7f77fc6cd6211a50e1e235d1ae62a94ddb3a3c22bc59f4ac5dfcfe100016b8f956c5614fd1fadb5d6ae6afb2a2b721c724c6d3868a23d952bb2e4dc547f2e8b02951b19a4b4209e39a2b9893771ca01cc1760f398d48518755a76c3f089502f6276559345dfac0ce7b466f7371636a6275649ed5628028a25798236f5ee68713affd731125f0f5e99892a28eeee2761ea0edcf64c8355fab02082d157d468e48fe7accc220c5b820db04c031bfe67046d5d7a3b1ff7bb372f6e68c7d3dd1f5481f0d17871557cdebc7955d9fc90ddf813c566310bd16282675df4e5e84662868402bfa64cdaa9259fe5a1c7eafc2e79591686194137d47a204a67a792",
+  "10.11": "9042406f96379ca99c763296:65b29b2fe4b532149f0cd3900769593b:c7a213df75b461d4fa120c5ef9b83bdb020a0679431ab7990c5f1bedad1e786fc24c70bc484ae6a263981d3a1716e10d35d0347c7ed8a70eed3f9f970ce77fc37c42a2b9e114b935db3e1552dd9a2c97e294d056f20abdb33fb99245481c96b33bd3adae588c5cdef9a88165f16db50c49e6e2a4bb04628f083c0b1ba63406ddc7354afd46ce03d67655c298ccab001506996af8e313384c28a52fa4ea546e11d1b585ba3c089c2ea02433fea84f56e0a4958384fdd930fc3ba36b442bfff6affb76a9b7db17cbecd609f44d03e32c7de9e709c005cab6fac20026178742ea4995f51bcde10a83f8556508515edb7f203bfcb2ec87e4f8808e06702c834011aa334dc31eaf22e1d15adce0218826892d61b91ee3f0985bb7b5d056b5b49b23a38b1a17f4d1fcb1e4c30964286b1287f61185c246439473ec0da214882a155c9679dec6507a2b87e032a814abc7a5e928fa3e474b484220022c7f9cbb19ae37e054bb2e79c220c681552e619d5cd047e40eb645efb910f88afabde39f039683482856e2651f8feecc1eb3d8bd4d8e2fe34b739a22cb14495fa68e96a1b6b88ddc573b3ebf90bc26889305be89e8d1a6fe627a541c636811e550b95aee4a3161e06c8fd11e1357bb30693d206f46cc8b12540bdb41bfcee4eccbc4fe36acb2dea44050d0b54a469b6d7108c951cfe91ea7a71d66e9ce4ef91cb5b4c04a5654d3bef390bb630e345c2a360f6a305fdce518bdc5849262a818271ec7f187f01d7efbb440dd2b00a55b1a1e28a857840c6a02a6b72aaa4c4ac9b019f5aebd445a0f295bcf9f3a4155a5a2e98ac7cbdf85897d17c733cf58117f11ddef21f55367a5e39d526ccd1450f25aeae4112d1bd5cdc5456eb555b67b44cccaa81de02eafce27cf75c5164edb3cf6afb0b2d9d16b55e77cdfa197c6d6685ef4b63e96c9409672f82515aa32e6529888c664a2256b57f978848131c4e4f5542a8cd0bb19a7e7e1727d05115d6e2f7ba9ff7e3b252d59c2047d61b4137e94b19bea5e79b0b78ef34bd2e4a54c13c57f20027943a4c11b214019f470ca6dffadd0db5462c0826b1ebbc6e059d60a695426828d0c6adccb53bc9482b115ea4cedcf636da04f693deb21e80990190fed5c19f696e1348b0f57455d0ae304a8b56263a3c4bc9392d101a0a96d72f06e02e40d5a5373de143e4f60d31c5bd2e2401a9286827c7b4978715424e3519d5c109299d90b41f4facd9990c50ded1fbd29895d77803eb91f1eb55672d2773cea8b52a450e0948df4731438e863e7d2d12830d63c99db55617ac9a50920383d60e31c2f0f70c2fc14104c7e621e46870345178f6d9d7948547cf2227fc67259ccd884ae7ce0ee2d062c905af52b15a56445f7e1860ff183c52468c753de06e75180cffb6936bb05df2e0384c3edba3198e279d89fae3b2ba2eb8d236bd4789328141b460eac9ca45e86186711134f190f01432f43647e66eb77753a5277406932cb17265bbaf53b50c5b1b36ac7a9ec5f3ed52a63ab2cffc02145afb2a67cefd094f5fb8f76d0a1b9d0e9a400476ddcd79ae3fda0a412d8111e9aa123051ee3ac896c2fd0f50a672f77c5464c3ffe98f56e4fe16b150dd2d3d3477f7be52a6d71444fed2d7f361054fce7e6e4fa53fb395b304111dd6ba5ff3af991c919a1b78feffd9e968a9be6d5e1bfc2cd68da5a2f1ef96827781cb5021356bb66f4d30096b9811b7511f01c1a4908e4db51a6236d990828290796656d75122b0ac0caa802dd210c7c40952d5def68847e10071c6aa4c74dfd6a74dd4dcd3ce439d48e2f5c5c9c00d1584e42e6452246e9967897efc683d388be933b05a3a135f72fef76c48ca8a2668568a438a479713f98b124d8da6fe6f5cf0eb679862eaed2241afee5b1b31c587fa6431c862fef9332e23359ada62bd3cf47a2070183c2581ddff494a9e51be38c5bc98025748d96fd00f8109a48f7b08af7e830b36a8dfb55a8af3f8677aa155f3042cdc34a1d14d922e185c995f0c0a004976c0c450942dff9d41969e8667ce3ae67077a88a2fce9bffdb38fe980e12d5510dfe0d12513e9bad188ecf7791020e87181dd99994c5e63c03340640e227df96d9d626d30feccbef1ef7dd952b407eb6f77adacf3a89e037a26bcf86f19c0e8579062dbaad3fe0740394d6859931e21d8344191baf9db7f2770705dc2e49c0d81cd4c2ec76344c8f31119152bfca0c0df065e156a991d5ff01e5d5c338512b892c82558bcddc4206d33663f39aa433280f71d15fafd56c39645507ad5e3661c538a1d2eb09a6057ba400f1b0367439dd102fad02d7a9b895e8241e21da5f1e37fd510de07f13bd86646846b95fa180f41c368959db6a7e12a805af85aa29a68d99b73ae15e93eb87fbdd457537beda36ac7426298c3de38459858bb477e99fb76c335d91d82e7aba4008e91c02f242147ac2aaa1749f7640667905909a3cbd78a0bde24d81fb18238ff0e1f0bcbbb035ad32cc4155425c8e1c98a52f8c13dc67217a534d9d5a4a7ee80ad338b7841385cc380d4d1f70fbe2061aa192f9474ed3423d1fec66d149efd58efb2a6bafbf24226cd889b9242968f69c42e7d9c600109d07e647bba30cb370d69cbc88242d0de08f50d409c728e251ea637e59882022f8208e4325c8c9e392294212ccd6b876ac25c2b83e43d063202db2c66bb9dba00bc3e0facf9c82c1da77be29aa46a3f4832a0cc2b8b2195e11c0026f18d5e8cf9de4cc874677886a30c17f64cb8281ce51ad71a3f6a6d5a20",
+  "10.12": "a6f4073efe083afc776c44f6:93fc5371e78fc92c94eb065df19ab77b:bbdaf4b50feee53c733d85ddd475eb4630a574ebc33848cc0066678b360c200ddcbb168dec2f789b58d2580953f63800e5c36304503beb15c0f29e9acc62ed3b8db627b35bd27043683cec285441ce2529af22b17a0dc7ed5925800fd3e3951157c89e14bd64c6e70e6132bd5972c591b8d976080342bdae079d96f7ad2dd60f46ec1abc481188483ec92f06b971066cffa822d4fc1e6539e18a1f06c2b56f2ae2dff6932d9274602ba298840d6f24b42e779c3ac39b7510b2a370456ea36bd999dbd0fce01e459f9ec37aebb3adab1da0c0ee41ac614ff98a0af60f599bde47bd38a54cacfdb4d05adf03e0586e8c342a84830352f605c632690c36d60578850a38265c4f8ba71de51d5f64f960f500b3d38da3c0fae14218f76f4ff3d1eab798c98fe0816ba5c54353ce8b7f177f81e5e719faf0a43778c7eef23cf91098d78d43abbe089128b6ec54456bbb54bcb6257fe127a43054f8263775d7a2f629cce9601dedac06c40e54fa7b5606f87133601bb912f1f98d23bbdb9e02943c62d83aeb82583435c7bce91bad18dc60067b65b928d1f5cb4024ac16750e09bc278f06321f5f3280b89636206d40629678fac2043afa8762a554c69d5a5fcf2f2a82cc5214b972d543f00f0dad2fd5b8e1634c4084112638bd3abb0f6f067d25ca7f12eecec7e65cb29e004b0e33ebe859438d980d893d38c9bec9f335a6cb062ae0ff0ca6f2626281f86a0d0afe741dc80e02e898c076da71cb0740256cd47216031fb1deb629f8713638ad84ec3bff0a3bd41adbe71adc7cbf6d214a8dfbf687e319f8607fcc82b62976d31c7209dd64286243dba0b026da81defc13b3f39df09302bc150ee20bfc4e3be29e37ac3b6e7fe8f7b77db63a351a4b9de46232c14eab58a9faeeb4e69e1ce34e2488c3f8a46f063c9d1d88a46b6ed9d72b065cb181db72b2956ae8bfd54d46e1926d3a4dae03f2dc16a480ac10ac5f72c798d3239666d35ecd0e84ac235db12599f4b424bbcd9fd579d1bdf8d0a306201cb8a1021f67ff710cfbadfae9967f91b5962e8f54f7c618c4ab2d83034968fcf188ce341582252c5f310184a5ead47527d3cd41d719a0d282a6fb5ae198024ffc9396abd0193c8275c8d46914bffd8987cad698c7940701873247a53a203271d187960ba5cad8a29259df2fbe4628fec3755cb4122ded1e5359c84df34378eeb49b12dd514deafdce74c03479f747723a54f09e8e01d6d75dd8de3466519b65940ade996ee714c504977f73e02807761ce3b2ab8d4a17b577a00ac32aaeec2eee7014dffab3ebf73d82249bbfbe18a6ac344c9c81558f353b034fc4532bf0cc4803c9e22b3938157f66bece0ab58893a3e97ee04d3d9991f451270048ab04cf0bc5d3e7c1c7c4abefdff13672ed58ef54edc3961a485385c584c5688df3f8aa03402757becf59f5c5391d38ab132404cafbcb31b1094af699208ab8785e8e2624e420f17cea8796cb07e61cf74d441cf7318f1501900082b112ac72b817f996563e26b684331bb41a85bf2d13778b68a2abe7e74985c801cd5c19cd62b29caa321a0097cecea389ac71e82f3958836d53b33648a5c3c95e82ed3a6e4479110d69058b79a000fd357a8dc6d85fc7923c11536ede62fc12284e09a449fad1658e575202700ff1b6dfe95a4f83850869889903af406c48412acd7ad88b48581b84f47d3abecdbaa4f5ff0559e47e5927ba5bc637c2f03d926f4a5683150b7b03c2185e20060aa1cc1c7738cfa98783f7fe76b7e0f8b8327971fea12db327f974a47e86c8c40a949216b2b35b837df0209c31fe9483eb84e1adcf8df8331df30c7ae240c719969a6dda9d815d8ffb0dc0c0773b5388aa6245fb256fd3a90d6329381fb2cb136b43118444e55097ff4eb0c6"
 };

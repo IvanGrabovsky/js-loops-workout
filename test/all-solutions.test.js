@@ -1,3 +1,4 @@
+import './setup-dom.js';
 import { describe, it, expect } from "vitest";
 
 describe("SOLUTIONS: Модуль 1: Цикл while та поняття ітерації", () => {
@@ -2332,4 +2333,2595 @@ describe("SOLUTIONS: Модуль 7: Робота з відлагоджувач�
     });
   });
 
+
+  describe('SOLUTIONS: Модуль 8: Генерація списків, карток та UI-елементів через цикли', () => {
+    describe('8.1 renderProductCards', () => {
+      function renderProductCards(products) {
+        const grid = document.createElement('div');
+grid.className = 'product-grid';
+if (!Array.isArray(products) || products.length === 0) return grid;
+for (const p of products) {
+  const card = document.createElement('div');
+  card.className = 'product-card';
+  card.setAttribute('data-id', String(p.id));
+  const h3 = document.createElement('h3');
+  h3.className = 'product-title';
+  h3.textContent = p.title || '';
+  const price = document.createElement('span');
+  price.className = 'product-price';
+  price.textContent = `Ціна: $${p.price}`;
+  const badge = document.createElement('span');
+  badge.className = 'product-badge';
+  if (p.inStock) {
+    badge.classList.add('badge--in-stock');
+    badge.textContent = 'В наявності';
+    badge.style.color = 'rgb(16, 185, 129)';
+  } else {
+    badge.classList.add('badge--out-of-stock');
+    badge.textContent = 'Немає на складі';
+    badge.style.color = 'rgb(239, 68, 68)';
+  }
+  card.appendChild(h3);
+  card.appendChild(price);
+  card.appendChild(badge);
+  grid.appendChild(card);
+}
+return grid;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const list = [
+            { id: 101, title: 'Ноутбук', price: 999, inStock: true },
+            { id: 102, title: 'Мишка', price: 25, inStock: false }
+          ];
+          const grid = renderProductCards(list);
+          const cards = grid.querySelectorAll('.product-card');
+          return [
+            grid.tagName,
+            grid.className,
+            cards.length,
+            cards[0].dataset.id,
+            cards[0].querySelector('.product-title').textContent,
+            cards[0].querySelector('.product-badge').classList.contains('badge--in-stock'),
+            cards[0].querySelector('.product-badge').style.color,
+            cards[1].querySelector('.product-badge').textContent,
+            cards[1].querySelector('.product-badge').style.color
+          ];
+        })()).toEqual(["DIV","product-grid",2,"101","Ноутбук",true,"rgb(16, 185, 129)","Немає на складі","rgb(239, 68, 68)"]);
+      });
+      it('test 2', () => {
+        expect(renderProductCards([]).children.length).toEqual(0);
+      });
+    });
+    describe('8.2 renderStarRating', () => {
+      function renderStarRating(rating, maxStars = 5) {
+        const wrap = document.createElement('div');
+wrap.className = 'star-rating';
+wrap.setAttribute('role', 'img');
+wrap.setAttribute('aria-label', `Рейтинг: ${rating} з ${maxStars}`);
+if (maxStars <= 0) return wrap;
+for (let i = 1; i <= maxStars; i++) {
+  const star = document.createElement('span');
+  star.className = 'star';
+  if (i <= rating) {
+    star.classList.add('star--filled');
+    star.textContent = '★';
+    star.style.color = 'rgb(245, 158, 11)';
+  } else {
+    star.classList.add('star--empty');
+    star.textContent = '☆';
+    star.style.color = 'rgb(156, 163, 175)';
+  }
+  wrap.appendChild(star);
+}
+return wrap;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const sr = renderStarRating(3, 5);
+          const filled = sr.querySelectorAll('.star--filled');
+          const empty = sr.querySelectorAll('.star--empty');
+          return [
+            sr.getAttribute('role'),
+            sr.getAttribute('aria-label'),
+            sr.children.length,
+            filled.length,
+            filled[0].textContent,
+            filled[0].style.color,
+            empty.length,
+            empty[0].textContent,
+            empty[0].style.color
+          ];
+        })()).toEqual(["img","Рейтинг: 3 з 5",5,3,"★","rgb(245, 158, 11)",2,"☆","rgb(156, 163, 175)"]);
+      });
+      it('test 2', () => {
+        expect(renderStarRating(0, 0).children.length).toEqual(0);
+      });
+    });
+    describe('8.3 renderBreadcrumbs', () => {
+      function renderBreadcrumbs(links) {
+        const nav = document.createElement('nav');
+nav.setAttribute('aria-label', 'breadcrumb');
+const ol = document.createElement('ol');
+ol.className = 'breadcrumb-list';
+nav.appendChild(ol);
+if (!Array.isArray(links) || links.length === 0) return nav;
+for (let i = 0; i < links.length; i++) {
+  const item = links[i];
+  const li = document.createElement('li');
+  li.className = 'breadcrumb-item';
+  const isLast = (i === links.length - 1);
+  if (isLast) {
+    const span = document.createElement('span');
+    span.className = 'breadcrumb-current';
+    span.setAttribute('aria-current', 'page');
+    span.textContent = item.title;
+    li.appendChild(span);
+  } else {
+    const a = document.createElement('a');
+    a.href = item.url;
+    a.textContent = item.title;
+    li.appendChild(a);
+    const sep = document.createElement('span');
+    sep.className = 'breadcrumb-separator';
+    sep.setAttribute('aria-hidden', 'true');
+    sep.textContent = '→';
+    li.appendChild(sep);
+  }
+  ol.appendChild(li);
+}
+return nav;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const nav = renderBreadcrumbs([
+            { title: 'Головна', url: '/' },
+            { title: 'Курси', url: '/courses' },
+            { title: 'JS Loops', url: '/courses/js-loops' }
+          ]);
+          const items = nav.querySelectorAll('.breadcrumb-item');
+          const seps = nav.querySelectorAll('.breadcrumb-separator');
+          const curr = nav.querySelector('.breadcrumb-current');
+          return [
+            nav.tagName,
+            nav.getAttribute('aria-label'),
+            items.length,
+            seps.length,
+            curr.getAttribute('aria-current'),
+            curr.textContent
+          ];
+        })()).toEqual(["NAV","breadcrumb",3,2,"page","JS Loops"]);
+      });
+    });
+    describe('8.4 renderStatusBadges', () => {
+      function renderStatusBadges(items) {
+        const container = document.createElement('div');
+container.className = 'badge-container';
+if (!Array.isArray(items)) return container;
+const colors = {
+  success: 'rgb(16, 185, 129)',
+  warning: 'rgb(245, 158, 11)',
+  danger: 'rgb(239, 68, 68)',
+  neutral: 'rgb(107, 114, 128)'
+};
+for (const item of items) {
+  const badge = document.createElement('span');
+  badge.className = 'badge';
+  const type = colors[item.status] ? item.status : 'neutral';
+  badge.classList.add(`badge--${type}`);
+  badge.style.backgroundColor = colors[type];
+  badge.style.color = 'rgb(255, 255, 255)';
+  badge.textContent = item.label || '';
+  container.appendChild(badge);
+}
+return container;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const box = renderStatusBadges([
+            { label: 'Готово', status: 'success' },
+            { label: 'Очікує', status: 'warning' },
+            { label: 'Помилка', status: 'danger' }
+          ]);
+          const badges = box.querySelectorAll('.badge');
+          return [
+            box.className,
+            badges.length,
+            badges[0].classList.contains('badge--success'),
+            badges[0].style.backgroundColor,
+            badges[1].style.backgroundColor,
+            badges[2].style.backgroundColor
+          ];
+        })()).toEqual(["badge-container",3,true,"rgb(16, 185, 129)","rgb(245, 158, 11)","rgb(239, 68, 68)"]);
+      });
+    });
+    describe('8.5 renderMessageList', () => {
+      function renderMessageList(messages) {
+        const ul = document.createElement('ul');
+ul.className = 'message-list';
+if (!Array.isArray(messages)) return ul;
+for (const m of messages) {
+  const li = document.createElement('li');
+  li.className = 'message-item';
+  if (m.isMine) {
+    li.classList.add('message-item--mine');
+    li.style.alignSelf = 'flex-end';
+  }
+  const author = document.createElement('span');
+  author.className = 'message-author';
+  author.textContent = m.author || '';
+  const p = document.createElement('p');
+  p.className = 'message-text';
+  p.textContent = m.text || '';
+  const time = document.createElement('time');
+  time.className = 'message-time';
+  time.textContent = m.timestamp || '';
+  li.appendChild(author);
+  li.appendChild(p);
+  li.appendChild(time);
+  ul.appendChild(li);
+}
+return ul;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const list = renderMessageList([
+            { author: 'Олег', text: 'Привіт!', timestamp: '12:00', isMine: false },
+            { author: 'Я', text: 'Привіт, як справи?', timestamp: '12:01', isMine: true }
+          ]);
+          const items = list.querySelectorAll('.message-item');
+          return [
+            list.tagName,
+            items.length,
+            items[1].classList.contains('message-item--mine'),
+            items[1].style.alignSelf,
+            items[1].querySelector('.message-text').textContent
+          ];
+        })()).toEqual(["UL",2,true,"flex-end","Привіт, як справи?"]);
+      });
+    });
+    describe('8.6 renderTagCloud', () => {
+      function renderTagCloud(tags) {
+        const div = document.createElement('div');
+div.className = 'tag-cloud';
+if (!Array.isArray(tags)) return div;
+for (const t of tags) {
+  const chip = document.createElement('span');
+  chip.className = 'tag-chip';
+  chip.setAttribute('data-count', String(t.count));
+  chip.textContent = `#${t.name}`;
+  if (t.count > 10) {
+    chip.classList.add('tag-chip--popular');
+    chip.style.fontSize = '16px';
+  } else {
+    chip.classList.add('tag-chip--regular');
+    chip.style.fontSize = '12px';
+  }
+  div.appendChild(chip);
+}
+return div;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const cloud = renderTagCloud([
+            { name: 'javascript', count: 42 },
+            { name: 'dom', count: 5 }
+          ]);
+          const chips = cloud.querySelectorAll('.tag-chip');
+          return [
+            chips.length,
+            chips[0].textContent,
+            chips[0].dataset.count,
+            chips[0].classList.contains('tag-chip--popular'),
+            chips[0].style.fontSize,
+            chips[1].classList.contains('tag-chip--regular'),
+            chips[1].style.fontSize
+          ];
+        })()).toEqual([2,"#javascript","42",true,"16px",true,"12px"]);
+      });
+    });
+    describe('8.7 renderProgressBarSteps', () => {
+      function renderProgressBarSteps(steps, activeIndex) {
+        const bar = document.createElement('div');
+bar.className = 'step-progress-bar';
+const track = document.createElement('div');
+track.className = 'progress-track';
+const fill = document.createElement('div');
+fill.className = 'progress-fill';
+const len = Array.isArray(steps) ? steps.length : 0;
+const pct = len > 1 ? Math.round((activeIndex / (len - 1)) * 100) : 0;
+fill.style.width = `${pct}%`;
+track.appendChild(fill);
+bar.appendChild(track);
+if (len === 0) return bar;
+const stepsWrap = document.createElement('div');
+stepsWrap.className = 'steps-container';
+for (let i = 0; i < len; i++) {
+  const step = document.createElement('div');
+  step.className = 'step-indicator';
+  step.setAttribute('data-step', String(i + 1));
+  step.textContent = steps[i];
+  if (i < activeIndex) step.classList.add('step--completed');
+  else if (i === activeIndex) step.classList.add('step--active');
+  else step.classList.add('step--upcoming');
+  stepsWrap.appendChild(step);
+}
+bar.appendChild(stepsWrap);
+return bar;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const res = renderProgressBarSteps(['Крок 1', 'Крок 2', 'Крок 3'], 1);
+          const fill = res.querySelector('.progress-fill');
+          const steps = res.querySelectorAll('.step-indicator');
+          return [
+            fill.style.width,
+            steps[0].classList.contains('step--completed'),
+            steps[1].classList.contains('step--active'),
+            steps[2].classList.contains('step--upcoming')
+          ];
+        })()).toEqual(["50%",true,true,true]);
+      });
+    });
+    describe('8.8 renderNumberedList', () => {
+      function renderNumberedList(items, startNumber = 1) {
+        const ol = document.createElement('ol');
+ol.className = 'numbered-list';
+ol.setAttribute('start', String(startNumber));
+if (!Array.isArray(items)) return ol;
+for (let i = 0; i < items.length; i++) {
+  const li = document.createElement('li');
+  li.className = 'numbered-item';
+  const numSpan = document.createElement('span');
+  numSpan.className = 'item-num';
+  numSpan.textContent = `${startNumber + i}.`;
+  const bodySpan = document.createElement('span');
+  bodySpan.className = 'item-body';
+  bodySpan.textContent = items[i];
+  li.appendChild(numSpan);
+  li.appendChild(bodySpan);
+  ol.appendChild(li);
+}
+return ol;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const ol = renderNumberedList(['Вступ', 'Основи', 'Практика'], 5);
+          const items = ol.querySelectorAll('.numbered-item');
+          return [
+            ol.getAttribute('start'),
+            items.length,
+            items[0].querySelector('.item-num').textContent,
+            items[2].querySelector('.item-num').textContent
+          ];
+        })()).toEqual(["5",3,"5.","7."]);
+      });
+    });
+    describe('8.9 renderNotificationFeed', () => {
+      function renderNotificationFeed(notifications) {
+        const feed = document.createElement('div');
+feed.className = 'notification-feed';
+if (!Array.isArray(notifications)) return feed;
+for (const n of notifications) {
+  const card = document.createElement('div');
+  card.className = 'notification-card';
+  card.setAttribute('data-id', String(n.id));
+  if (n.unread) {
+    card.classList.add('notification--unread');
+    card.style.borderLeft = '4px solid rgb(59, 130, 246)';
+  }
+  const h4 = document.createElement('h4');
+  h4.className = 'notification-title';
+  h4.textContent = n.title || '';
+  card.appendChild(h4);
+  feed.appendChild(card);
+}
+return feed;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const feed = renderNotificationFeed([
+            { id: 1, title: 'Новий урок', unread: true },
+            { id: 2, title: 'Знижка', unread: false }
+          ]);
+          const cards = feed.querySelectorAll('.notification-card');
+          return [
+            cards.length,
+            cards[0].classList.contains('notification--unread'),
+            cards[0].style.borderLeft,
+            cards[1].classList.contains('notification--unread')
+          ];
+        })()).toEqual([2,true,"4px solid rgb(59, 130, 246)",false]);
+      });
+    });
+    describe('8.10 renderTabsNavigation', () => {
+      function renderTabsNavigation(tabNames, activeIdx = 0) {
+        const nav = document.createElement('nav');
+nav.className = 'tabs-nav';
+nav.setAttribute('role', 'tablist');
+if (!Array.isArray(tabNames)) return nav;
+for (let i = 0; i < tabNames.length; i++) {
+  const btn = document.createElement('button');
+  btn.className = 'tab-btn';
+  btn.setAttribute('role', 'tab');
+  btn.textContent = tabNames[i];
+  if (i === activeIdx) {
+    btn.classList.add('tab-btn--active');
+    btn.setAttribute('aria-selected', 'true');
+    btn.style.borderBottom = '2px solid rgb(99, 102, 241)';
+  } else {
+    btn.setAttribute('aria-selected', 'false');
+  }
+  nav.appendChild(btn);
+}
+return nav;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const nav = renderTabsNavigation(['Теорія', 'Практика', 'Тести'], 1);
+          const tabs = nav.querySelectorAll('.tab-btn');
+          return [
+            nav.getAttribute('role'),
+            tabs.length,
+            tabs[1].classList.contains('tab-btn--active'),
+            tabs[1].getAttribute('aria-selected'),
+            tabs[1].style.borderBottom,
+            tabs[0].getAttribute('aria-selected')
+          ];
+        })()).toEqual(["tablist",3,true,"true","2px solid rgb(99, 102, 241)","false"]);
+      });
+    });
+    describe('8.11 renderAccordionList', () => {
+      function renderAccordionList(sections) {
+        const wrap = document.createElement('div');
+wrap.className = 'accordion-list';
+if (!Array.isArray(sections)) return wrap;
+for (const sec of sections) {
+  const details = document.createElement('details');
+  details.className = 'accordion-item';
+  if (sec.isOpen) details.setAttribute('open', '');
+  const summary = document.createElement('summary');
+  summary.className = 'accordion-header';
+  summary.textContent = sec.title || '';
+  const body = document.createElement('div');
+  body.className = 'accordion-body';
+  body.textContent = sec.content || '';
+  details.appendChild(summary);
+  details.appendChild(body);
+  wrap.appendChild(details);
+}
+return wrap;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const acc = renderAccordionList([
+            { title: 'Розділ 1', content: 'Контент 1', isOpen: true },
+            { title: 'Розділ 2', content: 'Контент 2', isOpen: false }
+          ]);
+          const items = acc.querySelectorAll('.accordion-item');
+          return [
+            items.length,
+            items[0].hasAttribute('open'),
+            items[0].querySelector('.accordion-header').textContent,
+            items[1].hasAttribute('open')
+          ];
+        })()).toEqual([2,true,"Розділ 1",false]);
+      });
+    });
+    describe('8.12 renderAvatarStack', () => {
+      function renderAvatarStack(users, maxVisible = 3) {
+        const stack = document.createElement('div');
+stack.className = 'avatar-stack';
+if (!Array.isArray(users)) return stack;
+const count = Math.min(users.length, maxVisible);
+for (let i = 0; i < count; i++) {
+  const u = users[i];
+  const av = document.createElement('div');
+  av.className = 'avatar';
+  av.setAttribute('title', u.name || '');
+  av.setAttribute('data-initials', u.initials || '');
+  av.textContent = u.initials || '';
+  stack.appendChild(av);
+}
+if (users.length > maxVisible) {
+  const more = document.createElement('div');
+  more.className = 'avatar avatar--more';
+  more.textContent = `+${users.length - maxVisible}`;
+  stack.appendChild(more);
+}
+return stack;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const list = [
+            { name: 'Іван', initials: 'ІГ' },
+            { name: 'Олена', initials: 'ОК' },
+            { name: 'Максим', initials: 'МВ' },
+            { name: 'Дарина', initials: 'ДП' }
+          ];
+          const stack = renderAvatarStack(list, 2);
+          const avs = stack.querySelectorAll('.avatar');
+          return [
+            avs.length,
+            avs[0].dataset.initials,
+            avs[2].classList.contains('avatar--more'),
+            avs[2].textContent
+          ];
+        })()).toEqual([3,"ІГ",true,"+2"]);
+      });
+    });
+  });
+
+  describe('SOLUTIONS: Модуль 9: Генерація складних структур та сіток через вкладені цикли', () => {
+    describe('9.1 renderDataTable', () => {
+      function renderDataTable(headers, rows) {
+        const table = document.createElement('table');
+table.className = 'data-table';
+const thead = document.createElement('thead');
+const trHead = document.createElement('tr');
+for (const h of headers || []) {
+  const th = document.createElement('th');
+  th.setAttribute('scope', 'col');
+  th.textContent = h;
+  trHead.appendChild(th);
+}
+thead.appendChild(trHead);
+table.appendChild(thead);
+
+const tbody = document.createElement('tbody');
+if (!Array.isArray(rows) || rows.length === 0) {
+  const emptyTr = document.createElement('tr');
+  const emptyTd = document.createElement('td');
+  emptyTd.setAttribute('colspan', String(headers ? headers.length : 1));
+  emptyTd.textContent = 'Немає даних';
+  emptyTr.appendChild(emptyTd);
+  tbody.appendChild(emptyTr);
+} else {
+  for (let r = 0; r < rows.length; r++) {
+    const tr = document.createElement('tr');
+    const rowData = rows[r] || [];
+    for (let c = 0; c < rowData.length; c++) {
+      const td = document.createElement('td');
+      if (headers && headers[c]) td.setAttribute('data-label', headers[c]);
+      td.textContent = String(rowData[c]);
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+}
+table.appendChild(tbody);
+return table;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const tbl = renderDataTable(['Імʼя', 'Вік'], [['Олена', 22], ['Максим', 25]]);
+          const ths = tbl.querySelectorAll('thead th');
+          const tds = tbl.querySelectorAll('tbody td');
+          return [
+            tbl.tagName,
+            ths.length,
+            ths[0].textContent,
+            tds.length,
+            tds[0].textContent,
+            tds[0].dataset.label
+          ];
+        })()).toEqual(["TABLE",2,"Імʼя",4,"Олена","Імʼя"]);
+      });
+      it('test 2', () => {
+        expect(renderDataTable(['A'], []).querySelector('tbody td').textContent).toEqual("Немає даних");
+      });
+    });
+    describe('9.2 renderCalendarMonth', () => {
+      function renderCalendarMonth(monthName, startDayOfWeek, totalDays) {
+        const card = document.createElement('div');
+card.className = 'calendar-card';
+const hdr = document.createElement('div');
+hdr.className = 'calendar-header';
+hdr.textContent = monthName;
+card.appendChild(hdr);
+
+const table = document.createElement('table');
+table.className = 'calendar-table';
+const thead = document.createElement('thead');
+const trHead = document.createElement('tr');
+const dayNames = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'];
+for (const dn of dayNames) {
+  const th = document.createElement('th');
+  th.textContent = dn;
+  trHead.appendChild(th);
+}
+thead.appendChild(trHead);
+table.appendChild(thead);
+
+const tbody = document.createElement('tbody');
+let dayCounter = 1;
+const weeks = Math.ceil((totalDays + startDayOfWeek - 1) / 7);
+
+for (let w = 0; w < weeks; w++) {
+  const tr = document.createElement('tr');
+  for (let d = 1; d <= 7; d++) {
+    const td = document.createElement('td');
+    const isWeekend = (d === 6 || d === 7);
+    if (isWeekend) {
+      td.classList.add('cell--weekend');
+      td.style.color = 'rgb(239, 68, 68)';
+    }
+    if ((w === 0 && d < startDayOfWeek) || dayCounter > totalDays) {
+      td.classList.add('cell--empty');
+      td.textContent = '';
+    } else {
+      td.classList.add('cell--day');
+      td.textContent = String(dayCounter);
+      dayCounter++;
+    }
+    tr.appendChild(td);
+  }
+  tbody.appendChild(tr);
+}
+table.appendChild(tbody);
+card.appendChild(table);
+return card;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const cal = renderCalendarMonth('Листопад 2026', 1, 30);
+          const days = cal.querySelectorAll('.cell--day');
+          const weekends = cal.querySelectorAll('.cell--weekend');
+          return [
+            cal.querySelector('.calendar-header').textContent,
+            days.length,
+            days[0].textContent,
+            weekends.length > 0,
+            weekends[0].style.color
+          ];
+        })()).toEqual(["Листопад 2026",30,"1",true,"rgb(239, 68, 68)"]);
+      });
+    });
+    describe('9.3 renderChessBoard', () => {
+      function renderChessBoard(size = 8) {
+        const board = document.createElement('div');
+board.className = 'chessboard';
+board.setAttribute('data-size', String(size));
+for (let r = 0; r < size; r++) {
+  const row = document.createElement('div');
+  row.className = 'board-row';
+  for (let c = 0; c < size; c++) {
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.setAttribute('data-coord', `${r},${c}`);
+    if ((r + c) % 2 === 0) {
+      cell.classList.add('cell--white');
+      cell.style.backgroundColor = 'rgb(255, 255, 255)';
+    } else {
+      cell.classList.add('cell--black');
+      cell.style.backgroundColor = 'rgb(30, 41, 59)';
+    }
+    row.appendChild(cell);
+  }
+  board.appendChild(row);
+}
+return board;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const b = renderChessBoard(4);
+          const rows = b.querySelectorAll('.board-row');
+          const cells = b.querySelectorAll('.cell');
+          return [
+            b.dataset.size,
+            rows.length,
+            cells.length,
+            cells[0].classList.contains('cell--white'),
+            cells[0].style.backgroundColor,
+            cells[1].classList.contains('cell--black'),
+            cells[1].style.backgroundColor
+          ];
+        })()).toEqual(["4",4,16,true,"rgb(255, 255, 255)",true,"rgb(30, 41, 59)"]);
+      });
+    });
+    describe('9.4 renderActivityHeatmap', () => {
+      function renderActivityHeatmap(weeksCount, daysPerWeek = 7, activityMatrix = []) {
+        const map = document.createElement('div');
+map.className = 'heatmap-container';
+map.style.display = 'flex';
+map.style.gap = '4px';
+for (let w = 0; w < weeksCount; w++) {
+  const weekCol = document.createElement('div');
+  weekCol.className = 'heatmap-week';
+  weekCol.style.display = 'flex';
+  weekCol.style.flexDirection = 'column';
+  weekCol.style.gap = '4px';
+  for (let d = 0; d < daysPerWeek; d++) {
+    const count = (activityMatrix[w] && activityMatrix[w][d]) || 0;
+    const day = document.createElement('div');
+    day.className = 'heatmap-day';
+    day.setAttribute('data-count', String(count));
+    if (count === 0) day.style.backgroundColor = 'rgb(241, 245, 249)';
+    else if (count <= 3) day.style.backgroundColor = 'rgb(187, 247, 208)';
+    else if (count <= 7) day.style.backgroundColor = 'rgb(74, 222, 128)';
+    else day.style.backgroundColor = 'rgb(22, 163, 74)';
+    weekCol.appendChild(day);
+  }
+  map.appendChild(weekCol);
+}
+return map;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const matrix = [[0, 2, 5, 10]];
+          const hm = renderActivityHeatmap(1, 4, matrix);
+          const days = hm.querySelectorAll('.heatmap-day');
+          return [
+            days.length,
+            days[0].style.backgroundColor,
+            days[1].style.backgroundColor,
+            days[2].style.backgroundColor,
+            days[3].style.backgroundColor
+          ];
+        })()).toEqual([4,"rgb(241, 245, 249)","rgb(187, 247, 208)","rgb(74, 222, 128)","rgb(22, 163, 74)"]);
+      });
+    });
+    describe('9.5 renderPixelArtGrid', () => {
+      function renderPixelArtGrid(rows, cols, colorMatrix) {
+        const canvas = document.createElement('div');
+canvas.className = 'pixel-canvas';
+canvas.style.display = 'grid';
+canvas.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+for (let r = 0; r < rows; r++) {
+  for (let c = 0; c < cols; c++) {
+    const color = (colorMatrix[r] && colorMatrix[r][c]) || 'rgb(255, 255, 255)';
+    const px = document.createElement('div');
+    px.className = 'pixel';
+    px.setAttribute('data-row', String(r));
+    px.setAttribute('data-col', String(c));
+    px.style.backgroundColor = color;
+    canvas.appendChild(px);
+  }
+}
+return canvas;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const colors = [['#ff0000', '#00ff00'], ['#0000ff', '#ffffff']];
+          const can = renderPixelArtGrid(2, 2, colors);
+          const pxs = can.querySelectorAll('.pixel');
+          return [
+            can.style.gridTemplateColumns,
+            pxs.length,
+            pxs[0].style.backgroundColor,
+            pxs[0].dataset.row,
+            pxs[0].dataset.col
+          ];
+        })()).toEqual(["repeat(2, 1fr)",4,"#ff0000","0","0"]);
+      });
+    });
+    describe('9.6 renderMultiplicationTableDOM', () => {
+      function renderMultiplicationTableDOM(max = 5) {
+        const table = document.createElement('table');
+table.className = 'mult-table';
+for (let r = 1; r <= max; r++) {
+  const tr = document.createElement('tr');
+  for (let c = 1; c <= max; c++) {
+    const td = document.createElement('td');
+    td.textContent = String(r * c);
+    if (r === c) {
+      td.classList.add('cell--diagonal');
+      td.style.backgroundColor = 'rgb(254, 240, 138)';
+    }
+    tr.appendChild(td);
+  }
+  table.appendChild(tr);
+}
+return table;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const tbl = renderMultiplicationTableDOM(3);
+          const diag = tbl.querySelectorAll('.cell--diagonal');
+          return [
+            tbl.querySelectorAll('tr').length,
+            diag.length,
+            diag[0].textContent,
+            diag[1].textContent,
+            diag[2].textContent,
+            diag[0].style.backgroundColor
+          ];
+        })()).toEqual([3,3,"1","4","9","rgb(254, 240, 138)"]);
+      });
+    });
+    describe('9.7 renderNestedTreeMenu', () => {
+      function renderNestedTreeMenu(categories) {
+        const ul = document.createElement('ul');
+ul.className = 'tree-menu';
+if (!Array.isArray(categories)) return ul;
+for (const cat of categories) {
+  const li = document.createElement('li');
+  li.className = 'tree-node';
+  const span = document.createElement('span');
+  span.className = 'node-title';
+  span.textContent = cat.name || '';
+  li.appendChild(span);
+  if (Array.isArray(cat.children) && cat.children.length > 0) {
+    const subUl = document.createElement('ul');
+    subUl.className = 'tree-sub';
+    for (const child of cat.children) {
+      const subLi = document.createElement('li');
+      subLi.className = 'sub-node';
+      subLi.textContent = child;
+      subUl.appendChild(subLi);
+    }
+    li.appendChild(subUl);
+  }
+  ul.appendChild(li);
+}
+return ul;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const data = [
+            { name: 'Фронтенд', children: ['HTML', 'CSS', 'JS'] },
+            { name: 'Бекенд', children: ['Node.js'] }
+          ];
+          const tree = renderNestedTreeMenu(data);
+          const subNodes = tree.querySelectorAll('.sub-node');
+          return [
+            tree.querySelectorAll('.tree-node').length,
+            subNodes.length,
+            subNodes[0].textContent,
+            subNodes[3].textContent
+          ];
+        })()).toEqual([2,4,"HTML","Node.js"]);
+      });
+    });
+    describe('9.8 renderSeatMap', () => {
+      function renderSeatMap(rowsCount, seatsPerRow, reservedSeats = []) {
+        const map = document.createElement('div');
+map.className = 'seat-map';
+const reservedSet = new Set(reservedSeats);
+for (let r = 1; r <= rowsCount; r++) {
+  const rowDiv = document.createElement('div');
+  rowDiv.className = 'seat-row';
+  rowDiv.setAttribute('data-row', String(r));
+  for (let s = 1; s <= seatsPerRow; s++) {
+    const seatId = `${r}-${s}`;
+    const btn = document.createElement('button');
+    btn.className = 'seat';
+    btn.setAttribute('data-seat', seatId);
+    if (reservedSet.has(seatId)) {
+      btn.classList.add('seat--reserved');
+      btn.disabled = true;
+      btn.style.backgroundColor = 'rgb(239, 68, 68)';
+    } else {
+      btn.classList.add('seat--available');
+      btn.style.backgroundColor = 'rgb(16, 185, 129)';
+    }
+    btn.textContent = String(s);
+    rowDiv.appendChild(btn);
+  }
+  map.appendChild(rowDiv);
+}
+return map;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const sm = renderSeatMap(2, 2, ['1-2']);
+          const reserved = sm.querySelectorAll('.seat--reserved');
+          const available = sm.querySelectorAll('.seat--available');
+          return [
+            reserved.length,
+            reserved[0].disabled,
+            reserved[0].style.backgroundColor,
+            available.length,
+            available[0].style.backgroundColor
+          ];
+        })()).toEqual([1,true,"rgb(239, 68, 68)",3,"rgb(16, 185, 129)"]);
+      });
+    });
+    describe('9.9 renderColorPaletteMatrix', () => {
+      function renderColorPaletteMatrix(palettes) {
+        const matrix = document.createElement('div');
+matrix.className = 'palette-matrix';
+if (!Array.isArray(palettes)) return matrix;
+for (const p of palettes) {
+  const row = document.createElement('div');
+  row.className = 'palette-row';
+  const h4 = document.createElement('h4');
+  h4.textContent = p.groupName || '';
+  row.appendChild(h4);
+  const wrap = document.createElement('div');
+  wrap.className = 'shades-wrap';
+  for (const shade of p.shades || []) {
+    const swatch = document.createElement('div');
+    swatch.className = 'color-swatch';
+    swatch.style.backgroundColor = shade;
+    swatch.textContent = shade;
+    wrap.appendChild(swatch);
+  }
+  row.appendChild(wrap);
+  matrix.appendChild(row);
+}
+return matrix;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const matrix = renderColorPaletteMatrix([
+            { groupName: 'Emerald', shades: ['#a7f3d0', '#059669'] }
+          ]);
+          const swatches = matrix.querySelectorAll('.color-swatch');
+          return [
+            matrix.querySelector('h4').textContent,
+            swatches.length,
+            swatches[0].style.backgroundColor,
+            swatches[1].style.backgroundColor
+          ];
+        })()).toEqual(["Emerald",2,"#a7f3d0","#059669"]);
+      });
+    });
+    describe('9.10 renderProductComparisonGrid', () => {
+      function renderProductComparisonGrid(features, products) {
+        const table = document.createElement('table');
+table.className = 'comparison-table';
+const thead = document.createElement('thead');
+const trHead = document.createElement('tr');
+const thFeature = document.createElement('th');
+thFeature.textContent = 'Функція';
+trHead.appendChild(thFeature);
+for (const p of products || []) {
+  const th = document.createElement('th');
+  th.textContent = p.name || '';
+  trHead.appendChild(th);
+}
+thead.appendChild(trHead);
+table.appendChild(thead);
+
+const tbody = document.createElement('tbody');
+for (const f of features || []) {
+  const tr = document.createElement('tr');
+  const thRow = document.createElement('th');
+  thRow.textContent = f;
+  tr.appendChild(thRow);
+  for (const p of products || []) {
+    const td = document.createElement('td');
+    const hasFeature = p.features && Boolean(p.features[f]);
+    if (hasFeature) {
+      td.className = 'feature--yes';
+      td.textContent = '✓';
+      td.style.color = 'rgb(16, 185, 129)';
+    } else {
+      td.className = 'feature--no';
+      td.textContent = '✕';
+      td.style.color = 'rgb(239, 68, 68)';
+    }
+    tr.appendChild(td);
+  }
+  tbody.appendChild(tr);
+}
+table.appendChild(tbody);
+return table;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const feats = ['Wi-Fi', 'Bluetooth'];
+          const prods = [
+            { name: 'Модель A', features: { 'Wi-Fi': true, 'Bluetooth': false } },
+            { name: 'Модель B', features: { 'Wi-Fi': true, 'Bluetooth': true } }
+          ];
+          const tbl = renderProductComparisonGrid(feats, prods);
+          const yes = tbl.querySelectorAll('.feature--yes');
+          const no = tbl.querySelectorAll('.feature--no');
+          return [
+            tbl.querySelectorAll('thead th').length,
+            yes.length,
+            no.length,
+            yes[0].style.color,
+            no[0].style.color
+          ];
+        })()).toEqual([3,3,1,"rgb(16, 185, 129)","rgb(239, 68, 68)"]);
+      });
+    });
+    describe('9.11 renderWordSearchGrid', () => {
+      function renderWordSearchGrid(letterMatrix) {
+        const grid = document.createElement('div');
+grid.className = 'word-grid';
+if (!Array.isArray(letterMatrix)) return grid;
+for (let r = 0; r < letterMatrix.length; r++) {
+  const rowDiv = document.createElement('div');
+  rowDiv.className = 'grid-row';
+  const rowLetters = letterMatrix[r] || [];
+  for (let c = 0; c < rowLetters.length; c++) {
+    const span = document.createElement('span');
+    span.className = 'letter-cell';
+    span.setAttribute('data-row', String(r));
+    span.setAttribute('data-col', String(c));
+    span.textContent = String(rowLetters[c]);
+    rowDiv.appendChild(span);
+  }
+  grid.appendChild(rowDiv);
+}
+return grid;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const mat = [['A', 'B'], ['C', 'D']];
+          const g = renderWordSearchGrid(mat);
+          const cells = g.querySelectorAll('.letter-cell');
+          return [
+            g.querySelectorAll('.grid-row').length,
+            cells.length,
+            cells[0].textContent,
+            cells[3].textContent,
+            cells[3].dataset.row,
+            cells[3].dataset.col
+          ];
+        })()).toEqual([2,4,"A","D","1","1"]);
+      });
+    });
+    describe('9.12 renderBarChartGrouped', () => {
+      function renderBarChartGrouped(periods, series) {
+        const chart = document.createElement('div');
+chart.className = 'grouped-chart';
+chart.style.display = 'flex';
+chart.style.gap = '16px';
+chart.style.alignItems = 'flex-end';
+if (!Array.isArray(periods) || !Array.isArray(series)) return chart;
+for (let p = 0; p < periods.length; p++) {
+  const group = document.createElement('div');
+  group.className = 'chart-group';
+  for (const s of series) {
+    const val = (s.data && s.data[p]) || 0;
+    const bar = document.createElement('div');
+    bar.className = 'chart-bar';
+    bar.style.height = `${val * 2}px`;
+    bar.style.backgroundColor = s.color || 'rgb(99, 102, 241)';
+    bar.setAttribute('title', `${s.name}: ${val}`);
+    group.appendChild(bar);
+  }
+  chart.appendChild(group);
+}
+return chart;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const periods = ['Q1', 'Q2'];
+          const series = [
+            { name: 'План', color: '#3b82f6', data: [50, 80] },
+            { name: 'Факт', color: '#10b981', data: [45, 90] }
+          ];
+          const chart = renderBarChartGrouped(periods, series);
+          const bars = chart.querySelectorAll('.chart-bar');
+          return [
+            chart.querySelectorAll('.chart-group').length,
+            bars.length,
+            bars[0].style.height,
+            bars[0].style.backgroundColor,
+            bars[3].style.height
+          ];
+        })()).toEqual([2,4,"100px","#3b82f6","180px"]);
+      });
+    });
+  });
+
+  describe('SOLUTIONS: Модуль 10: Маніпуляція DOM, стилізація та очищення через цикли', () => {
+    describe('10.1 applyZebraStriping', () => {
+      function applyZebraStriping(tableElement, evenBg = '#ffffff', oddBg = '#f9fafb') {
+        if (!tableElement) return 0;
+const rows = tableElement.querySelectorAll('tbody tr');
+for (let i = 0; i < rows.length; i++) {
+  const row = rows[i];
+  if (i % 2 === 0) {
+    row.style.backgroundColor = evenBg;
+    row.classList.remove('table-row--striped');
+  } else {
+    row.style.backgroundColor = oddBg;
+    row.classList.add('table-row--striped');
+  }
+}
+return rows.length;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const tbl = document.createElement('table');
+          const tbody = document.createElement('tbody');
+          for (let i = 0; i < 3; i++) tbody.appendChild(document.createElement('tr'));
+          tbl.appendChild(tbody);
+          const count = applyZebraStriping(tbl, '#ffffff', '#f0f0f0');
+          const rows = tbl.querySelectorAll('tbody tr');
+          return [
+            count,
+            rows[0].style.backgroundColor,
+            rows[1].style.backgroundColor,
+            rows[1].classList.contains('table-row--striped')
+          ];
+        })()).toEqual([3,"#ffffff","#f0f0f0",true]);
+      });
+    });
+    describe('10.2 clearContainerFast', () => {
+      function clearContainerFast(containerElement) {
+        if (!containerElement) return 0;
+let count = 0;
+while (containerElement.firstChild) {
+  containerElement.removeChild(containerElement.firstChild);
+  count++;
+}
+return count;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const div = document.createElement('div');
+          div.appendChild(document.createElement('p'));
+          div.appendChild(document.createElement('span'));
+          const deleted = clearContainerFast(div);
+          return [deleted, div.childNodes.length];
+        })()).toEqual([2,0]);
+      });
+      it('test 2', () => {
+        expect(clearContainerFast(null)).toEqual(0);
+      });
+    });
+    describe('10.3 buildNestedListTree', () => {
+      function buildNestedListTree(treeData) {
+        function renderNode(node) {
+  const li = document.createElement('li');
+  li.className = 'tree-item';
+  li.textContent = node.label || '';
+  if (Array.isArray(node.children) && node.children.length > 0) {
+    const subUl = document.createElement('ul');
+    subUl.className = 'tree-sublist';
+    for (const child of node.children) {
+      subUl.appendChild(renderNode(child));
+    }
+    li.appendChild(subUl);
+  }
+  return li;
+}
+const ul = document.createElement('ul');
+ul.className = 'tree-root';
+const items = Array.isArray(treeData) ? treeData : [treeData].filter(Boolean);
+for (const item of items) {
+  ul.appendChild(renderNode(item));
+}
+return ul;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const data = {
+            label: 'Корінь',
+            children: [{ label: 'Дочірній 1' }, { label: 'Дочірній 2' }]
+          };
+          const tree = buildNestedListTree(data);
+          const items = tree.querySelectorAll('.tree-item');
+          return [
+            tree.tagName,
+            items.length,
+            items[0].childNodes[0].text || items[0].textContent
+          ];
+        })()).toEqual(["UL",3,"Корінь"]);
+      });
+    });
+    describe('10.4 renderStepWizard', () => {
+      function renderStepWizard(steps, currentStepIndex) {
+        const wizard = document.createElement('div');
+wizard.className = 'wizard-container';
+if (!Array.isArray(steps)) return wizard;
+for (let i = 0; i < steps.length; i++) {
+  const step = document.createElement('div');
+  step.className = 'wizard-step';
+  step.setAttribute('data-step', String(i + 1));
+  step.textContent = steps[i];
+  if (i < currentStepIndex) {
+    step.classList.add('wizard-step--done');
+    step.style.borderColor = 'rgb(16, 185, 129)';
+  } else if (i === currentStepIndex) {
+    step.classList.add('wizard-step--active');
+    step.style.borderColor = 'rgb(99, 102, 241)';
+  } else {
+    step.classList.add('wizard-step--pending');
+    step.style.borderColor = 'rgb(203, 213, 225)';
+  }
+  wizard.appendChild(step);
+}
+return wizard;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const wiz = renderStepWizard(['Контакти', 'Оплата', 'Підтвердження'], 1);
+          const steps = wiz.querySelectorAll('.wizard-step');
+          return [
+            steps.length,
+            steps[0].classList.contains('wizard-step--done'),
+            steps[0].style.borderColor,
+            steps[1].classList.contains('wizard-step--active'),
+            steps[1].style.borderColor,
+            steps[2].classList.contains('wizard-step--pending'),
+            steps[2].style.borderColor
+          ];
+        })()).toEqual([3,true,"rgb(16, 185, 129)",true,"rgb(99, 102, 241)",true,"rgb(203, 213, 225)"]);
+      });
+    });
+    describe('10.5 highlightKeywordsInElements', () => {
+      function highlightKeywordsInElements(elementsList, keywords) {
+        if (!elementsList || !keywords || keywords.length === 0) return 0;
+let totalMatches = 0;
+const escaped = keywords.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+const regex = new RegExp(`(${escaped})`, 'gi');
+for (const el of elementsList) {
+  const text = el.textContent || '';
+  const matches = text.match(regex);
+  if (matches) {
+    totalMatches += matches.length;
+    el.innerHTML = text.replace(regex, '<mark class="kw-highlight">$1</mark>');
+  }
+}
+return totalMatches;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const p1 = document.createElement('p'); p1.textContent = 'JavaScript цикли while та for';
+          const p2 = document.createElement('p'); p2.textContent = 'Тут немає збігів';
+          const count = highlightKeywordsInElements([p1, p2], ['while', 'for']);
+          return [count, p1.innerHTML.includes('<mark class="kw-highlight">while</mark>')];
+        })()).toEqual([2,true]);
+      });
+    });
+    describe('10.6 toggleElementsVisibility', () => {
+      function toggleElementsVisibility(elementsList, predicateFn) {
+        if (!elementsList || typeof predicateFn !== 'function') return 0;
+let visibleCount = 0;
+for (const el of elementsList) {
+  const show = Boolean(predicateFn(el));
+  if (show) {
+    el.style.display = '';
+    el.removeAttribute('hidden');
+    visibleCount++;
+  } else {
+    el.style.display = 'none';
+    el.setAttribute('hidden', 'true');
+  }
+}
+return visibleCount;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const c1 = document.createElement('div'); c1.dataset.status = 'active';
+          const c2 = document.createElement('div'); c2.dataset.status = 'inactive';
+          const visible = toggleElementsVisibility([c1, c2], el => el.dataset.status === 'active');
+          return [visible, c1.style.display, c2.style.display, c2.hasAttribute('hidden')];
+        })()).toEqual([1,"","none",true]);
+      });
+    });
+    describe('10.7 reorderListByAttribute', () => {
+      function reorderListByAttribute(parentListElement, attrName) {
+        if (!parentListElement) return null;
+const items = Array.from(parentListElement.children);
+items.sort((a, b) => {
+  const valA = a.getAttribute(attrName) || '';
+  const valB = b.getAttribute(attrName) || '';
+  const numA = Number(valA);
+  const numB = Number(valB);
+  if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
+  return valA.localeCompare(valB);
 });
+for (const item of items) {
+  parentListElement.appendChild(item);
+}
+return parentListElement;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const ul = document.createElement('ul');
+          const li1 = document.createElement('li'); li1.setAttribute('data-order', '3');
+          const li2 = document.createElement('li'); li2.setAttribute('data-order', '1');
+          const li3 = document.createElement('li'); li3.setAttribute('data-order', '2');
+          ul.appendChild(li1); ul.appendChild(li2); ul.appendChild(li3);
+          reorderListByAttribute(ul, 'data-order');
+          return Array.from(ul.children).map(c => c.getAttribute('data-order'));
+        })()).toEqual(["1","2","3"]);
+      });
+    });
+    describe('10.8 paginateChildren', () => {
+      function paginateChildren(containerElement, pageSize, activePage) {
+        if (!containerElement || pageSize <= 0 || activePage <= 0) return 0;
+const children = containerElement.children;
+let visibleCount = 0;
+const startIdx = (activePage - 1) * pageSize;
+const endIdx = startIdx + pageSize;
+for (let i = 0; i < children.length; i++) {
+  const child = children[i];
+  if (i >= startIdx && i < endIdx) {
+    child.style.display = '';
+    visibleCount++;
+  } else {
+    child.style.display = 'none';
+  }
+}
+return visibleCount;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const div = document.createElement('div');
+          for (let i = 0; i < 5; i++) div.appendChild(document.createElement('span'));
+          const page1Count = paginateChildren(div, 2, 1);
+          const visiblePage1 = Array.from(div.children).filter(c => c.style.display !== 'none').length;
+          const page3Count = paginateChildren(div, 2, 3);
+          return [page1Count, visiblePage1, page3Count];
+        })()).toEqual([2,2,1]);
+      });
+    });
+    describe('10.9 batchUpdateStyles', () => {
+      function batchUpdateStyles(elementsList, stylesObject) {
+        if (!elementsList || !stylesObject) return elementsList;
+const entries = Object.entries(stylesObject);
+for (const el of elementsList) {
+  for (const [prop, val] of entries) {
+    el.style[prop] = val;
+  }
+}
+return elementsList;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const d1 = document.createElement('div');
+          const d2 = document.createElement('div');
+          batchUpdateStyles([d1, d2], { color: '#ffffff', opacity: '0.8' });
+          return [d1.style.color, d2.style.opacity];
+        })()).toEqual(["#ffffff","0.8"]);
+      });
+    });
+    describe('10.10 extractTableData', () => {
+      function extractTableData(tableElement) {
+        if (!tableElement) return [];
+const headers = Array.from(tableElement.querySelectorAll('thead th')).map(th => th.textContent.trim());
+const rows = tableElement.querySelectorAll('tbody tr');
+const data = [];
+for (const tr of rows) {
+  const cells = tr.querySelectorAll('td');
+  const rowObj = {};
+  for (let c = 0; c < cells.length; c++) {
+    const key = headers[c] || `col_${c}`;
+    rowObj[key] = cells[c].textContent.trim();
+  }
+  data.push(rowObj);
+}
+return data;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const tbl = document.createElement('table');
+          const thead = document.createElement('thead');
+          const trH = document.createElement('tr');
+          const th1 = document.createElement('th'); th1.textContent = 'name';
+          const th2 = document.createElement('th'); th2.textContent = 'score';
+          trH.appendChild(th1); trH.appendChild(th2);
+          thead.appendChild(trH);
+          tbl.appendChild(thead);
+          const tbody = document.createElement('tbody');
+          const trD = document.createElement('tr');
+          const td1 = document.createElement('td'); td1.textContent = 'Anna';
+          const td2 = document.createElement('td'); td2.textContent = '100';
+          trD.appendChild(td1); trD.appendChild(td2);
+          tbody.appendChild(trD);
+          tbl.appendChild(tbody);
+          return extractTableData(tbl);
+        })()).toEqual([{"name":"Anna","score":"100"}]);
+      });
+    });
+    describe('10.11 wrapConsecutiveElements', () => {
+      function wrapConsecutiveElements(parentElement, targetTagName, wrapperClass = 'group-wrap') {
+        if (!parentElement || !targetTagName) return null;
+const tag = targetTagName.toUpperCase();
+let currentWrapper = null;
+let node = parentElement.firstChild;
+while (node) {
+  const next = node.nextSibling;
+  if (node.nodeType === 1 && node.tagName === tag) {
+    if (!currentWrapper) {
+      currentWrapper = document.createElement('div');
+      currentWrapper.className = wrapperClass;
+      parentElement.insertBefore ? parentElement.insertBefore(currentWrapper, node) : parentElement.appendChild(currentWrapper);
+    }
+    currentWrapper.appendChild(node);
+  } else {
+    currentWrapper = null;
+  }
+  node = next;
+}
+return parentElement;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const div = document.createElement('div');
+          const p1 = document.createElement('p');
+          const p2 = document.createElement('p');
+          const span = document.createElement('span');
+          div.appendChild(p1); div.appendChild(p2); div.appendChild(span);
+          const wrap = document.createElement('div');
+          wrap.className = 'group-wrap';
+          wrap.appendChild(p1); wrap.appendChild(p2);
+          const res = document.createElement('div');
+          res.appendChild(wrap); res.appendChild(span);
+          return [res.children.length, res.children[0].className, res.children[0].children.length];
+        })()).toEqual([2,"group-wrap",2]);
+      });
+    });
+    describe('10.12 animateElementsStagger', () => {
+      function animateElementsStagger(elementsList, stepDelayMs = 100) {
+        if (!elementsList || elementsList.length === 0) return 0;
+let maxDelay = 0;
+for (let i = 0; i < elementsList.length; i++) {
+  const el = elementsList[i];
+  const delay = i * stepDelayMs;
+  el.style.animationDelay = `${delay}ms`;
+  el.classList.add('animate-stagger');
+  maxDelay = delay;
+}
+return maxDelay;
+      }
+      it('test 1', () => {
+        expect((() => {
+          const el1 = document.createElement('div');
+          const el2 = document.createElement('div');
+          const el3 = document.createElement('div');
+          const max = animateElementsStagger([el1, el2, el3], 150);
+          return [max, el1.style.animationDelay, el2.style.animationDelay, el3.style.animationDelay, el3.classList.contains('animate-stagger')];
+        })()).toEqual([300,"0ms","150ms","300ms",true]);
+      });
+    });
+  });
+
+});
+
+describe("SOLUTIONS: Модуль 8: Створення DOM-елементів: списки, картки та UI-компоненти", () => {
+  describe("8.1 renderProductCards", () => {
+    function renderProductCards(products) {
+      if (!Array.isArray(products) || products.length === 0) return null;
+const container = document.createElement('div');
+container.className = 'product-cards-container';
+for (let i = 0; i < products.length; i++) {
+  const p = products[i];
+  const card = document.createElement('div');
+  card.className = 'product-card';
+
+  const title = document.createElement('h4');
+  title.className = 'product-card__title';
+  title.textContent = p.title || '';
+
+  const price = document.createElement('p');
+  price.className = 'product-card__price';
+  price.textContent = `${p.price} ₴`;
+
+  card.appendChild(title);
+  card.appendChild(price);
+  container.appendChild(card);
+}
+return container;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const res = renderProductCards([{ title: 'Ноутбук', price: 25000 }, { title: 'Мишка', price: 800 }]);
+          return [res.className, res.children.length, res.children[0].querySelector('.product-card__title').textContent];
+        })()).toEqual(["product-cards-container",2,"Ноутбук"]);
+    });
+    it("test 2", () => {
+      expect(renderProductCards([])).toEqual(null);
+    });
+  });
+
+  describe("8.2 renderStarRating", () => {
+    function renderStarRating(rating, maxStars) {
+      if (maxStars <= 0) return null;
+const container = document.createElement('div');
+container.className = 'star-rating';
+container.setAttribute('role', 'img');
+container.setAttribute('aria-label', `Рейтинг: ${rating} з ${maxStars}`);
+for (let i = 1; i <= maxStars; i++) {
+  const star = document.createElement('span');
+  if (i <= rating) {
+    star.className = 'star star--filled';
+    star.textContent = '★';
+  } else {
+    star.className = 'star star--empty';
+    star.textContent = '☆';
+  }
+  container.appendChild(star);
+}
+return container;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const el = renderStarRating(3, 5);
+          return [el.className, el.children.length, el.querySelectorAll('.star--filled').length];
+        })()).toEqual(["star-rating",5,3]);
+    });
+    it("test 2", () => {
+      expect(renderStarRating(0, 0)).toEqual(null);
+    });
+  });
+
+  describe("8.3 renderBreadcrumbs", () => {
+    function renderBreadcrumbs(links) {
+      if (!Array.isArray(links) || links.length === 0) return null;
+const nav = document.createElement('nav');
+nav.className = 'breadcrumbs';
+for (let i = 0; i < links.length; i++) {
+  const item = links[i];
+  const isLast = (i === links.length - 1) || !item.url;
+  if (isLast) {
+    const cur = document.createElement('span');
+    cur.className = 'breadcrumbs__current';
+    cur.textContent = item.label;
+    nav.appendChild(cur);
+  } else {
+    const a = document.createElement('a');
+    a.className = 'breadcrumbs__link';
+    a.setAttribute('href', item.url);
+    a.textContent = item.label;
+    nav.appendChild(a);
+
+    const sep = document.createElement('span');
+    sep.className = 'breadcrumbs__sep';
+    sep.textContent = '/';
+    nav.appendChild(sep);
+  }
+}
+return nav;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const nav = renderBreadcrumbs([{ label: 'Головна', url: '/' }, { label: 'Курс', url: null }]);
+          return [nav.children.length, nav.children[0].tagName, nav.children[1].className, nav.children[2].className];
+        })()).toEqual([3,"A","breadcrumbs__sep","breadcrumbs__current"]);
+    });
+    it("test 2", () => {
+      expect(renderBreadcrumbs([])).toEqual(null);
+    });
+  });
+
+  describe("8.4 renderStatusBadges", () => {
+    function renderStatusBadges(items) {
+      if (!Array.isArray(items) || items.length === 0) return null;
+const container = document.createElement('div');
+container.className = 'badge-container';
+const valid = ['success', 'warning', 'danger'];
+for (let i = 0; i < items.length; i++) {
+  const it = items[i];
+  const span = document.createElement('span');
+  const st = valid.includes(it.status) ? it.status : 'neutral';
+  span.className = `badge badge--${st}`;
+  span.textContent = it.label;
+  container.appendChild(span);
+}
+return container;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const wrap = renderStatusBadges([{ label: 'OK', status: 'success' }, { label: '???', status: 'unknown' }]);
+          return [wrap.children.length, wrap.children[0].className, wrap.children[1].className];
+        })()).toEqual([2,"badge badge--success","badge badge--neutral"]);
+    });
+  });
+
+  describe("8.5 renderMessageList", () => {
+    function renderMessageList(messages) {
+      if (!Array.isArray(messages) || messages.length === 0) return null;
+const ul = document.createElement('ul');
+ul.className = 'message-list';
+for (let i = 0; i < messages.length; i++) {
+  const m = messages[i];
+  const li = document.createElement('li');
+  li.className = `message-item ${m.isMine ? 'message-item--mine' : 'message-item--other'}`;
+
+  const author = document.createElement('span');
+  author.className = 'message-item__author';
+  author.textContent = `${m.author}: `;
+
+  const text = document.createElement('span');
+  text.className = 'message-item__text';
+  text.textContent = m.text;
+
+  li.appendChild(author);
+  li.appendChild(text);
+  ul.appendChild(li);
+}
+return ul;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const list = renderMessageList([{ author: 'Анна', text: 'Привіт!', isMine: false }, { author: 'Я', text: 'Привіт', isMine: true }]);
+          return [list.children.length, list.children[0].className, list.children[1].className];
+        })()).toEqual([2,"message-item message-item--other","message-item message-item--mine"]);
+    });
+  });
+
+  describe("8.6 renderTagCloud", () => {
+    function renderTagCloud(tags) {
+      if (!Array.isArray(tags) || tags.length === 0) return null;
+const container = document.createElement('div');
+container.className = 'tag-cloud';
+for (let i = 0; i < tags.length; i++) {
+  const t = tags[i];
+  const chip = document.createElement('span');
+  chip.className = t.count > 10 ? 'tag-chip tag-chip--popular' : 'tag-chip';
+  chip.setAttribute('data-count', String(t.count));
+  chip.textContent = t.name;
+  container.appendChild(chip);
+}
+return container;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const wrap = renderTagCloud([{ name: 'js', count: 15 }, { name: 'css', count: 5 }]);
+          return [wrap.children.length, wrap.children[0].className, wrap.children[0].getAttribute('data-count')];
+        })()).toEqual([2,"tag-chip tag-chip--popular","15"]);
+    });
+  });
+
+  describe("8.7 renderProgressBarSteps", () => {
+    function renderProgressBarSteps(stepsCount, activeIndex) {
+      if (stepsCount <= 0) return null;
+const container = document.createElement('div');
+container.className = 'progress-steps';
+container.setAttribute('data-total', String(stepsCount));
+for (let i = 0; i < stepsCount; i++) {
+  const step = document.createElement('div');
+  step.className = i <= activeIndex ? 'step-indicator step-indicator--completed' : 'step-indicator';
+  step.textContent = String(i + 1);
+  container.appendChild(step);
+}
+return container;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const bar = renderProgressBarSteps(4, 1);
+          return [bar.children.length, bar.children[0].className, bar.children[2].className];
+        })()).toEqual([4,"step-indicator step-indicator--completed","step-indicator"]);
+    });
+  });
+
+  describe("8.8 renderNumberedList", () => {
+    function renderNumberedList(items, startNumber) {
+      if (!Array.isArray(items) || items.length === 0) return null;
+const ol = document.createElement('ol');
+ol.className = 'numbered-list';
+ol.setAttribute('start', String(startNumber));
+for (let i = 0; i < items.length; i++) {
+  const li = document.createElement('li');
+  li.className = 'numbered-list__item';
+  li.setAttribute('data-index', String(startNumber + i));
+  li.textContent = items[i];
+  ol.appendChild(li);
+}
+return ol;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const ol = renderNumberedList(['Вступ', 'Основи'], 10);
+          return [ol.getAttribute('start'), ol.children[0].getAttribute('data-index'), ol.children[0].textContent];
+        })()).toEqual(["10","10","Вступ"]);
+    });
+  });
+
+  describe("8.9 renderNotificationFeed", () => {
+    function renderNotificationFeed(notifications) {
+      if (!Array.isArray(notifications) || notifications.length === 0) return null;
+const container = document.createElement('div');
+container.className = 'notification-feed';
+for (let i = 0; i < notifications.length; i++) {
+  const n = notifications[i];
+  const card = document.createElement('div');
+  card.className = n.unread ? 'notification-card notification-card--unread' : 'notification-card';
+
+  const title = document.createElement('h5');
+  title.className = 'notification-card__title';
+  title.textContent = n.title;
+
+  const body = document.createElement('p');
+  body.className = 'notification-card__body';
+  body.textContent = n.message;
+
+  card.appendChild(title);
+  card.appendChild(body);
+  container.appendChild(card);
+}
+return container;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const feed = renderNotificationFeed([{ title: 'Оновлення', message: 'Готово', unread: true }]);
+          return [feed.children.length, feed.children[0].className, feed.children[0].querySelector('h5').textContent];
+        })()).toEqual([1,"notification-card notification-card--unread","Оновлення"]);
+    });
+  });
+
+  describe("8.10 renderTabsNavigation", () => {
+    function renderTabsNavigation(tabTitles, activeIndex) {
+      if (!Array.isArray(tabTitles) || tabTitles.length === 0) return null;
+const nav = document.createElement('div');
+nav.className = 'tabs-nav';
+nav.setAttribute('role', 'tablist');
+for (let i = 0; i < tabTitles.length; i++) {
+  const isCur = (i === activeIndex);
+  const btn = document.createElement('button');
+  btn.className = isCur ? 'tab-button tab-button--active' : 'tab-button';
+  btn.setAttribute('role', 'tab');
+  btn.setAttribute('aria-selected', isCur ? 'true' : 'false');
+  btn.textContent = tabTitles[i];
+  nav.appendChild(btn);
+}
+return nav;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const nav = renderTabsNavigation(['Таб 1', 'Таб 2'], 0);
+          return [nav.children.length, nav.children[0].className, nav.children[0].getAttribute('aria-selected'), nav.children[1].getAttribute('aria-selected')];
+        })()).toEqual([2,"tab-button tab-button--active","true","false"]);
+    });
+  });
+
+  describe("8.11 renderAccordionList", () => {
+    function renderAccordionList(items) {
+      if (!Array.isArray(items) || items.length === 0) return null;
+const list = document.createElement('div');
+list.className = 'accordion-list';
+for (let i = 0; i < items.length; i++) {
+  const it = items[i];
+  const details = document.createElement('details');
+  details.className = 'accordion-item';
+  if (it.open) details.open = true;
+
+  const summary = document.createElement('summary');
+  summary.className = 'accordion-header';
+  summary.textContent = it.title;
+
+  const content = document.createElement('div');
+  content.className = 'accordion-content';
+  content.textContent = it.content;
+
+  details.appendChild(summary);
+  details.appendChild(content);
+  list.appendChild(details);
+}
+return list;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const acc = renderAccordionList([{ title: 'Питання', content: 'Відповідь', open: true }]);
+          return [acc.children.length, acc.children[0].tagName, acc.children[0].open];
+        })()).toEqual([1,"DETAILS",true]);
+    });
+  });
+
+  describe("8.12 renderAvatarStack", () => {
+    function renderAvatarStack(avatars, maxVisible) {
+      if (!Array.isArray(avatars) || avatars.length === 0) return null;
+const stack = document.createElement('div');
+stack.className = 'avatar-stack';
+const limit = Math.min(avatars.length, maxVisible);
+for (let i = 0; i < limit; i++) {
+  const img = document.createElement('img');
+  img.className = 'avatar-img';
+  img.setAttribute('src', avatars[i]);
+  img.setAttribute('alt', 'avatar');
+  stack.appendChild(img);
+}
+if (avatars.length > maxVisible) {
+  const more = document.createElement('span');
+  more.className = 'avatar-more';
+  more.textContent = `+${avatars.length - maxVisible}`;
+  stack.appendChild(more);
+}
+return stack;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const s = renderAvatarStack(['u1.png', 'u2.png', 'u3.png'], 2);
+          return [s.children.length, s.children[0].tagName, s.children[2].className, s.children[2].textContent];
+        })()).toEqual([3,"IMG","avatar-more","+1"]);
+    });
+  });
+
+});
+
+describe("SOLUTIONS: Модуль 9: Створення складних сіток та таблиць через вкладені цикли та DOM API", () => {
+  describe("9.1 renderDataTable", () => {
+    function renderDataTable(headers, rows) {
+      if (!Array.isArray(headers) || headers.length === 0) return null;
+const tbl = document.createElement('table');
+tbl.className = 'data-table';
+
+const thead = document.createElement('thead');
+const trHead = document.createElement('tr');
+for (let h = 0; h < headers.length; h++) {
+  const th = document.createElement('th');
+  th.textContent = headers[h];
+  trHead.appendChild(th);
+}
+thead.appendChild(trHead);
+tbl.appendChild(thead);
+
+const tbody = document.createElement('tbody');
+if (Array.isArray(rows)) {
+  for (let r = 0; r < rows.length; r++) {
+    const tr = document.createElement('tr');
+    for (let c = 0; c < headers.length; c++) {
+      const td = document.createElement('td');
+      td.textContent = rows[r][headers[c]] !== undefined ? String(rows[r][headers[c]]) : '';
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+}
+tbl.appendChild(tbody);
+return tbl;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const t = renderDataTable(['id', 'name'], [{ id: 1, name: 'Alice' }, { id: 2, name: 'Bob' }]);
+          return [t.tagName, t.querySelectorAll('th').length, t.querySelectorAll('tbody tr').length, t.querySelectorAll('td')[1].textContent];
+        })()).toEqual(["TABLE",2,2,"Alice"]);
+    });
+    it("test 2", () => {
+      expect(renderDataTable([], [])).toEqual(null);
+    });
+  });
+
+  describe("9.2 renderCalendarMonth", () => {
+    function renderCalendarMonth(daysInMonth, monthName) {
+      if (daysInMonth <= 0) return null;
+const container = document.createElement('div');
+container.className = 'calendar-month';
+
+const title = document.createElement('h3');
+title.className = 'month-title';
+title.textContent = monthName;
+container.appendChild(title);
+
+const grid = document.createElement('div');
+grid.className = 'calendar-grid';
+
+for (let d = 1; d <= daysInMonth; d++) {
+  const cell = document.createElement('span');
+  cell.className = 'day-cell';
+  cell.textContent = String(d);
+  grid.appendChild(cell);
+}
+
+container.appendChild(grid);
+return container;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const cal = renderCalendarMonth(31, 'Березень 2026');
+          return [cal.className, cal.querySelector('h3').textContent, cal.querySelectorAll('.day-cell').length, cal.querySelectorAll('.day-cell')[0].textContent];
+        })()).toEqual(["calendar-month","Березень 2026",31,"1"]);
+    });
+    it("test 2", () => {
+      expect(renderCalendarMonth(0, 'Тест')).toEqual(null);
+    });
+  });
+
+  describe("9.3 renderChessBoard", () => {
+    function renderChessBoard(size) {
+      if (size <= 0) return null;
+const board = document.createElement('div');
+board.className = 'chess-board';
+for (let r = 0; r < size; r++) {
+  const row = document.createElement('div');
+  row.className = 'chess-row';
+  for (let c = 0; c < size; c++) {
+    const cell = document.createElement('div');
+    cell.className = (r + c) % 2 === 0 ? 'chess-cell cell--white' : 'chess-cell cell--black';
+    row.appendChild(cell);
+  }
+  board.appendChild(row);
+}
+return board;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const b = renderChessBoard(4);
+          return [b.children.length, b.children[0].children.length, b.children[0].children[0].className, b.children[0].children[1].className];
+        })()).toEqual([4,4,"chess-cell cell--white","chess-cell cell--black"]);
+    });
+  });
+
+  describe("9.4 renderActivityHeatmap", () => {
+    function renderActivityHeatmap(weeksCount, dataMatrix) {
+      if (weeksCount <= 0 || !Array.isArray(dataMatrix)) return null;
+const grid = document.createElement('div');
+grid.className = 'heatmap-grid';
+for (let w = 0; w < weeksCount; w++) {
+  const col = document.createElement('div');
+  col.className = 'heatmap-col';
+  const week = dataMatrix[w] || [];
+  for (let d = 0; d < 7; d++) {
+    const val = week[d] || 0;
+    const cell = document.createElement('div');
+    cell.className = 'heatmap-cell';
+    const level = val > 6 ? 3 : val >= 4 ? 2 : val >= 1 ? 1 : 0;
+    cell.setAttribute('data-level', String(level));
+    cell.setAttribute('title', `${val} дій`);
+    col.appendChild(cell);
+  }
+  grid.appendChild(col);
+}
+return grid;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const hm = renderActivityHeatmap(2, [[0, 5, 2, 0, 8, 1, 0], [1, 2, 0, 4, 0, 0, 0]]);
+          return [hm.children.length, hm.children[0].children.length, hm.children[0].children[1].getAttribute('data-level')];
+        })()).toEqual([2,7,"2"]);
+    });
+  });
+
+  describe("9.5 renderPixelArtGrid", () => {
+    function renderPixelArtGrid(width, height, colorMatrix) {
+      if (width <= 0 || height <= 0 || !Array.isArray(colorMatrix)) return null;
+const grid = document.createElement('div');
+grid.className = 'pixel-art-grid';
+for (let r = 0; r < height; r++) {
+  const row = document.createElement('div');
+  row.className = 'pixel-row';
+  const colors = colorMatrix[r] || [];
+  for (let c = 0; c < width; c++) {
+    const pixel = document.createElement('div');
+    pixel.className = 'pixel-cell';
+    pixel.style.backgroundColor = colors[c] || '#ffffff';
+    row.appendChild(pixel);
+  }
+  grid.appendChild(row);
+}
+return grid;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const g = renderPixelArtGrid(2, 2, [['#ff0000', '#00ff00'], ['#0000ff', '#ffffff']]);
+          return [g.children.length, g.children[0].children[0].style.backgroundColor];
+        })()).toEqual([2,"#ff0000"]);
+    });
+  });
+
+  describe("9.6 renderMultiplicationTableDOM", () => {
+    function renderMultiplicationTableDOM(size) {
+      if (size <= 0) return null;
+const table = document.createElement('table');
+table.className = 'mult-table';
+const tbody = document.createElement('tbody');
+for (let r = 1; r <= size; r++) {
+  const tr = document.createElement('tr');
+  for (let c = 1; c <= size; c++) {
+    const td = document.createElement('td');
+    td.textContent = String(r * c);
+    if (r === c) td.className = 'cell--diagonal';
+    tr.appendChild(td);
+  }
+  tbody.appendChild(tr);
+}
+table.appendChild(tbody);
+return table;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const t = renderMultiplicationTableDOM(3);
+          return [t.querySelectorAll('tr').length, t.querySelectorAll('.cell--diagonal').length, t.querySelectorAll('td')[8].textContent];
+        })()).toEqual([3,3,"9"]);
+    });
+  });
+
+  describe("9.7 renderNestedTreeMenu", () => {
+    function renderNestedTreeMenu(nodes) {
+      if (!Array.isArray(nodes) || nodes.length === 0) return null;
+const ul = document.createElement('ul');
+ul.className = 'tree-menu';
+for (let i = 0; i < nodes.length; i++) {
+  const node = nodes[i];
+  const li = document.createElement('li');
+  const span = document.createElement('span');
+  span.className = 'tree-label';
+  span.textContent = node.label;
+  li.appendChild(span);
+
+  if (Array.isArray(node.children) && node.children.length > 0) {
+    const subUl = document.createElement('ul');
+    subUl.className = 'tree-submenu';
+    for (let j = 0; j < node.children.length; j++) {
+      const subLi = document.createElement('li');
+      subLi.textContent = node.children[j].label;
+      subUl.appendChild(subLi);
+    }
+    li.appendChild(subUl);
+  }
+  ul.appendChild(li);
+}
+return ul;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const m = renderNestedTreeMenu([{ label: 'Каталог', children: [{ label: 'Взуття' }] }]);
+          return [m.children.length, m.querySelector('.tree-submenu').children.length];
+        })()).toEqual([1,1]);
+    });
+  });
+
+  describe("9.8 renderSeatMap", () => {
+    function renderSeatMap(rowsCount, seatsPerRow, reservedSeats) {
+      if (rowsCount <= 0 || seatsPerRow <= 0) return null;
+const map = document.createElement('div');
+map.className = 'seat-map';
+const reserved = Array.isArray(reservedSeats) ? reservedSeats : [];
+for (let r = 1; r <= rowsCount; r++) {
+  const row = document.createElement('div');
+  row.className = 'seat-row';
+  row.setAttribute('data-row', String(r));
+  for (let s = 1; s <= seatsPerRow; s++) {
+    const seatId = `${r}-${s}`;
+    const btn = document.createElement('button');
+    btn.setAttribute('data-seat', seatId);
+    btn.textContent = String(s);
+    if (reserved.includes(seatId)) {
+      btn.className = 'seat seat--reserved';
+      btn.disabled = true;
+    } else {
+      btn.className = 'seat seat--available';
+    }
+    row.appendChild(btn);
+  }
+  map.appendChild(row);
+}
+return map;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const sm = renderSeatMap(2, 2, ['1-2']);
+          return [sm.children.length, sm.querySelectorAll('.seat--reserved').length, sm.querySelectorAll('.seat--reserved')[0].disabled];
+        })()).toEqual([2,1,true]);
+    });
+  });
+
+  describe("9.9 renderColorPaletteMatrix", () => {
+    function renderColorPaletteMatrix(paletteGroups) {
+      if (!Array.isArray(paletteGroups) || paletteGroups.length === 0) return null;
+const matrix = document.createElement('div');
+matrix.className = 'palette-matrix';
+for (let g = 0; g < paletteGroups.length; g++) {
+  const grp = paletteGroups[g];
+  const groupEl = document.createElement('div');
+  groupEl.className = 'palette-group';
+
+  const title = document.createElement('h4');
+  title.className = 'palette-group__title';
+  title.textContent = grp.groupName;
+  groupEl.appendChild(title);
+
+  const chips = document.createElement('div');
+  chips.className = 'palette-chips';
+  const shades = Array.isArray(grp.shades) ? grp.shades : [];
+  for (let c = 0; c < shades.length; c++) {
+    const chip = document.createElement('div');
+    chip.className = 'color-chip';
+    chip.style.backgroundColor = shades[c];
+    chip.setAttribute('title', shades[c]);
+    chips.appendChild(chip);
+  }
+  groupEl.appendChild(chips);
+  matrix.appendChild(groupEl);
+}
+return matrix;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const pm = renderColorPaletteMatrix([{ groupName: 'Greens', shades: ['#10b981', '#059669'] }]);
+          return [pm.children.length, pm.querySelectorAll('.color-chip').length];
+        })()).toEqual([1,2]);
+    });
+  });
+
+  describe("9.10 renderProductComparisonGrid", () => {
+    function renderProductComparisonGrid(featuresList, productsList) {
+      if (!Array.isArray(featuresList) || !Array.isArray(productsList) || featuresList.length === 0 || productsList.length === 0) return null;
+const table = document.createElement('table');
+table.className = 'compare-table';
+
+const thead = document.createElement('thead');
+const trHead = document.createElement('tr');
+const thFeat = document.createElement('th');
+thFeat.textContent = 'Характеристика';
+trHead.appendChild(thFeat);
+for (let p = 0; p < productsList.length; p++) {
+  const th = document.createElement('th');
+  th.textContent = productsList[p].name;
+  trHead.appendChild(th);
+}
+thead.appendChild(trHead);
+table.appendChild(thead);
+
+const tbody = document.createElement('tbody');
+for (let f = 0; f < featuresList.length; f++) {
+  const feat = featuresList[f];
+  const tr = document.createElement('tr');
+  const tdName = document.createElement('td');
+  tdName.className = 'feat-name';
+  tdName.textContent = feat;
+  tr.appendChild(tdName);
+
+  for (let p = 0; p < productsList.length; p++) {
+    const tdVal = document.createElement('td');
+    const has = productsList[p].features && productsList[p].features[feat];
+    tdVal.textContent = has ? '✓' : '—';
+    tdVal.className = has ? 'feat-yes' : 'feat-no';
+    tr.appendChild(tdVal);
+  }
+  tbody.appendChild(tr);
+}
+table.appendChild(tbody);
+return table;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const ct = renderProductComparisonGrid(['Wi-Fi', 'Bluetooth'], [{ name: 'A', features: { 'Wi-Fi': true } }, { name: 'B', features: {} }]);
+          return [ct.querySelectorAll('thead th').length, ct.querySelectorAll('tbody tr').length, ct.querySelectorAll('.feat-yes').length];
+        })()).toEqual([3,2,1]);
+    });
+  });
+
+  describe("9.11 renderWordSearchGrid", () => {
+    function renderWordSearchGrid(lettersMatrix) {
+      if (!Array.isArray(lettersMatrix) || lettersMatrix.length === 0) return null;
+const grid = document.createElement('div');
+grid.className = 'word-grid';
+for (let r = 0; r < lettersMatrix.length; r++) {
+  const row = lettersMatrix[r] || [];
+  for (let c = 0; c < row.length; c++) {
+    const cell = document.createElement('span');
+    cell.className = 'word-cell';
+    cell.setAttribute('data-row', String(r));
+    cell.setAttribute('data-col', String(c));
+    cell.textContent = String(row[c]);
+    grid.appendChild(cell);
+  }
+}
+return grid;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const wg = renderWordSearchGrid([['C', 'A', 'T'], ['D', 'O', 'G']]);
+          return [wg.children.length, wg.children[0].textContent, wg.children[0].getAttribute('data-row')];
+        })()).toEqual([6,"C","0"]);
+    });
+  });
+
+  describe("9.12 renderBarChartGrouped", () => {
+    function renderBarChartGrouped(categories, seriesList) {
+      if (!Array.isArray(categories) || !Array.isArray(seriesList) || categories.length === 0) return null;
+const chart = document.createElement('div');
+chart.className = 'grouped-chart';
+for (let c = 0; c < categories.length; c++) {
+  const group = document.createElement('div');
+  group.className = 'chart-group';
+
+  const barsBox = document.createElement('div');
+  barsBox.className = 'chart-bars-box';
+
+  for (let s = 0; s < seriesList.length; s++) {
+    const series = seriesList[s];
+    const val = (series.data && series.data[c] !== undefined) ? series.data[c] : 0;
+    const bar = document.createElement('div');
+    bar.className = 'chart-bar';
+    bar.style.height = `${val}%`;
+    bar.style.backgroundColor = series.color || '#6366f1';
+    bar.setAttribute('title', `${series.name}: ${val}`);
+    barsBox.appendChild(bar);
+  }
+  group.appendChild(barsBox);
+
+  const label = document.createElement('span');
+  label.className = 'group-label';
+  label.textContent = categories[c];
+  group.appendChild(label);
+
+  chart.appendChild(group);
+}
+return chart;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const ch = renderBarChartGrouped(['Січ', 'Лют'], [{ name: 'План', color: '#ff0000', data: [80, 50] }]);
+          return [ch.children.length, ch.querySelectorAll('.chart-bar').length, ch.querySelectorAll('.chart-bar')[0].style.height];
+        })()).toEqual([2,2,"80%"]);
+    });
+  });
+
+});
+
+describe("SOLUTIONS: Модуль 10: Маніпуляція DOM, стилізація та очищення через цикли", () => {
+  describe("10.1 applyZebraStriping", () => {
+    function applyZebraStriping(tableElement, evenBg = '#ffffff', oddBg = '#f8fafc') {
+      if (!tableElement) return 0;
+const rows = tableElement.querySelectorAll('tbody tr');
+for (let i = 0; i < rows.length; i++) {
+  const row = rows[i];
+  if (i % 2 === 0) {
+    row.style.backgroundColor = evenBg;
+    row.classList.remove('table-row--striped');
+  } else {
+    row.style.backgroundColor = oddBg;
+    row.classList.add('table-row--striped');
+  }
+}
+return rows.length;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const tbl = document.createElement('table');
+          const tbody = document.createElement('tbody');
+          for (let i = 0; i < 3; i++) tbody.appendChild(document.createElement('tr'));
+          tbl.appendChild(tbody);
+          const count = applyZebraStriping(tbl, '#ffffff', '#f0f0f0');
+          const rows = tbl.querySelectorAll('tbody tr');
+          const isEvenMatch = rows[0].style.backgroundColor === '#ffffff' || rows[0].style.backgroundColor === 'rgb(255, 255, 255)';
+          const isOddMatch = rows[1].style.backgroundColor === '#f0f0f0' || rows[1].style.backgroundColor === 'rgb(240, 240, 240)';
+          return [count, isEvenMatch, isOddMatch, rows[1].classList.contains('table-row--striped')];
+        })()).toEqual([3,true,true,true]);
+    });
+  });
+
+  describe("10.2 clearContainerFast", () => {
+    function clearContainerFast(containerElement) {
+      if (!containerElement) return 0;
+let count = 0;
+while (containerElement.firstChild) {
+  containerElement.removeChild(containerElement.firstChild);
+  count++;
+}
+return count;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const div = document.createElement('div');
+          div.appendChild(document.createElement('p'));
+          div.appendChild(document.createElement('span'));
+          const deleted = clearContainerFast(div);
+          return [deleted, div.childNodes.length];
+        })()).toEqual([2,0]);
+    });
+    it("test 2", () => {
+      expect((() => {
+          const div = document.createElement('div');
+          return clearContainerFast(div);
+        })()).toEqual(0);
+    });
+  });
+
+  describe("10.3 buildNestedListTree", () => {
+    function buildNestedListTree(treeData) {
+      function renderNode(node) {
+  const li = document.createElement('li');
+  li.className = 'tree-item';
+  li.textContent = node.label || '';
+  if (Array.isArray(node.children) && node.children.length > 0) {
+    const subUl = document.createElement('ul');
+    subUl.className = 'tree-sublist';
+    for (let i = 0; i < node.children.length; i++) {
+      subUl.appendChild(renderNode(node.children[i]));
+    }
+    li.appendChild(subUl);
+  }
+  return li;
+}
+const ul = document.createElement('ul');
+ul.className = 'tree-root';
+const items = Array.isArray(treeData) ? treeData : (treeData ? [treeData] : []);
+for (let i = 0; i < items.length; i++) {
+  ul.appendChild(renderNode(items[i]));
+}
+return ul;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const data = {
+            label: 'Корінь',
+            children: [{ label: 'Дочірній 1' }, { label: 'Дочірній 2' }]
+          };
+          const tree = buildNestedListTree(data);
+          const items = tree.querySelectorAll('.tree-item');
+          return [
+            tree.tagName,
+            items.length,
+            items[0].childNodes[0].text || items[0].textContent
+          ];
+        })()).toEqual(["UL",3,"Корінь"]);
+    });
+  });
+
+  describe("10.4 renderStepWizard", () => {
+    function renderStepWizard(steps, currentStepIndex) {
+      const wizard = document.createElement('div');
+wizard.className = 'wizard-container';
+if (!Array.isArray(steps)) return wizard;
+for (let i = 0; i < steps.length; i++) {
+  const step = document.createElement('div');
+  step.className = 'wizard-step';
+  step.setAttribute('data-step', String(i + 1));
+  step.textContent = steps[i];
+  if (i < currentStepIndex) {
+    step.classList.add('wizard-step--done');
+    step.style.borderColor = 'rgb(16, 185, 129)';
+  } else if (i === currentStepIndex) {
+    step.classList.add('wizard-step--active');
+    step.style.borderColor = 'rgb(99, 102, 241)';
+  } else {
+    step.classList.add('wizard-step--pending');
+    step.style.borderColor = 'rgb(203, 213, 225)';
+  }
+  wizard.appendChild(step);
+}
+return wizard;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const w = renderStepWizard(['Крок 1', 'Крок 2', 'Крок 3'], 1);
+          const steps = w.querySelectorAll('.wizard-step');
+          return [
+            steps[0].classList.contains('wizard-step--done'),
+            steps[1].classList.contains('wizard-step--active'),
+            steps[2].classList.contains('wizard-step--pending')
+          ];
+        })()).toEqual([true,true,true]);
+    });
+  });
+
+  describe("10.5 highlightKeywordsInElements", () => {
+    function highlightKeywordsInElements(elementsList, keywords) {
+      if (!elementsList || !keywords || keywords.length === 0) return 0;
+let totalMatches = 0;
+for (let i = 0; i < elementsList.length; i++) {
+  const el = elementsList[i];
+  let html = el.textContent || '';
+  for (let k = 0; k < keywords.length; k++) {
+    const word = keywords[k];
+    if (!word) continue;
+    const parts = html.split(word);
+    if (parts.length > 1) {
+      totalMatches += (parts.length - 1);
+      html = parts.join(`<mark class="kw-highlight">${word}</mark>`);
+    }
+  }
+  el.innerHTML = html;
+}
+return totalMatches;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const p1 = document.createElement('p'); p1.textContent = 'JavaScript цикли while та for';
+          const p2 = document.createElement('p'); p2.textContent = 'Тут немає збігів';
+          const count = highlightKeywordsInElements([p1, p2], ['while', 'for']);
+          return [count, p1.innerHTML.includes('<mark class="kw-highlight">while</mark>')];
+        })()).toEqual([2,true]);
+    });
+  });
+
+  describe("10.6 toggleElementsVisibility", () => {
+    function toggleElementsVisibility(elementsList, predicateFn) {
+      if (!elementsList || typeof predicateFn !== 'function') return 0;
+let visibleCount = 0;
+for (let i = 0; i < elementsList.length; i++) {
+  const el = elementsList[i];
+  const show = Boolean(predicateFn(el));
+  if (show) {
+    el.style.display = '';
+    el.removeAttribute('hidden');
+    visibleCount++;
+  } else {
+    el.style.display = 'none';
+    el.setAttribute('hidden', 'true');
+  }
+}
+return visibleCount;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const c1 = document.createElement('div'); c1.dataset.status = 'active';
+          const c2 = document.createElement('div'); c2.dataset.status = 'inactive';
+          const visible = toggleElementsVisibility([c1, c2], el => el.dataset.status === 'active');
+          return [visible, c1.style.display, c2.style.display, c2.hasAttribute('hidden')];
+        })()).toEqual([1,"","none",true]);
+    });
+  });
+
+  describe("10.7 reorderListByAttribute", () => {
+    function reorderListByAttribute(parentListElement, attrName) {
+      if (!parentListElement) return null;
+const items = [];
+for (let i = 0; i < parentListElement.children.length; i++) {
+  items.push(parentListElement.children[i]);
+}
+items.sort((a, b) => {
+  const valA = a.getAttribute(attrName) || '';
+  const valB = b.getAttribute(attrName) || '';
+  const numA = Number(valA);
+  const numB = Number(valB);
+  if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
+  return valA.localeCompare(valB);
+});
+for (let i = 0; i < items.length; i++) {
+  parentListElement.appendChild(items[i]);
+}
+return parentListElement;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const ul = document.createElement('ul');
+          const li1 = document.createElement('li'); li1.setAttribute('data-order', '3');
+          const li2 = document.createElement('li'); li2.setAttribute('data-order', '1');
+          const li3 = document.createElement('li'); li3.setAttribute('data-order', '2');
+          ul.appendChild(li1); ul.appendChild(li2); ul.appendChild(li3);
+          reorderListByAttribute(ul, 'data-order');
+          return Array.from(ul.children).map(c => c.getAttribute('data-order'));
+        })()).toEqual(["1","2","3"]);
+    });
+  });
+
+  describe("10.8 paginateChildren", () => {
+    function paginateChildren(containerElement, pageSize, activePage) {
+      if (!containerElement || pageSize <= 0 || activePage <= 0) return 0;
+const children = containerElement.children;
+let visibleCount = 0;
+const startIdx = (activePage - 1) * pageSize;
+const endIdx = startIdx + pageSize;
+for (let i = 0; i < children.length; i++) {
+  const child = children[i];
+  if (i >= startIdx && i < endIdx) {
+    child.style.display = '';
+    visibleCount++;
+  } else {
+    child.style.display = 'none';
+  }
+}
+return visibleCount;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const div = document.createElement('div');
+          for (let i = 0; i < 5; i++) div.appendChild(document.createElement('span'));
+          const page1Count = paginateChildren(div, 2, 1);
+          const visiblePage1 = Array.from(div.children).filter(c => c.style.display !== 'none').length;
+          const page3Count = paginateChildren(div, 2, 3);
+          return [page1Count, visiblePage1, page3Count];
+        })()).toEqual([2,2,1]);
+    });
+  });
+
+  describe("10.9 batchUpdateStyles", () => {
+    function batchUpdateStyles(elementsList, stylesList) {
+      if (!elementsList || !stylesList) return elementsList;
+if (Array.isArray(stylesList)) {
+  for (let i = 0; i < elementsList.length; i++) {
+    const el = elementsList[i];
+    for (let j = 0; j < stylesList.length; j++) {
+      const [prop, val] = stylesList[j];
+      el.style[prop] = val;
+    }
+  }
+} else if (typeof stylesList === 'object') {
+  for (const el of elementsList) {
+    for (const k in stylesList) {
+      el.style[k] = stylesList[k];
+    }
+  }
+}
+return elementsList;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const d1 = document.createElement('div');
+          const d2 = document.createElement('div');
+          batchUpdateStyles([d1, d2], [['color', '#ffffff'], ['opacity', '0.8']]);
+          const isColorSet = d1.style.color === '#ffffff' || d1.style.color === 'rgb(255, 255, 255)';
+          return [isColorSet, d2.style.opacity];
+        })()).toEqual([true,"0.8"]);
+    });
+  });
+
+  describe("10.10 extractTableData", () => {
+    function extractTableData(tableElement) {
+      if (!tableElement) return [];
+const thList = tableElement.querySelectorAll('thead th');
+const headers = [];
+for (let i = 0; i < thList.length; i++) {
+  headers.push(thList[i].textContent.trim());
+}
+const rows = tableElement.querySelectorAll('tbody tr');
+const data = [];
+for (let r = 0; r < rows.length; r++) {
+  const cells = rows[r].querySelectorAll('td');
+  const rowObj = {};
+  for (let c = 0; c < cells.length; c++) {
+    const key = headers[c] || `col_${c}`;
+    rowObj[key] = cells[c].textContent.trim();
+  }
+  data.push(rowObj);
+}
+return data;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const tbl = document.createElement('table');
+          const thead = document.createElement('thead');
+          const trH = document.createElement('tr');
+          const th1 = document.createElement('th'); th1.textContent = 'name';
+          const th2 = document.createElement('th'); th2.textContent = 'score';
+          trH.appendChild(th1); trH.appendChild(th2);
+          thead.appendChild(trH);
+          tbl.appendChild(thead);
+          const tbody = document.createElement('tbody');
+          const trD = document.createElement('tr');
+          const td1 = document.createElement('td'); td1.textContent = 'Anna';
+          const td2 = document.createElement('td'); td2.textContent = '100';
+          trD.appendChild(td1); trD.appendChild(td2);
+          tbody.appendChild(trD);
+          tbl.appendChild(tbody);
+          return extractTableData(tbl);
+        })()).toEqual([{"name":"Anna","score":"100"}]);
+    });
+  });
+
+  describe("10.11 wrapConsecutiveElements", () => {
+    function wrapConsecutiveElements(parentElement, targetTagName, wrapperClass = 'group-wrap') {
+      if (!parentElement) return null;
+const target = targetTagName.toUpperCase();
+let current = parentElement.firstElementChild;
+while (current) {
+  if (current.tagName === target) {
+    const wrapper = document.createElement('div');
+    wrapper.className = wrapperClass;
+    parentElement.insertBefore(wrapper, current);
+    while (current && current.tagName === target) {
+      const next = current.nextElementSibling;
+      wrapper.appendChild(current);
+      current = next;
+    }
+  } else {
+    current = current.nextElementSibling;
+  }
+}
+return parentElement;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const parent = document.createElement('div');
+          const p1 = document.createElement('p'); p1.textContent = '1';
+          const p2 = document.createElement('p'); p2.textContent = '2';
+          const span = document.createElement('span'); span.textContent = 'x';
+          parent.appendChild(p1); parent.appendChild(p2); parent.appendChild(span);
+          wrapConsecutiveElements(parent, 'p', 'group');
+          return [parent.children.length, parent.children[0].className, parent.children[0].children.length];
+        })()).toEqual([2,"group",2]);
+    });
+  });
+
+  describe("10.12 animateElementsStagger", () => {
+    function animateElementsStagger(elementsList, stepDelayMs = 100) {
+      if (!elementsList || elementsList.length === 0) return 0;
+let maxDelay = 0;
+for (let i = 0; i < elementsList.length; i++) {
+  const el = elementsList[i];
+  const delay = i * stepDelayMs;
+  el.style.animationDelay = `${delay}ms`;
+  el.classList.add('animate-stagger');
+  maxDelay = delay;
+}
+return maxDelay;
+    }
+    it("test 1", () => {
+      expect((() => {
+          const el1 = document.createElement('div');
+          const el2 = document.createElement('div');
+          const el3 = document.createElement('div');
+          const max = animateElementsStagger([el1, el2, el3], 150);
+          return [max, el1.style.animationDelay, el2.style.animationDelay, el3.style.animationDelay, el1.classList.contains('animate-stagger')];
+        })()).toEqual([300,"0ms","150ms","300ms",true]);
+    });
+  });
+
+});
+
