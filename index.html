@@ -4625,14 +4625,15 @@ for (let i = 1; i &lt;= 3; i++) {
           localStorage.setItem('js_loops_css_codes', JSON.stringify(userCssCodes));
         }
 
-        // 3. Update the editor to show the code of CURRENT active tab!
-        if (currentEditorTab === 'js') {
-          codeEditor.value = userCodes[currentTask.id];
-        } else if (currentEditorTab === 'html') {
-          codeEditor.value = userHtmlCodes[currentTask.id];
-        } else if (currentEditorTab === 'css') {
-          codeEditor.value = userCssCodes[currentTask.id];
-        }
+        // 3. Switch active editor tab to JS and update editor
+        currentEditorTab = 'js';
+        document.querySelectorAll('.editor-tab').forEach(b => {
+          b.classList.toggle('active', b.dataset.fileTab === 'js');
+        });
+        const mod = MODULES.find(m => m.idx === currentTask.moduleIdx);
+        editorFilename.textContent = `src/${mod ? mod.filename : 'task.js'}`;
+        if (editorFileIcon) editorFileIcon.textContent = '📄';
+        codeEditor.value = userCodes[currentTask.id];
 
         saveNotice.classList.add('visible');
         setTimeout(() => saveNotice.classList.remove('visible'), 1200);
@@ -4644,6 +4645,11 @@ for (let i = 1; i &lt;= 3; i++) {
         if (isDomTask) {
           renderFullLivePreview(currentTask);
         }
+
+        // Auto-run test so the mentor/student immediately sees the green PASS state
+        setTimeout(() => {
+          runSingleTaskTest();
+        }, 60);
       }
     }
 
