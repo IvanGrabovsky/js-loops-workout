@@ -3063,6 +3063,19 @@ for (let i = 1; i &lt;= 3; i++) {
           </div>
         </div>
 
+        <!-- Resumable Exam Notice Banner (if previous session exists) -->
+        <div id="certResumeBanner" style="display:none; margin:0 auto 20px auto; max-width:500px; padding:16px 20px; border-radius:12px; background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.4); text-align:left;">
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+            <div>
+              <div style="font-weight:700; font-size:14px; color:#b45309; margin-bottom:2px;">⚠️ Знайдено активну сесію іспиту!</div>
+              <div id="certResumeDetails" style="font-size:12.5px; color:var(--ink); line-height:1.4;">Усі ваші відповіді збережено в браузері.</div>
+            </div>
+            <button id="certResumeExamBtn" class="btn-pill btn-pill-primary" style="padding:8px 18px; font-size:13px; font-weight:700; white-space:nowrap;">
+              ▶ Продовжити іспит
+            </button>
+          </div>
+        </div>
+
         <button class="btn-pill btn-pill-primary" id="startCertExamBtn" style="display:none; padding:14px 32px; font-size:16px;">
           🚀 Розпочати сертифікацію
         </button>
@@ -3075,6 +3088,10 @@ for (let i = 1; i &lt;= 3; i++) {
             <div style="display:flex; align-items:center; gap:12px;">
               <span style="font-weight:700; font-size:16px;">⏱️ Сертифікаційний екзамен</span>
               <span id="certTimerDisplay" class="pill-badge" style="font-family:var(--font-mono); font-weight:700; color:#b45309; background:#fffbeb;">45:00</span>
+              <span id="certAutosaveStatus" style="font-size:11.5px; color:#10b981; font-weight:600; display:inline-flex; align-items:center; gap:4px;" title="Кожен символ у редакторі зберігається автоматично">
+                <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#10b981;"></span>
+                Автозбереження активне
+              </span>
             </div>
 
             <!-- Question Pills 1..10 -->
@@ -3252,6 +3269,7 @@ for (let i = 1; i &lt;= 3; i++) {
             </div>
           </div>
           <div style="display:flex; gap:8px;">
+            <button class="btn-pill btn-pill-outline" id="refreshExamRecordsBtn" style="padding:6px 14px; font-size:12px;">🔄 Оновити</button>
             <button class="btn-pill btn-pill-primary" id="exportExamCsvBtn" style="padding:6px 14px; font-size:12px;">📥 Експорт CSV (Excel)</button>
             <button class="btn-pill btn-pill-outline" id="clearExamLogBtn" style="padding:6px 14px; font-size:12px; color:#ef4444; border-color:rgba(239,68,68,0.3);">🗑️ Очистити</button>
           </div>
@@ -4846,28 +4864,32 @@ for (let i = 1; i &lt;= 3; i++) {
       startMassRunnerBtn.disabled = false;
     });
 
-    // Supabase Realtime Online presence
-    try {
-      const SUPABASE_URL = 'https://djjvceuzbvhfvfdcptwb.supabase.co';
-      const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqanZjZXV6YnZoZnZmZGNwdHdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg1Mzg1OTgsImV4cCI6MjA1NDExNDU5OH0.7YtGzJ66bZlIUXf2n3L1uW7Hk5k5u5U8X7';
-      const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
-      const room = supabase.channel('loops_workout_presence', {
-        config: { presence: { key: 'user_' + Math.random().toString(36).substring(7) } }
-      });
-      room.on('presence', { event: 'sync' }, () => {
-        const state = room.presenceState();
-        const count = Math.max(1, Object.keys(state).length);
-        document.getElementById('onlineCountText').textContent = count + ' онлайн';
-      });
-      room.subscribe(async (status) => {
-        if (status === 'SUBSCRIBED') {
-          await room.track({ online_at: new Date().toISOString() });
-        }
-      });
-    } catch (e) {
-      // Offline fallback
-      document.getElementById('onlineCountText').textContent = '1 онлайн';
-    }
+    // Live Online Presence via Cloudflare Worker
+    (function initOnlinePresenceTracker() {
+      const badgeText = document.getElementById('onlineCountText');
+      if (!badgeText) return;
+
+      let visitorId = sessionStorage.getItem('camp_visitor_id');
+      if (!visitorId) {
+        visitorId = 'vis_' + Math.random().toString(36).substring(2, 10);
+        sessionStorage.setItem('camp_visitor_id', visitorId);
+      }
+
+      const pingWorker = async () => {
+        try {
+          const res = await fetch(`https://loops-github-auth.ivan-grabovsky-ua.workers.dev/ping?id=${visitorId}`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && typeof data.online === 'number') {
+              badgeText.textContent = `${Math.max(1, data.online)} онлайн`;
+            }
+          }
+        } catch (_) {}
+      };
+
+      pingWorker();
+      setInterval(pingWorker, 25000);
+    })();
 
     // Interactive theory demo functions
     window.runTheoryAlertDemo = function() {
@@ -5033,6 +5055,148 @@ for (let i = 1; i &lt;= 3; i++) {
       } catch (err) {
         showToast('Помилка зʼєднання з сервером авторизації');
       }
+    }
+
+    // ==========================================
+    // EXAM STATE PERSISTENCE & AUTOSAVE (RECOVERY)
+    // ==========================================
+    const ACTIVE_EXAM_STORAGE_KEY = 'camp_active_exam_state';
+
+    function saveActiveExamState() {
+      if (!certActive || !certExamTasks || certExamTasks.length === 0) return;
+
+      const editor = document.getElementById('certCodeEditor');
+      const curTask = certExamTasks[certCurrentIdx];
+      if (editor && curTask) {
+        certUserCodes[curTask.id] = editor.value;
+      }
+
+      if (certTaskStartTimestamp > 0) {
+        const elapsed = Math.round((Date.now() - certTaskStartTimestamp) / 1000);
+        certTaskTimeSpent[certCurrentIdx] = (certTaskTimeSpent[certCurrentIdx] || 0) + elapsed;
+        certTaskStartTimestamp = Date.now();
+      }
+
+      const state = {
+        active: true,
+        taskIds: certExamTasks.map(t => t.id),
+        currentIdx: certCurrentIdx,
+        userCodes: certUserCodes,
+        passedMap: certPassedMap,
+        taskTimeSpent: certTaskTimeSpent,
+        examStartTime: certExamStartTime,
+        secondsLeft: certSecondsLeft,
+        studentName: certStudentName,
+        savedAt: Date.now()
+      };
+
+      try {
+        localStorage.setItem(ACTIVE_EXAM_STORAGE_KEY, JSON.stringify(state));
+        flashAutosaveIndicator();
+      } catch (err) {
+        console.warn('Exam autosave failed:', err);
+      }
+    }
+
+    function clearActiveExamState() {
+      try {
+        localStorage.removeItem(ACTIVE_EXAM_STORAGE_KEY);
+      } catch (_) {}
+      updateResumeBannerUI();
+    }
+
+    function flashAutosaveIndicator() {
+      const el = document.getElementById('certAutosaveStatus');
+      if (!el) return;
+      el.innerHTML = '<span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#10b981;"></span> Збережено';
+    }
+
+    function getSavedActiveExam() {
+      try {
+        const raw = localStorage.getItem(ACTIVE_EXAM_STORAGE_KEY);
+        if (!raw) return null;
+        const data = JSON.parse(raw);
+        if (data && data.active && Array.isArray(data.taskIds) && data.taskIds.length === 10) {
+          return data;
+        }
+      } catch (_) {}
+      return null;
+    }
+
+    function updateResumeBannerUI() {
+      const banner = document.getElementById('certResumeBanner');
+      const details = document.getElementById('certResumeDetails');
+      if (!banner) return;
+
+      const saved = getSavedActiveExam();
+      if (!saved) {
+        banner.style.display = 'none';
+        return;
+      }
+
+      const timeSinceSave = Math.floor((Date.now() - (saved.savedAt || Date.now())) / 1000);
+      const remainingSeconds = Math.max(0, (saved.secondsLeft || 0) - timeSinceSave);
+
+      if (remainingSeconds <= 0) {
+        banner.style.display = 'none';
+        clearActiveExamState();
+        return;
+      }
+
+      const solvedCount = Object.values(saved.passedMap || {}).filter(Boolean).length;
+      if (details) {
+        details.innerHTML = `Збережено: <b>${solvedCount} / 10</b> виконано. Залишок часу: <b>${formatDuration(remainingSeconds)}</b>.`;
+      }
+      banner.style.display = 'block';
+    }
+
+    function restoreSavedExam(saved) {
+      if (!saved) return false;
+      const timeSinceSave = Math.floor((Date.now() - (saved.savedAt || Date.now())) / 1000);
+      const remainingSeconds = Math.max(0, (saved.secondsLeft || 0) - timeSinceSave);
+
+      if (remainingSeconds <= 0) {
+        clearActiveExamState();
+        showToast('⚠️ Час попередньої сесії іспиту вичерпано.');
+        return false;
+      }
+
+      const reconstructedTasks = [];
+      for (const id of saved.taskIds) {
+        const found = ALL_TASKS.find(t => t.id === id);
+        if (!found) {
+          clearActiveExamState();
+          return false;
+        }
+        reconstructedTasks.push(found);
+      }
+
+      certExamTasks = reconstructedTasks;
+      certCurrentIdx = Math.max(0, Math.min(saved.currentIdx || 0, certExamTasks.length - 1));
+
+      Object.keys(certUserCodes).forEach(k => delete certUserCodes[k]);
+      Object.assign(certUserCodes, saved.userCodes || {});
+
+      Object.keys(certPassedMap).forEach(k => delete certPassedMap[k]);
+      Object.assign(certPassedMap, saved.passedMap || {});
+
+      certTaskTimeSpent = Array.isArray(saved.taskTimeSpent) ? [...saved.taskTimeSpent] : new Array(10).fill(0);
+      certExamStartTime = saved.examStartTime || Date.now();
+      certTaskStartTimestamp = Date.now();
+      certSecondsLeft = remainingSeconds;
+      certActive = true;
+
+      // Update UI views
+      document.getElementById('certWelcomeBox').style.display = 'none';
+      document.getElementById('certResultsBox').style.display = 'none';
+      document.getElementById('certActiveBox').style.display = 'block';
+
+      renderCertExamPills();
+      selectCertExamTask(certCurrentIdx);
+      startCertTimer();
+
+      showToast(`🔄 Сесію іспиту успішно відновлено! Залишок: ${formatDuration(remainingSeconds)}`);
+      return true;
     }
 
     let certActive = false;
@@ -5230,12 +5394,16 @@ for (let i = 1; i &lt;= 3; i++) {
       });
 
       // Mentor analytics actions
+      document.getElementById('refreshExamRecordsBtn')?.addEventListener('click', () => {
+        renderTeacherExamAnalytics();
+        showToast('Оновлення журналу із хмари...');
+      });
       document.getElementById('exportExamCsvBtn')?.addEventListener('click', exportExamRecordsCsv);
       document.getElementById('clearExamLogBtn')?.addEventListener('click', () => {
-        if (confirm('Ви дійсно бажаєте очистити журнал сертифікацій?')) {
+        if (confirm('Ви дійсно бажаєте очистити локальний журнал сертифікацій?')) {
           localStorage.removeItem('camp_exam_records');
           renderTeacherExamAnalytics();
-          showToast('Журнал сертифікацій очищено.');
+          showToast('Локальний журнал сертифікацій очищено.');
         }
       });
 
@@ -5243,15 +5411,56 @@ for (let i = 1; i &lt;= 3; i++) {
       document.getElementById('certGithubLoginBtn')?.addEventListener('click', loginWithGitHub);
       document.getElementById('certGithubLogoutBtn')?.addEventListener('click', logoutGitHub);
 
+      // Realtime input autosave for exam editor
+      let certEditorInputTimeout = null;
+      if (certEditor) {
+        certEditor.addEventListener('input', () => {
+          if (certActive && certExamTasks[certCurrentIdx]) {
+            certUserCodes[certExamTasks[certCurrentIdx].id] = certEditor.value;
+            clearTimeout(certEditorInputTimeout);
+            certEditorInputTimeout = setTimeout(() => {
+              saveActiveExamState();
+            }, 250);
+          }
+        });
+      }
+
+      // Resume Exam Button
+      document.getElementById('certResumeExamBtn')?.addEventListener('click', () => {
+        const saved = getSavedActiveExam();
+        if (saved) restoreSavedExam(saved);
+      });
+
+      // Window unload protection (warn if closing during active exam)
+      window.addEventListener('beforeunload', (e) => {
+        if (certActive) {
+          saveActiveExamState();
+          e.preventDefault();
+          e.returnValue = 'Увага! Сертифікаційний іспит ще триває. Якщо ви закриєте сторінку, таймер продовжить іти.';
+          return e.returnValue;
+        }
+      });
+
       // Render initial GitHub student status & process callback if present
       renderGitHubUserUI();
       checkGitHubCallback();
+      updateResumeBannerUI();
 
       // Render initial analytics if teacher mode is active
       renderTeacherExamAnalytics();
     }
 
     function startCertificationExam() {
+      // Check if there is an active session in progress
+      const saved = getSavedActiveExam();
+      if (saved) {
+        if (confirm('Знайдено збережену незавершену сесію іспиту! Бажаєте продовжити її (OK), чи почати новий іспит (Скасувати)?')) {
+          if (restoreSavedExam(saved)) return;
+        } else {
+          clearActiveExamState();
+        }
+      }
+
       // Pick 10 balanced random tasks across modules
       certExamTasks = [];
       const shuffledModules = [...MODULES].sort(() => Math.random() - 0.5);
@@ -5290,6 +5499,7 @@ for (let i = 1; i &lt;= 3; i++) {
       renderCertExamPills();
       selectCertExamTask(0);
       startCertTimer();
+      saveActiveExamState();
       showToast('🚀 Сертифікаційний іспит розпочато! Успіхів!');
     }
 
@@ -5298,6 +5508,10 @@ for (let i = 1; i &lt;= 3; i++) {
       updateCertTimerDisplay();
       certTimerInterval = setInterval(() => {
         certSecondsLeft--;
+        // Auto-save timer and progress every 5 seconds
+        if (certSecondsLeft % 5 === 0) {
+          saveActiveExamState();
+        }
         if (certSecondsLeft <= 0) {
           clearInterval(certTimerInterval);
           alert('Час екзамену вичерпано!');
@@ -5382,6 +5596,7 @@ for (let i = 1; i &lt;= 3; i++) {
       testStatus.style.color = certPassedMap[idx] ? '#10b981' : '#9ba1b0';
 
       renderCertExamPills();
+      saveActiveExamState();
     }
 
     function runCertSingleTaskTest() {
@@ -5456,11 +5671,13 @@ for (let i = 1; i &lt;= 3; i++) {
         consoleBody.innerHTML = `<div style="color:#ef4444;">Помилка: ${err.message}</div>`;
         renderCertExamPills();
       }
+      saveActiveExamState();
     }
 
     function finishCertificationExam() {
       if (certTimerInterval) clearInterval(certTimerInterval);
       certActive = false;
+      clearActiveExamState();
       const blurEl = document.getElementById('certBlurOverlay');
       if (blurEl) blurEl.style.display = 'none';
       const mainWrap = document.querySelector('.app-container, .workout-container, .container, body > div');
@@ -5566,10 +5783,11 @@ for (let i = 1; i &lt;= 3; i++) {
         }
       }
 
-      // Record exam attempt for mentor analytics (Variant B)
+      // Record exam attempt for mentor analytics (Variant B + Cloudflare KV Centralized)
       const curGhUser = getSavedGitHubUser();
       const examRecord = {
         id: 'EXAM-' + Math.random().toString(36).substring(2, 8).toUpperCase(),
+        timestamp: Date.now(),
         date: new Date().toLocaleString('uk-UA'),
         studentName: certStudentName,
         githubLogin: curGhUser ? curGhUser.login : null,
@@ -5593,14 +5811,12 @@ for (let i = 1; i &lt;= 3; i++) {
         records.unshift(examRecord);
         localStorage.setItem('camp_exam_records', JSON.stringify(records.slice(0, 50)));
 
-        // Broadcast to mentor channel if Supabase is active
-        if (window.campRealtimePresence) {
-          window.campRealtimePresence.send({
-            type: 'broadcast',
-            event: 'exam_completed',
-            payload: examRecord
-          });
-        }
+        // Send to Centralized Cloudflare Worker
+        fetch('https://loops-github-auth.ivan-grabovsky-ua.workers.dev/api/exam-submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(examRecord)
+        }).catch(err => console.warn('Cloudflare exam-submit failed:', err));
       } catch (e) {
         console.warn('Could not save exam record:', e);
       }
@@ -5608,14 +5824,62 @@ for (let i = 1; i &lt;= 3; i++) {
       renderTeacherExamAnalytics();
     }
 
-    // Mentor Analytics View (Variant B)
-    function renderTeacherExamAnalytics() {
+    // Mentor Analytics View (Variant B + Centralized Cloud Sync)
+    let cachedTeacherExamRecords = [];
+
+    async function renderTeacherExamAnalytics() {
       const tbody = document.getElementById('teacherExamRecordsBody');
       if (!tbody) return;
 
-      const records = JSON.parse(localStorage.getItem('camp_exam_records') || '[]');
-      if (records.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="padding:20px; text-align:center; color:#9ba1b0;">Записів сертифікацій ще немає.</td></tr>';
+      let localRecords = [];
+      try {
+        localRecords = JSON.parse(localStorage.getItem('camp_exam_records') || '[]');
+      } catch (_) {}
+
+      // Fast render local records first
+      if (localRecords.length > 0 && cachedTeacherExamRecords.length === 0) {
+        renderRecordsToTable(localRecords);
+      }
+
+      // Fetch centralized records from Cloudflare Worker
+      try {
+        const res = await fetch('https://loops-github-auth.ivan-grabovsky-ua.workers.dev/api/exam-records');
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data.records) && data.records.length > 0) {
+            const map = new Map();
+            data.records.forEach(r => {
+              if (r) {
+                const key = r.id || `${r.githubLogin || r.studentName}_${r.timestamp || r.date}`;
+                map.set(key, r);
+              }
+            });
+            localRecords.forEach(r => {
+              if (r) {
+                const key = r.id || `${r.githubLogin || r.studentName}_${r.timestamp || r.date}`;
+                map.set(key, r);
+              }
+            });
+            const merged = Array.from(map.values()).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+            cachedTeacherExamRecords = merged;
+            renderRecordsToTable(merged);
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn('Could not fetch cloud exam records:', err);
+      }
+
+      cachedTeacherExamRecords = localRecords;
+      renderRecordsToTable(localRecords);
+    }
+
+    function renderRecordsToTable(records) {
+      const tbody = document.getElementById('teacherExamRecordsBody');
+      if (!tbody) return;
+
+      if (!records || records.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="padding:20px; text-align:center; color:#9ba1b0;">Записів сертифікацій ще немає. Коли студенти складають тест, дані зʼявляються тут автоматично.</td></tr>';
         return;
       }
 
@@ -5624,13 +5888,16 @@ for (let i = 1; i &lt;= 3; i++) {
         const row = document.createElement('tr');
         row.style.borderBottom = '1px solid rgba(125,125,125,0.15)';
         row.innerHTML = `
-          <td style="padding:10px 8px; font-size:12px; color:var(--color-graphite, #9ba1b0);">${rec.date}</td>
-          <td style="padding:10px 8px; font-weight:600;">${rec.studentName}</td>
-          <td style="padding:10px 8px; text-align:center; font-weight:700;">${rec.passedCount}/${rec.totalTasks} (${rec.percent}%)</td>
-          <td style="padding:10px 8px; text-align:center; font-family:var(--font-mono);">${formatDuration(rec.totalElapsedSeconds)}</td>
+          <td style="padding:10px 8px; font-size:12px; color:var(--color-graphite, #9ba1b0);">${rec.date || '-'}</td>
+          <td style="padding:10px 8px; font-weight:600;">
+            ${rec.studentName || rec.login || 'Анонім'}
+            ${rec.githubLogin ? `<div style="font-size:11px; color:#3b82f6; font-weight:normal;">@${rec.githubLogin}</div>` : ''}
+          </td>
+          <td style="padding:10px 8px; text-align:center; font-weight:700;">${rec.passedCount ?? rec.score ?? 0}/${rec.totalTasks || 10} (${rec.percent ?? Math.round(((rec.score || 0)/10)*100)}%)</td>
+          <td style="padding:10px 8px; text-align:center; font-family:var(--font-mono);">${formatDuration(rec.totalElapsedSeconds || 0)}</td>
           <td style="padding:10px 8px; text-align:center;">
-            <span class="test-status-pill ${rec.isCertified ? 'status-pass' : 'status-fail'}" style="font-size:11px;">
-              ${rec.isCertified ? 'Складено' : 'Не складено'}
+            <span class="test-status-pill ${rec.isCertified || (rec.score >= 8) ? 'status-pass' : 'status-fail'}" style="font-size:11px;">
+              ${rec.isCertified || (rec.score >= 8) ? 'Складено' : 'Не складено'}
             </span>
           </td>
           <td style="padding:10px 8px; text-align:right;">
@@ -5648,12 +5915,12 @@ for (let i = 1; i &lt;= 3; i++) {
           <td colspan="6" style="padding:12px 16px;">
             <div style="font-size:12px; font-weight:700; margin-bottom:8px; color:var(--color-graphite, #9ba1b0);">Хронометраж завдань тесту:</div>
             <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(200px, 1fr)); gap:8px;">
-              ${(rec.tasks || []).map((t, ti) => `
+              ${Array.isArray(rec.tasks) && rec.tasks.length > 0 ? rec.tasks.map((t, ti) => `
                 <div style="padding:6px 10px; border-radius:6px; background:rgba(125,125,125,0.08); font-size:11.5px; display:flex; justify-content:space-between; align-items:center;">
-                  <span><b>#${ti + 1}</b> ${t.name}</span>
-                  <span style="font-family:var(--font-mono); color:${t.passed ? '#10b981' : '#ef4444'}; font-weight:600;">${formatDuration(t.timeSpent)}</span>
+                  <span><b>#${ti + 1}</b> ${t.name || t.title || 'Завдання'}</span>
+                  <span style="font-family:var(--font-mono); color:${t.passed ? '#10b981' : '#ef4444'}; font-weight:600;">${formatDuration(t.timeSpent || 0)}</span>
                 </div>
-              `).join('')}
+              `).join('') : '<div style="font-size:12px; color:#9ba1b0;">Деталі окремих завдань відсутні.</div>'}
             </div>
           </td>
         `;
@@ -5669,14 +5936,16 @@ for (let i = 1; i &lt;= 3; i++) {
     };
 
     function exportExamRecordsCsv() {
-      const records = JSON.parse(localStorage.getItem('camp_exam_records') || '[]');
+      const records = cachedTeacherExamRecords.length > 0 
+        ? cachedTeacherExamRecords 
+        : JSON.parse(localStorage.getItem('camp_exam_records') || '[]');
       if (!records.length) {
         showToast('Журнал порожній, немає даних для експорту.');
         return;
       }
-      let csv = 'ID,Дата,Студент,Курс,Бали,Відсоток,Статус,Час (сек),Загальний час\n';
+      let csv = 'ID,Дата,Студент,GitHub,Курс,Бали,Відсоток,Статус,Час (сек),Загальний час\n';
       records.forEach(r => {
-        csv += `"${r.id}","${r.date}","${r.studentName.replace(/"/g, '""')}","${r.courseTitle}",${r.passedCount}/${r.totalTasks},${r.percent}%,${r.isCertified ? 'Сертифіковано' : 'Не подолано'},${r.totalElapsedSeconds},"${formatDuration(r.totalElapsedSeconds)}"\n`;
+        csv += `"${r.id || ''}","${r.date || ''}","${(r.studentName || '').replace(/"/g, '""')}","${r.githubLogin || ''}","${r.courseTitle || ''}",${r.passedCount ?? r.score ?? 0}/${r.totalTasks || 10},${r.percent ?? 0}%,${r.isCertified ? 'Сертифіковано' : 'Не подолано'},${r.totalElapsedSeconds || 0},"${formatDuration(r.totalElapsedSeconds || 0)}"\n`;
       });
       const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
