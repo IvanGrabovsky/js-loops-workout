@@ -2189,6 +2189,20 @@
           🏆 <span id="progressCount">0</span> / <span id="totalTaskCount">201</span> виконано
         </div>
 
+        <!-- Header GitHub Auth -->
+        <button id="headerGithubLoginBtn" class="btn-pill btn-pill-outline" style="display:inline-flex; align-items:center; gap:6px; padding:6px 14px; font-size:12.5px; cursor:pointer;" title="Увійти через GitHub для синхронізації прогресу">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          <span>Увійти через GitHub</span>
+        </button>
+
+        <div id="headerGithubUserPill" class="pill-badge" style="display:none; align-items:center; gap:8px; padding:4px 12px; cursor:pointer;" title="Клікніть для виходу з акаунту">
+          <img id="headerGithubAvatar" src="" style="width:20px; height:20px; border-radius:50%; object-fit:cover; border:1px solid rgba(255,255,255,0.2);">
+          <span id="headerGithubLogin" style="font-weight:700; font-size:12.5px; color:var(--color-primary, #3ecf8e);">@username</span>
+          <span style="font-size:10px; color:#10b981;" title="Хмарна синхронізація активна">☁️</span>
+        </div>
+
         <button class="btn-pill btn-pill-outline" id="resetAllBtn" title="Скинути весь збережений код до початкового стану">
           ↺ Скинути
         </button>
@@ -3258,41 +3272,102 @@ for (let i = 1; i &lt;= 3; i++) {
         </div>
       </div>
 
-      <!-- Teacher Exam Analytics Dashboard (Variant B - Revealed in Teacher Mode) -->
-      <div id="teacherAnalyticsBox" class="mass-runner-box" style="display:none; max-width:920px; margin:28px auto 0 auto; border:2px solid #b45309; text-align:left;">
+      <!-- Teacher Analytics & Progress Matrix Dashboard -->
+      <div id="teacherAnalyticsBox" class="mass-runner-box" style="display:none; max-width:980px; margin:28px auto 0 auto; border:2px solid #b45309; text-align:left;">
+        <!-- Top Sub-Tabs -->
         <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px; border-bottom:1px solid rgba(125,125,125,0.2); padding-bottom:12px;">
-          <div style="display:flex; align-items:center; gap:8px;">
-            <span style="font-size:22px;">📊</span>
+          <div style="display:flex; gap:8px;">
+            <button class="btn-pill btn-pill-primary" id="teacherTabMatrixBtn" style="padding:7px 16px; font-size:13px; font-weight:700;">📊 Зведена матриця студентів</button>
+            <button class="btn-pill btn-pill-outline" id="teacherTabExamLogBtn" style="padding:7px 16px; font-size:13px;">📜 Протокол іспитів</button>
+          </div>
+          <span style="font-size:12px; color:var(--color-primary); font-weight:600;">🔐 Режим Ментора</span>
+        </div>
+
+        <!-- VIEW 1: Global Student Progress Matrix -->
+        <div id="teacherMatrixView" style="display:block;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
             <div>
-              <h3 style="margin:0; font-size:17px; font-weight:700;">Журнал сертифікацій студентів (Менторський аналіз)</h3>
-              <div style="font-size:12px; color:var(--color-graphite, #9ba1b0);">Зведена аналітика успішності, часу та типових помилок групи</div>
+              <h3 style="margin:0; font-size:17px; font-weight:700;">Зведена матриця прогресу студентів (Усі модулі)</h3>
+              <div style="font-size:12px; color:var(--color-graphite, #9ba1b0);">Синхронізація виконання завдань та іспитів у реальному часі через Cloudflare</div>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+              <input type="text" id="filterMatrixInput" placeholder="🔍 Пошук студента..." style="padding:6px 12px; border-radius:18px; border:1px solid rgba(125,125,125,0.3); background:rgba(0,0,0,0.1); color:inherit; font-size:12px; outline:none; width:160px;">
+              <button class="btn-pill btn-pill-outline" id="refreshMatrixBtn" style="padding:6px 14px; font-size:12px;">🔄 Оновити</button>
+              <button class="btn-pill btn-pill-primary" id="exportMatrixCsvBtn" style="padding:6px 14px; font-size:12px;">📥 Експорт матриці в CSV</button>
             </div>
           </div>
-          <div style="display:flex; gap:8px;">
-            <button class="btn-pill btn-pill-outline" id="refreshExamRecordsBtn" style="padding:6px 14px; font-size:12px;">🔄 Оновити</button>
-            <button class="btn-pill btn-pill-primary" id="exportExamCsvBtn" style="padding:6px 14px; font-size:12px;">📥 Експорт CSV (Excel)</button>
-            <button class="btn-pill btn-pill-outline" id="clearExamLogBtn" style="padding:6px 14px; font-size:12px; color:#ef4444; border-color:rgba(239,68,68,0.3);">🗑️ Очистити</button>
+
+          <!-- Summary Metric Cards -->
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:10px; margin-bottom:16px;">
+            <div style="padding:10px 14px; border-radius:10px; background:rgba(62,207,142,0.08); border:1px solid rgba(62,207,142,0.2);">
+              <div style="font-size:11px; color:var(--color-graphite, #9ba1b0); font-weight:600;">СТУДЕНТІВ У БАЗІ</div>
+              <div style="font-size:20px; font-weight:800; color:var(--color-primary);" id="matrixTotalStudents">0</div>
+            </div>
+            <div style="padding:10px 14px; border-radius:10px; background:rgba(59,130,246,0.08); border:1px solid rgba(59,130,246,0.2);">
+              <div style="font-size:11px; color:var(--color-graphite, #9ba1b0); font-weight:600;">СЕРЕДНІЙ ПРОГРЕС</div>
+              <div style="font-size:20px; font-weight:800; color:#3b82f6;" id="matrixAvgProgress">0%</div>
+            </div>
+            <div style="padding:10px 14px; border-radius:10px; background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.2);">
+              <div style="font-size:11px; color:var(--color-graphite, #9ba1b0); font-weight:600;">СЕРТИФІКОВАНО</div>
+              <div style="font-size:20px; font-weight:800; color:#f59e0b;" id="matrixCertifiedCount">0</div>
+            </div>
+          </div>
+
+          <!-- Matrix Table -->
+          <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:12.5px;" id="teacherMatrixTable">
+              <thead>
+                <tr style="border-bottom:2px solid rgba(125,125,125,0.2); color:var(--color-graphite, #9ba1b0); text-align:left;">
+                  <th style="padding:8px 10px;">Студент</th>
+                  <th style="padding:8px 10px;">Цикли (Loops)</th>
+                  <th style="padding:8px 10px;">Масиви (Arrays)</th>
+                  <th style="padding:8px 10px;">Функції & DOM</th>
+                  <th style="padding:8px 10px; text-align:center;">Загальний прогрес</th>
+                  <th style="padding:8px 10px; text-align:right;">Остання дія</th>
+                </tr>
+              </thead>
+              <tbody id="teacherMatrixBody">
+                <tr>
+                  <td colspan="6" style="padding:24px; text-align:center; color:#9ba1b0;">Завантаження зведеної матриці...</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
 
-        <div style="overflow-x:auto;">
-          <table style="width:100%; border-collapse:collapse; font-size:13px;" id="teacherExamRecordsTable">
-            <thead>
-              <tr style="border-bottom:1px solid rgba(125,125,125,0.2); color:var(--color-graphite, #9ba1b0); text-align:left;">
-                <th style="padding:8px 10px;">Дата</th>
-                <th style="padding:8px 10px;">Студент</th>
-                <th style="padding:8px 10px; text-align:center;">Бал</th>
-                <th style="padding:8px 10px; text-align:center;">Час</th>
-                <th style="padding:8px 10px; text-align:center;">Статус</th>
-                <th style="padding:8px 10px; text-align:right;">Дії</th>
-              </tr>
-            </thead>
-            <tbody id="teacherExamRecordsBody">
-              <tr>
-                <td colspan="6" style="padding:20px; text-align:center; color:#9ba1b0;">Записів сертифікацій ще немає. Коли студенти складають тест, дані з'являються тут автоматично.</td>
-              </tr>
-            </tbody>
-          </table>
+        <!-- VIEW 2: Exam Log View (Existing) -->
+        <div id="teacherExamLogView" style="display:none;">
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
+            <div>
+              <h3 style="margin:0; font-size:17px; font-weight:700;">Журнал сертифікацій студентів (Протокол іспитів)</h3>
+              <div style="font-size:12px; color:var(--color-graphite, #9ba1b0);">Зведена аналітика успішності, часу та типових помилок групи</div>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button class="btn-pill btn-pill-outline" id="refreshExamRecordsBtn" style="padding:6px 14px; font-size:12px;">🔄 Оновити</button>
+              <button class="btn-pill btn-pill-primary" id="exportExamCsvBtn" style="padding:6px 14px; font-size:12px;">📥 Експорт CSV (Excel)</button>
+              <button class="btn-pill btn-pill-outline" id="clearExamLogBtn" style="padding:6px 14px; font-size:12px; color:#ef4444; border-color:rgba(239,68,68,0.3);">🗑️ Очистити</button>
+            </div>
+          </div>
+
+          <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:13px;" id="teacherExamRecordsTable">
+              <thead>
+                <tr style="border-bottom:1px solid rgba(125,125,125,0.2); color:var(--color-graphite, #9ba1b0); text-align:left;">
+                  <th style="padding:8px 10px;">Дата</th>
+                  <th style="padding:8px 10px;">Студент</th>
+                  <th style="padding:8px 10px; text-align:center;">Бал</th>
+                  <th style="padding:8px 10px; text-align:center;">Час</th>
+                  <th style="padding:8px 10px; text-align:center;">Статус</th>
+                  <th style="padding:8px 10px; text-align:right;">Дії</th>
+                </tr>
+              </thead>
+              <tbody id="teacherExamRecordsBody">
+                <tr>
+                  <td colspan="6" style="padding:20px; text-align:center; color:#9ba1b0;">Записів сертифікацій ще немає. Коли студенти складають тест, дані з'являються тут автоматично.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -3942,6 +4017,9 @@ for (let i = 1; i &lt;= 3; i++) {
       progressCount.textContent = completedTasks.size;
       const totalEl = document.getElementById('totalTaskCount');
       if (totalEl) totalEl.textContent = ALL_TASKS.length;
+      if (typeof syncStudentProgressToCloud === 'function') {
+        syncStudentProgressToCloud('loops');
+      }
     }
 
     // Run Single Task Test
@@ -4545,11 +4623,17 @@ for (let i = 1; i &lt;= 3; i++) {
       const teacherGuideBox = document.getElementById('teacherGuideBox');
       if (teacherGuideBox) {
         teacherGuideBox.style.display = isUnlocked ? 'block' : 'none';
+      }
       const teacherAnalyticsBox = document.getElementById('teacherAnalyticsBox');
-      if (teacherAnalyticsBox) teacherAnalyticsBox.style.display = isUnlocked ? 'block' : 'none';
-        if (isUnlocked && decryptedSolutionsCache && currentTask) {
-          renderTeacherGuide(currentTask.id);
+      if (teacherAnalyticsBox) {
+        teacherAnalyticsBox.style.display = isUnlocked ? 'block' : 'none';
+        if (isUnlocked) {
+          if (typeof renderTeacherMatrix === 'function') renderTeacherMatrix();
+          if (typeof renderTeacherExamAnalytics === 'function') renderTeacherExamAnalytics();
         }
+      }
+      if (isUnlocked && decryptedSolutionsCache && currentTask) {
+        renderTeacherGuide(currentTask.id);
       }
     }
 
@@ -4965,6 +5049,33 @@ for (let i = 1; i &lt;= 3; i++) {
       }
     }
 
+    let syncProgressTimer = null;
+    function syncStudentProgressToCloud(moduleKey = 'loops') {
+      const user = getSavedGitHubUser();
+      const studentName = user?.name || localStorage.getItem('camp_student_name') || 'Студент';
+      const githubLogin = user?.login || null;
+      if (!githubLogin && !localStorage.getItem('camp_student_name')) return;
+
+      clearTimeout(syncProgressTimer);
+      syncProgressTimer = setTimeout(async () => {
+        try {
+          await fetch('https://loops-github-auth.ivan-grabovsky-ua.workers.dev/api/progress-sync', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              githubLogin: githubLogin,
+              studentName: studentName,
+              avatarUrl: user?.avatar_url || (githubLogin ? `https://github.com/${githubLogin}.png` : null),
+              module: moduleKey,
+              solvedCount: completedTasks.size,
+              totalTasks: ALL_TASKS.length,
+              percent: ALL_TASKS.length ? Math.round((completedTasks.size / ALL_TASKS.length) * 100) : 0
+            })
+          });
+        } catch (_) {}
+      }, 800);
+    }
+
     function renderGitHubUserUI() {
       const user = getSavedGitHubUser();
       const unauthedBox = document.getElementById('certGithubUnauthed');
@@ -4974,6 +5085,12 @@ for (let i = 1; i &lt;= 3; i++) {
       const linkEl = document.getElementById('certGithubLink');
 
       const startBtn = document.getElementById('startCertExamBtn');
+
+      // Top Header Elements
+      const headerLoginBtn = document.getElementById('headerGithubLoginBtn');
+      const headerUserPill = document.getElementById('headerGithubUserPill');
+      const headerAvatar = document.getElementById('headerGithubAvatar');
+      const headerLogin = document.getElementById('headerGithubLogin');
 
       if (user && user.login) {
         if (unauthedBox) unauthedBox.style.display = 'none';
@@ -4985,6 +5102,11 @@ for (let i = 1; i &lt;= 3; i++) {
           linkEl.textContent = `@${user.login}`;
           linkEl.href = user.html_url || `https://github.com/${user.login}`;
         }
+
+        if (headerLoginBtn) headerLoginBtn.style.display = 'none';
+        if (headerUserPill) headerUserPill.style.display = 'inline-flex';
+        if (headerAvatar) headerAvatar.src = user.avatar_url || '';
+        if (headerLogin) headerLogin.textContent = `@${user.login}`;
 
         // Auto-fill student name from verified GitHub profile
         certStudentName = user.name || user.login;
@@ -5004,16 +5126,25 @@ for (let i = 1; i &lt;= 3; i++) {
           docLogin.textContent = `@${user.login}`;
           docLogin.href = user.html_url || `https://github.com/${user.login}`;
         }
+
+        syncStudentProgressToCloud('loops');
       } else {
         if (unauthedBox) unauthedBox.style.display = 'flex';
         if (authedBox) authedBox.style.display = 'none';
         if (startBtn) startBtn.style.display = 'none';
         const docBadge = document.getElementById('certDocGithubBadge');
         if (docBadge) docBadge.style.display = 'none';
+
+        if (headerLoginBtn) headerLoginBtn.style.display = 'inline-flex';
+        if (headerUserPill) headerUserPill.style.display = 'none';
       }
     }
 
     function loginWithGitHub() {
+      // Remember where user initiated login
+      const currentTab = document.querySelector('.tab-btn.active')?.getAttribute('data-tab') || 'trainer';
+      sessionStorage.setItem('camp_oauth_return_tab', currentTab);
+
       const redirectUri = encodeURIComponent(window.location.origin + window.location.pathname);
       window.location.href = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${redirectUri}&scope=read:user`;
     }
@@ -5024,14 +5155,24 @@ for (let i = 1; i &lt;= 3; i++) {
       renderGitHubUserUI();
     }
 
+    // Bind header auth buttons
+    document.getElementById('headerGithubLoginBtn')?.addEventListener('click', loginWithGitHub);
+    document.getElementById('headerGithubUserPill')?.addEventListener('click', () => {
+      const u = getSavedGitHubUser();
+      if (confirm(`Вийти з GitHub-акаунта @${u?.login || ''}?`)) {
+        logoutGitHub();
+      }
+    });
+
     async function checkGitHubCallback() {
       const params = new URLSearchParams(window.location.search);
       const code = params.get('code');
       if (!code) return;
 
-      // Ensure student is on the final-cert tab
+      const returnTab = sessionStorage.getItem('camp_oauth_return_tab') || 'trainer';
+      sessionStorage.removeItem('camp_oauth_return_tab');
       if (typeof switchMainTab === 'function') {
-        switchMainTab('final-cert');
+        switchMainTab(returnTab);
       }
 
       showToast('⏳ Авторизація через GitHub...');
@@ -5049,6 +5190,7 @@ for (let i = 1; i &lt;= 3; i++) {
 
           renderGitHubUserUI();
           showToast(`✅ Успішно авторизовано як @${data.login}!`);
+          syncStudentProgressToCloud('loops');
         } else {
           showToast('Помилка авторизації: ' + (data.error_description || data.error || 'не вдалося отримати профіль'));
         }
@@ -5956,6 +6098,227 @@ for (let i = 1; i &lt;= 3; i++) {
       URL.revokeObjectURL(url);
       showToast('📥 CSV-файл з оцінками завантажено!');
     }
+
+    // ==========================================
+    // GLOBAL STUDENT MATRIX CONTROLLER
+    // ==========================================
+    let cachedMatrixStudents = [];
+
+    document.getElementById('teacherTabMatrixBtn')?.addEventListener('click', () => {
+      document.getElementById('teacherTabMatrixBtn').className = 'btn-pill btn-pill-primary';
+      document.getElementById('teacherTabExamLogBtn').className = 'btn-pill btn-pill-outline';
+      document.getElementById('teacherMatrixView').style.display = 'block';
+      document.getElementById('teacherExamLogView').style.display = 'none';
+      renderTeacherMatrix();
+    });
+
+    document.getElementById('teacherTabExamLogBtn')?.addEventListener('click', () => {
+      document.getElementById('teacherTabExamLogBtn').className = 'btn-pill btn-pill-primary';
+      document.getElementById('teacherTabMatrixBtn').className = 'btn-pill btn-pill-outline';
+      document.getElementById('teacherExamLogView').style.display = 'block';
+      document.getElementById('teacherMatrixView').style.display = 'none';
+      renderTeacherExamAnalytics();
+    });
+
+    async function renderTeacherMatrix() {
+      const tbody = document.getElementById('teacherMatrixBody');
+      if (!tbody) return;
+
+      if (cachedMatrixStudents.length > 0) {
+        renderMatrixToTable(cachedMatrixStudents);
+      }
+
+      try {
+        const res = await fetch('https://loops-github-auth.ivan-grabovsky-ua.workers.dev/api/progress-matrix');
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data.students)) {
+            cachedMatrixStudents = data.students;
+            renderMatrixToTable(data.students);
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn('Could not load student matrix:', err);
+      }
+    }
+
+    function renderMatrixToTable(students) {
+      const tbody = document.getElementById('teacherMatrixBody');
+      if (!tbody) return;
+
+      const filterQuery = (document.getElementById('filterMatrixInput')?.value || '').trim().toLowerCase();
+      const filtered = filterQuery 
+        ? students.filter(s => (s.studentName || '').toLowerCase().includes(filterQuery) || (s.githubLogin || '').toLowerCase().includes(filterQuery))
+        : students;
+
+      // Update Metric Cards
+      const totalStudentsEl = document.getElementById('matrixTotalStudents');
+      if (totalStudentsEl) totalStudentsEl.textContent = students.length;
+      
+      let certifiedCount = 0;
+      let totalPercentsSum = 0;
+      let studentsWithData = 0;
+
+      students.forEach(s => {
+        const loopsPct = s.modules?.loops?.percent || 0;
+        const arrPct = s.modules?.arrays?.percent || 0;
+        const fnPct = s.modules?.functions?.percent || 0;
+        const avg = Math.round((loopsPct + arrPct + fnPct) / 3);
+        totalPercentsSum += avg;
+        if (loopsPct > 0 || arrPct > 0 || fnPct > 0) studentsWithData++;
+
+        if (s.exams?.loops?.isCertified || s.exams?.arrays?.isCertified || s.exams?.functions?.isCertified) {
+          certifiedCount++;
+        }
+      });
+
+      const platformAvg = studentsWithData ? Math.round(totalPercentsSum / studentsWithData) : 0;
+      const avgProgEl = document.getElementById('matrixAvgProgress');
+      if (avgProgEl) avgProgEl.textContent = `${platformAvg}%`;
+      const certCountEl = document.getElementById('matrixCertifiedCount');
+      if (certCountEl) certCountEl.textContent = certifiedCount;
+
+      if (!filtered || filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="padding:24px; text-align:center; color:#9ba1b0;">Студентів не знайдено.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = '';
+
+      filtered.forEach(s => {
+        const tr = document.createElement('tr');
+        tr.style.borderBottom = '1px solid rgba(125,125,125,0.15)';
+
+        const formatModuleCell = (modData, examData) => {
+          if (!modData && !examData) {
+            return '<span style="color:#64748b; font-size:11.5px;">Немає даних</span>';
+          }
+          const solved = modData ? `${modData.solved}/${modData.total || '?'}` : '0';
+          const pct = modData ? (modData.percent || 0) : 0;
+          let examTag = '';
+          if (examData) {
+            const isCert = examData.isCertified || (examData.score >= 8);
+            const color = isCert ? '#10b981' : '#ef4444';
+            examTag = `<div style="font-size:10.5px; margin-top:3px; color:${color}; font-weight:700;">${isCert ? '🟢' : '🔴'} Іспит: ${examData.score}/${examData.total || 10}</div>`;
+          } else {
+            examTag = '<div style="font-size:10.5px; margin-top:3px; color:#64748b;">⏳ Іспит не складався</div>';
+          }
+
+          return `
+            <div>
+              <div style="font-weight:700; color:var(--ink); font-size:12px;">${solved} <span style="font-weight:normal; color:#9ba1b0;">(${pct}%)</span></div>
+              <div style="height:4px; width:90px; background:rgba(125,125,125,0.15); border-radius:9999px; overflow:hidden; margin-top:3px;">
+                <div style="height:100%; width:${Math.min(100, pct)}%; background:var(--color-primary, #3ecf8e);"></div>
+              </div>
+              ${examTag}
+            </div>
+          `;
+        };
+
+        const loopsCell = formatModuleCell(s.modules?.loops, s.exams?.loops);
+        const arraysCell = formatModuleCell(s.modules?.arrays, s.exams?.arrays);
+        const funcsCell = formatModuleCell(s.modules?.functions, s.exams?.functions);
+
+        const lPct = s.modules?.loops?.percent || 0;
+        const aPct = s.modules?.arrays?.percent || 0;
+        const fPct = s.modules?.functions?.percent || 0;
+        const overallPct = Math.round((lPct + aPct + fPct) / 3);
+
+        const lastActiveStr = s.lastActive 
+          ? new Date(s.lastActive).toLocaleDateString([], { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })
+          : '—';
+
+        const avatarImg = s.avatarUrl 
+          ? `<img src="${s.avatarUrl}" style="width:28px; height:28px; border-radius:50%; object-fit:cover; border:1px solid rgba(125,125,125,0.2);">`
+          : '<div style="width:28px; height:28px; border-radius:50%; background:rgba(125,125,125,0.15); display:flex; align-items:center; justify-content:center; font-size:12px;">👤</div>';
+
+        const ghLink = s.githubLogin 
+          ? `<a href="https://github.com/${s.githubLogin}" target="_blank" style="color:var(--color-primary, #3ecf8e); text-decoration:none; font-size:11.5px; display:block;">@${s.githubLogin}</a>`
+          : '<span style="color:#64748b; font-size:11px;">(без GitHub)</span>';
+
+        tr.innerHTML = `
+          <td style="padding:10px 8px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              ${avatarImg}
+              <div>
+                <div style="font-weight:700; color:var(--ink);">${escapeHtml(s.studentName || 'Студент')}</div>
+                ${ghLink}
+              </div>
+            </div>
+          </td>
+          <td style="padding:10px 8px;">${loopsCell}</td>
+          <td style="padding:10px 8px;">${arraysCell}</td>
+          <td style="padding:10px 8px;">${funcsCell}</td>
+          <td style="padding:10px 8px; text-align:center;">
+            <div style="font-size:14px; font-weight:800; color:var(--color-primary);">${overallPct}%</div>
+            <div style="font-size:10px; color:#9ba1b0;">середній бал</div>
+          </td>
+          <td style="padding:10px 8px; text-align:right; font-size:11.5px; color:#9ba1b0;">${lastActiveStr}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    document.getElementById('filterMatrixInput')?.addEventListener('input', () => {
+      renderMatrixToTable(cachedMatrixStudents);
+    });
+
+    document.getElementById('refreshMatrixBtn')?.addEventListener('click', () => {
+      renderTeacherMatrix();
+    });
+
+    document.getElementById('exportMatrixCsvBtn')?.addEventListener('click', () => {
+      if (!cachedMatrixStudents || cachedMatrixStudents.length === 0) {
+        showToast('Матриця порожня або ще не завантажена');
+        return;
+      }
+
+      const rows = [
+        ['Студент', 'GitHub', 'Цикли_Вирішено', 'Цикли_%', 'Цикли_Іспит', 'Масиви_Вирішено', 'Масиви_%', 'Масиви_Іспит', 'Функції_Вирішено', 'Функції_%', 'Функції_Іспит', 'Загальний_%', 'Остання_активність']
+      ];
+
+      cachedMatrixStudents.forEach(s => {
+        const lMod = s.modules?.loops;
+        const aMod = s.modules?.arrays;
+        const fMod = s.modules?.functions;
+
+        const lExam = s.exams?.loops;
+        const aExam = s.exams?.arrays;
+        const fExam = s.exams?.functions;
+
+        const lPct = lMod?.percent || 0;
+        const aPct = aMod?.percent || 0;
+        const fPct = fMod?.percent || 0;
+        const overall = Math.round((lPct + aPct + fPct) / 3);
+
+        rows.push([
+          s.studentName || '',
+          s.githubLogin ? `@${s.githubLogin}` : '',
+          lMod ? `${lMod.solved}/${lMod.total}` : '0',
+          `${lPct}%`,
+          lExam ? `${lExam.score}/${lExam.total} (${lExam.isCertified ? 'Сертифіковано' : 'Не складено'})` : 'Не складався',
+          aMod ? `${aMod.solved}/${aMod.total}` : '0',
+          `${aPct}%`,
+          aExam ? `${aExam.score}/${aExam.total} (${aExam.isCertified ? 'Сертифіковано' : 'Не складено'})` : 'Не складався',
+          fMod ? `${fMod.solved}/${fMod.total}` : '0',
+          `${fPct}%`,
+          fExam ? `${fExam.score}/${fExam.total} (${fExam.isCertified ? 'Сертифіковано' : 'Не складено'})` : 'Не складався',
+          `${overall}%`,
+          s.lastActive || ''
+        ]);
+      });
+
+      const csvContent = '\uFEFF' + rows.map(r => r.map(f => '"' + String(f).replace(/"/g, '""') + '"').join(',')).join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'frontend_camp_students_matrix.csv';
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('📥 Зведену матрицю студентів експортовано в CSV!');
+    });
 
     // Call init
     initCertificationModule();
