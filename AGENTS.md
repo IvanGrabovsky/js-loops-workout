@@ -17,3 +17,7 @@ This project is connected to the master **frontend-camp** platform.
 ## 🔐 Security & Solutions
 - Master teacher vault password: `camp-admin-2026`.
 - All solutions in `catalog.js` are AES-256-GCM encrypted. Do not leak plaintext solutions into public files.
+
+## 🛑 Safe Process Management & No Global Kill (CRITICAL)
+- **NEVER run `killall` on user applications** (such as `killall "Google Chrome"`, `killall Safari`, etc.) as this abruptly terminates the user's active browser sessions, open tabs, and unsaved work.
+- Always target strictly specific spawned PIDs (`kill $PID` or `manage_task` with action `'kill'`) for processes launched by the agent. Never terminate system-wide apps.
