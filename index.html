@@ -488,12 +488,46 @@
 
     /* Right Card: Code Editor */
     .editor-card {
+      position: relative;
       background: #ffffff;
       border: 1px solid var(--border-stone);
       border-radius: var(--radius-card);
       overflow: hidden;
       display: flex;
       flex-direction: column;
+    }
+
+    .editor-auth-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 25;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(18, 20, 29, 0.78);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      padding: 24px;
+    }
+
+    .auth-overlay-card {
+      background: var(--surface-taupe, #1e2230);
+      border: 1px solid var(--border-stone, rgba(255, 255, 255, 0.15));
+      border-radius: 14px;
+      padding: 28px 24px;
+      max-width: 440px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+      animation: authOverlayFadeIn 0.2s ease-out;
+    }
+
+    @keyframes authOverlayFadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
     }
 
     .editor-topbar {
@@ -2291,6 +2325,23 @@
         <!-- Right: Code Editor & Runner -->
         <div>
           <div class="editor-card">
+            <!-- Unauthorized Practice Overlay -->
+            <div id="practiceAuthOverlay" class="editor-auth-overlay" style="display:none;">
+              <div class="auth-overlay-card">
+                <div style="font-size:38px; line-height:1; margin-bottom:12px;">🔒</div>
+                <h3 style="font-size:18px; font-weight:700; margin-bottom:8px; color:var(--ink);">Практика доступна після авторизації</h3>
+                <p style="font-size:13px; color:var(--smoke); max-width:380px; margin:0 auto 18px auto; line-height:1.5;">
+                  Ви можете вільно читати умову завдання та теоретичний довідник. Щоб писати код у редакторі, запускати тести та зберігати прогрес, увійдіть через GitHub.
+                </p>
+                <button type="button" class="btn-pill btn-pill-primary overlay-github-login-btn" style="padding:10px 22px; font-size:14px; font-weight:600; display:inline-flex; align-items:center; justify-content:center; gap:8px; margin:0 auto;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                  </svg>
+                  Увійти через GitHub для розвʼязання
+                </button>
+              </div>
+            </div>
+
             <div class="editor-topbar">
               <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
                 <div class="editor-filename">
@@ -3047,6 +3098,19 @@ for (let i = 1; i &lt;= 3; i++) {
         <p style="font-size:15px; color:var(--color-graphite, #6e7687); line-height:1.6; margin-bottom:20px; max-width:620px; margin-left:auto; margin-right:auto;">
           Перевірте свої навички у форматі підсумкового іспиту! Вам буде запропоновано <b>10 випадкових завдань</b> із різних модулів курсу. Для отримання іменного сертифіката необхідно успішно скласти щонайменше <b>8 з 10 завдань (80%)</b>.
         </p>
+
+        <!-- Locked Exam Auth Wall -->
+        <div id="certExamAuthWall" style="display:none; margin: 0 auto 24px auto; max-width: 520px; padding: 24px 20px; border-radius: 12px; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.3); text-align: center;">
+          <div style="font-size:36px; margin-bottom:10px;">🔒</div>
+          <div style="font-size:16px; font-weight:700; color:var(--ink); margin-bottom:6px;">Сертифікаційний іспит заблоковано</div>
+          <p style="font-size:13px; color:var(--smoke); margin:0 0 16px 0; line-height:1.5;">
+            Допуск до підсумкового іспиту надається лише після авторизації через GitHub для фіксації авторства результатів та видачі іменного сертифіката.
+          </p>
+          <button type="button" class="btn-pill btn-pill-primary overlay-github-login-btn" style="padding:10px 22px; font-size:14px; font-weight:600; display:inline-flex; align-items:center; justify-content:center; gap:8px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+            Увійти через GitHub для складання іспиту
+          </button>
+        </div>
 
         <!-- GitHub Student Verification Card -->
         <div id="certGithubAuthCard" style="margin: 0 auto 24px auto; max-width: 480px; padding: 18px 20px; border-radius: 12px; border: 1px solid var(--border-stone); background: var(--surface-taupe); text-align: center;">
@@ -3990,6 +4054,9 @@ for (let i = 1; i &lt;= 3; i++) {
           : getStarterCss(task);
       }
 
+      const curUser = getSavedGitHubUser();
+      codeEditor.readOnly = !(curUser && curUser.login);
+
       // Live DOM Component Preview for Modules 8, 9, 10
       const pvCard = document.getElementById('livePreviewCard');
       if (pvCard) {
@@ -4414,6 +4481,13 @@ for (let i = 1; i &lt;= 3; i++) {
     }
 
     function runSingleTaskTest() {
+      const ghUser = getSavedGitHubUser();
+      if (!ghUser || !ghUser.login) {
+        showToast('Для запуску тестів та збереження практики увійдіть через GitHub.');
+        loginWithGitHub();
+        return;
+      }
+
       const code = (currentEditorTab === 'js')
         ? codeEditor.value
         : (userCodes[currentTask.id] || `export function ${currentTask.name}(${currentTask.starterParams}) {\n  ${currentTask.starterBody}\n}`);
@@ -5078,6 +5152,8 @@ for (let i = 1; i &lt;= 3; i++) {
 
     function renderGitHubUserUI() {
       const user = getSavedGitHubUser();
+      const isAuthed = Boolean(user && user.login);
+
       const unauthedBox = document.getElementById('certGithubUnauthed');
       const authedBox = document.getElementById('certGithubAuthed');
       const avatarEl = document.getElementById('certGithubAvatar');
@@ -5085,6 +5161,13 @@ for (let i = 1; i &lt;= 3; i++) {
       const linkEl = document.getElementById('certGithubLink');
 
       const startBtn = document.getElementById('startCertExamBtn');
+      const certAuthWall = document.getElementById('certExamAuthWall');
+      const certAuthCard = document.getElementById('certGithubAuthCard');
+      const certResumeBanner = document.getElementById('certResumeBanner');
+
+      const practiceOverlay = document.getElementById('practiceAuthOverlay');
+      const codeEditorEl = document.getElementById('codeEditor');
+      const runBtnEl = document.getElementById('runTestBtn');
 
       // Top Header Elements
       const headerLoginBtn = document.getElementById('headerGithubLoginBtn');
@@ -5092,7 +5175,17 @@ for (let i = 1; i &lt;= 3; i++) {
       const headerAvatar = document.getElementById('headerGithubAvatar');
       const headerLogin = document.getElementById('headerGithubLogin');
 
-      if (user && user.login) {
+      if (isAuthed) {
+        if (practiceOverlay) practiceOverlay.style.display = 'none';
+        if (codeEditorEl) codeEditorEl.readOnly = false;
+        if (runBtnEl) {
+          runBtnEl.disabled = false;
+          runBtnEl.style.opacity = '1';
+          runBtnEl.style.cursor = 'pointer';
+        }
+
+        if (certAuthWall) certAuthWall.style.display = 'none';
+        if (certAuthCard) certAuthCard.style.display = 'block';
         if (unauthedBox) unauthedBox.style.display = 'none';
         if (authedBox) authedBox.style.display = 'flex';
         if (startBtn) startBtn.style.display = 'inline-flex';
@@ -5129,9 +5222,21 @@ for (let i = 1; i &lt;= 3; i++) {
 
         syncStudentProgressToCloud('loops');
       } else {
-        if (unauthedBox) unauthedBox.style.display = 'flex';
+        if (practiceOverlay) practiceOverlay.style.display = 'flex';
+        if (codeEditorEl) codeEditorEl.readOnly = true;
+        if (runBtnEl) {
+          runBtnEl.disabled = true;
+          runBtnEl.style.opacity = '0.55';
+          runBtnEl.style.cursor = 'not-allowed';
+        }
+
+        if (certAuthWall) certAuthWall.style.display = 'block';
+        if (certAuthCard) certAuthCard.style.display = 'none';
+        if (unauthedBox) unauthedBox.style.display = 'none';
         if (authedBox) authedBox.style.display = 'none';
         if (startBtn) startBtn.style.display = 'none';
+        if (certResumeBanner) certResumeBanner.style.display = 'none';
+
         const docBadge = document.getElementById('certDocGithubBadge');
         if (docBadge) docBadge.style.display = 'none';
 
@@ -5162,6 +5267,9 @@ for (let i = 1; i &lt;= 3; i++) {
       if (confirm(`Вийти з GitHub-акаунта @${u?.login || ''}?`)) {
         logoutGitHub();
       }
+    });
+    document.querySelectorAll('.overlay-github-login-btn').forEach(btn => {
+      btn.addEventListener('click', loginWithGitHub);
     });
 
     async function checkGitHubCallback() {
@@ -5269,6 +5377,12 @@ for (let i = 1; i &lt;= 3; i++) {
       const banner = document.getElementById('certResumeBanner');
       const details = document.getElementById('certResumeDetails');
       if (!banner) return;
+
+      const ghUser = getSavedGitHubUser();
+      if (!ghUser || !ghUser.login) {
+        banner.style.display = 'none';
+        return;
+      }
 
       const saved = getSavedActiveExam();
       if (!saved) {
@@ -5593,6 +5707,13 @@ for (let i = 1; i &lt;= 3; i++) {
     }
 
     function startCertificationExam() {
+      const ghUser = getSavedGitHubUser();
+      if (!ghUser || !ghUser.login) {
+        showToast('Для допуску до сертифікаційного іспиту необхідно авторизуватися через GitHub.');
+        loginWithGitHub();
+        return;
+      }
+
       // Check if there is an active session in progress
       const saved = getSavedActiveExam();
       if (saved) {
