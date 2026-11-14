@@ -1,13 +1,13 @@
-name: Loops Tests
+name: CI Quality Gate (Tests & Build)
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, master, develop ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main, master, develop ]
 
 jobs:
-  test:
+  test-and-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,5 +18,7 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm ci || npm install
-      - name: Run Vitest Suite
-        run: npm test || true
+      - name: Run Vitest Solution Suite
+        run: npm test
+      - name: Verify Production Build
+        run: npm run build
