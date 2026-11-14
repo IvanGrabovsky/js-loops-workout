@@ -913,6 +913,7 @@
     .chart-bar { width: 22px; border-radius: 4px 4px 0 0; transition: height 0.3s ease; }
     .animate-stagger { animation: fadeInStagger 0.4s ease forwards; }
     @keyframes fadeInStagger { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     .accordion-list { display: flex; flex-direction: column; gap: 8px; width: 100%; }
     .accordion-item { border: 1px solid var(--border-stone); border-radius: 8px; padding: 10px 14px; background: var(--surface-stone); }
     .avatar-stack { display: flex; align-items: center; }
@@ -2236,6 +2237,11 @@
           <span id="headerGithubLogin" style="font-weight:700; font-size:12.5px; color:var(--color-primary, #3ecf8e);">@username</span>
           <span style="font-size:10px; color:#10b981;" title="Хмарна синхронізація активна">☁️</span>
         </div>
+
+        <!-- Header Teacher Analytics Button (visible when teacher unlocked) -->
+        <button id="headerTeacherMatrixBtn" class="btn-pill btn-pill-outline" style="display:none; align-items:center; gap:6px; padding:6px 14px; font-size:12.5px; border-color:#b45309; color:#f59e0b; font-weight:700; cursor:pointer;" title="Відкрити зведену матрицю студентів">
+          <span>🎓 Панель Ментора</span>
+        </button>
 
         <button class="btn-pill btn-pill-outline" id="resetAllBtn" title="Скинути весь збережений код до початкового стану">
           ↺ Скинути
@@ -4706,6 +4712,10 @@ for (let i = 1; i &lt;= 3; i++) {
           if (typeof renderTeacherExamAnalytics === 'function') renderTeacherExamAnalytics();
         }
       }
+      const headerTeacherBtn = document.getElementById('headerTeacherMatrixBtn');
+      if (headerTeacherBtn) {
+        headerTeacherBtn.style.display = isUnlocked ? 'inline-flex' : 'none';
+      }
       if (isUnlocked && decryptedSolutionsCache && currentTask) {
         renderTeacherGuide(currentTask.id);
       }
@@ -5650,9 +5660,23 @@ for (let i = 1; i &lt;= 3; i++) {
       });
 
       // Mentor analytics actions
-      document.getElementById('refreshExamRecordsBtn')?.addEventListener('click', () => {
-        renderTeacherExamAnalytics();
-        showToast('Оновлення журналу із хмари...');
+      document.getElementById('refreshExamRecordsBtn')?.addEventListener('click', async () => {
+        const btn = document.getElementById('refreshExamRecordsBtn');
+        if (btn) {
+          btn.disabled = true;
+          btn.innerHTML = '<span class="spin-icon" style="display:inline-block; animation:spin 0.8s linear infinite;">🔄</span> Оновлюється...';
+        }
+        try {
+          await renderTeacherExamAnalytics();
+          if (typeof showToast === 'function') showToast('✅ Журнал іспитів оновлено');
+        } catch (err) {
+          console.warn('Error refreshing exam records:', err);
+        } finally {
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '🔄 Оновити';
+          }
+        }
       });
       document.getElementById('exportExamCsvBtn')?.addEventListener('click', exportExamRecordsCsv);
       document.getElementById('clearExamLogBtn')?.addEventListener('click', () => {
@@ -6225,6 +6249,25 @@ for (let i = 1; i &lt;= 3; i++) {
     // ==========================================
     let cachedMatrixStudents = [];
 
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    document.getElementById('headerTeacherMatrixBtn')?.addEventListener('click', () => {
+      switchMainTab('final-cert');
+      const box = document.getElementById('teacherAnalyticsBox');
+      if (box) {
+        box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      renderTeacherMatrix(true);
+    });
+
     document.getElementById('teacherTabMatrixBtn')?.addEventListener('click', () => {
       document.getElementById('teacherTabMatrixBtn').className = 'btn-pill btn-pill-primary';
       document.getElementById('teacherTabExamLogBtn').className = 'btn-pill btn-pill-outline';
@@ -6241,9 +6284,15 @@ for (let i = 1; i &lt;= 3; i++) {
       renderTeacherExamAnalytics();
     });
 
-    async function renderTeacherMatrix() {
+    async function renderTeacherMatrix(isManualClick = false) {
       const tbody = document.getElementById('teacherMatrixBody');
+      const refreshBtn = document.getElementById('refreshMatrixBtn');
       if (!tbody) return;
+
+      if (refreshBtn && isManualClick) {
+        refreshBtn.disabled = true;
+        refreshBtn.innerHTML = '<span class="spin-icon" style="display:inline-block; animation:spin 0.8s linear infinite;">🔄</span> Оновлюється...';
+      }
 
       if (cachedMatrixStudents.length > 0) {
         renderMatrixToTable(cachedMatrixStudents);
@@ -6256,11 +6305,22 @@ for (let i = 1; i &lt;= 3; i++) {
           if (Array.isArray(data.students)) {
             cachedMatrixStudents = data.students;
             renderMatrixToTable(data.students);
+            if (isManualClick && typeof showToast === 'function') {
+              showToast('✅ Зведену матрицю успішно оновлено');
+            }
             return;
           }
         }
       } catch (err) {
         console.warn('Could not load student matrix:', err);
+        if (isManualClick && typeof showToast === 'function') {
+          showToast('⚠️ Не вдалося оновити дані матриці');
+        }
+      } finally {
+        if (refreshBtn) {
+          refreshBtn.disabled = false;
+          refreshBtn.innerHTML = '🔄 Оновити';
+        }
       }
     }
 
@@ -6316,21 +6376,27 @@ for (let i = 1; i &lt;= 3; i++) {
             return '<span style="color:#64748b; font-size:11.5px;">Немає даних</span>';
           }
           const solved = modData ? `${modData.solved}/${modData.total || '?'}` : '0';
-          const pct = modData ? (modData.percent || 0) : 0;
+          let pct = modData ? (modData.percent || 0) : 0;
+          let pctLabel = `${pct}%`;
+          if (modData && modData.solved > 0 && pct === 0) {
+            pctLabel = `< 1%`;
+          }
           let examTag = '';
           if (examData) {
             const isCert = examData.isCertified || (examData.score >= 8);
             const color = isCert ? '#10b981' : '#ef4444';
-            examTag = `<div style="font-size:10.5px; margin-top:3px; color:${color}; font-weight:700;">${isCert ? '🟢' : '🔴'} Іспит: ${examData.score}/${examData.total || 10}</div>`;
+            examTag = `<div style="font-size:10.5px; margin-top:3px; color:${color}; font-weight:700;">${isCert ? '🟢' : '🔴'} Іспит: ${escapeHtml(examData.score)}/${escapeHtml(examData.total || 10)}</div>`;
           } else {
             examTag = '<div style="font-size:10.5px; margin-top:3px; color:#64748b;">⏳ Іспит не складався</div>';
           }
 
+          const barWidth = Math.min(100, Math.max(modData && modData.solved > 0 ? 3 : 0, pct));
+
           return `
             <div>
-              <div style="font-weight:700; color:var(--ink); font-size:12px;">${solved} <span style="font-weight:normal; color:#9ba1b0;">(${pct}%)</span></div>
+              <div style="font-weight:700; color:var(--ink); font-size:12px;">${escapeHtml(solved)} <span style="font-weight:normal; color:#9ba1b0;">(${pctLabel})</span></div>
               <div style="height:4px; width:90px; background:rgba(125,125,125,0.15); border-radius:9999px; overflow:hidden; margin-top:3px;">
-                <div style="height:100%; width:${Math.min(100, pct)}%; background:var(--color-primary, #3ecf8e);"></div>
+                <div style="height:100%; width:${barWidth}%; background:var(--color-primary, #3ecf8e);"></div>
               </div>
               ${examTag}
             </div>
@@ -6355,7 +6421,7 @@ for (let i = 1; i &lt;= 3; i++) {
           : '<div style="width:28px; height:28px; border-radius:50%; background:rgba(125,125,125,0.15); display:flex; align-items:center; justify-content:center; font-size:12px;">👤</div>';
 
         const ghLink = s.githubLogin 
-          ? `<a href="https://github.com/${s.githubLogin}" target="_blank" style="color:var(--color-primary, #3ecf8e); text-decoration:none; font-size:11.5px; display:block;">@${s.githubLogin}</a>`
+          ? `<a href="https://github.com/${s.githubLogin}" target="_blank" style="color:var(--color-primary, #3ecf8e); text-decoration:none; font-size:11.5px; display:block;">@${escapeHtml(s.githubLogin)}</a>`
           : '<span style="color:#64748b; font-size:11px;">(без GitHub)</span>';
 
         tr.innerHTML = `
@@ -6375,7 +6441,7 @@ for (let i = 1; i &lt;= 3; i++) {
             <div style="font-size:14px; font-weight:800; color:var(--color-primary);">${overallPct}%</div>
             <div style="font-size:10px; color:#9ba1b0;">середній бал</div>
           </td>
-          <td style="padding:10px 8px; text-align:right; font-size:11.5px; color:#9ba1b0;">${lastActiveStr}</td>
+          <td style="padding:10px 8px; text-align:right; font-size:11.5px; color:#9ba1b0;">${escapeHtml(lastActiveStr)}</td>
         `;
         tbody.appendChild(tr);
       });
@@ -6386,7 +6452,7 @@ for (let i = 1; i &lt;= 3; i++) {
     });
 
     document.getElementById('refreshMatrixBtn')?.addEventListener('click', () => {
-      renderTeacherMatrix();
+      renderTeacherMatrix(true);
     });
 
     document.getElementById('exportMatrixCsvBtn')?.addEventListener('click', () => {
